@@ -130,11 +130,9 @@ public class MainActivity extends AppCompatActivity {
         View mView = getLayoutInflater().inflate(R.layout.dialog_add_contact, null);
         final EditText mEmail = (EditText) mView.findViewById(R.id.add_contact_email);
         final EditText mMessage = (EditText) mView.findViewById(R.id.add_contact_message);
-        Button mAddContactButton = (Button) mView.findViewById(R.id.button_add_contact);
-        Button mCancel = (Button) mView.findViewById(R.id.button_add_contact_cancel);
-        mAddContactButton.setOnClickListener(new View.OnClickListener() {
+        mBuilder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(DialogInterface dialog, int which) {
                 if (!mEmail.getText().toString().isEmpty() && !mMessage.getText().toString().isEmpty()) {
                     if (containsContact(mEmail.getText().toString())) {
                         Toast.makeText(MainActivity.this, R.string.error_add_contact_existing_contact, Toast.LENGTH_SHORT).show();
@@ -148,13 +146,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //TODO: Finish cancel button
-        mCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Tried finish(); but that quits the whole application.
-            }
-        });
+        mBuilder.setNegativeButton(android.R.string.cancel, null);
         mBuilder.setView(mView);
         AlertDialog dialog = mBuilder.create();
         dialog.show();

@@ -54,22 +54,4 @@
         android:layout_alignLeft="@+id/add_contact_email"
         android:layout_alignStart="@+id/add_contact_email" />
 
-    <Button
-        android:id="@+id/button_add_contact"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="37dp"
-        android:text="Add"
-        android:layout_below="@+id/add_contact_message"
-        android:layout_alignRight="@+id/add_contact_message"
-        android:layout_alignEnd="@+id/add_contact_message" />
-
-    <Button
-        android:id="@+id/button_add_contact_cancel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/add_contact_message"
-        android:layout_alignStart="@+id/add_contact_message"
-        android:layout_alignTop="@+id/button_add_contact"
-        android:text="Cancel" />
 </RelativeLayout>
