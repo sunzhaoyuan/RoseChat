@@ -17,7 +17,7 @@ Ultimately, the application core function is to allow students/professors to cha
 - [ ] Enable users to send image messages.
 - [ ] Users are able to create groups amongst themselves.
 - [ ] Users can record and send voice messages.
-- [ ] Create an authentication system so only people with a [Rose account](http://rose-hulman.edu/admissions-and-aid/contact-admissions.html)
+- [ ] Create an authentication system so only people with a [Rose account](http://rose-hulman.edu/admissions-and-aid/contact-admissions.html) can use the app.
 - [ ] Allow multi-language support (especially Mandarin), to take into account the portion of the student body whose native language is not English.
 - [ ] Create a profile page that is editable.
     * This profile page will have basic info
@@ -25,7 +25,7 @@ Ultimately, the application core function is to allow students/professors to cha
     * Email
     * Schedule (should have an option to hide)
     * Office hours/office location (for teachers)
-- [ ] Allow students to voice call (Not group conference calls)
+- [ ] Allow students to voice call.
 - [ ] \(Potentially\) have a translation dictionary avaliable.
 
 ## Screen Mock
