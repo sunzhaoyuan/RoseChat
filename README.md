@@ -22,7 +22,7 @@ Ultimately, the application core function is to allow students/professors to cha
 - [ ] \(Potentially\) have a translation dictionary avaliable.
 
 ### Screen Mock
-You can find our UI demo in [Ninja Mock](https://ninjamock.com/s/5FZF2) 
+You can find our UI demo on [Ninja Mock](https://ninjamock.com/s/5FZF2) 
 
 ### Sprint 1 plan
 - [ ] Finish all the XML for the key/primary parts of the app
