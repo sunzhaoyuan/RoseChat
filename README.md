@@ -25,6 +25,7 @@ Ultimately, the application core function is to allow students/professors to cha
 You can find our UI demo on [Ninja Mock](https://ninjamock.com/s/5FZF2) 
 
 ### Sprint 1 plan
+- [x] Learn how to use GitHub to do version control
 - [ ] Finish all the XML for the key/primary parts of the app
     - [ ] Chat
     - [ ] Message
@@ -35,4 +36,3 @@ You can find our UI demo on [Ninja Mock](https://ninjamock.com/s/5FZF2)
     - [ ] EditProfile
     - [ ] Settings (All Pages)
 - [ ] Do and write down some research on how to send messages to other users in real time
-- [x] Learn how to use GitHub to do version control
