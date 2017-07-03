@@ -1,11 +1,11 @@
 # RoseChatApp
 
 ## Table of Contents
-[Summary](https://github.com/sunzhaoyuan/RoseChatApp#summary)
-[Preliminary Requirements](https://github.com/sunzhaoyuan/RoseChatApp#preliminary-requirements)
-[Screen Mock](https://github.com/sunzhaoyuan/RoseChatApp#screen-mock)
-[Sprint 1 Plan](https://github.com/sunzhaoyuan/RoseChatApp#sprint-1-plan)
-
+* [Summary](https://github.com/sunzhaoyuan/RoseChatApp#summary)
+* [Preliminary Requirements](https://github.com/sunzhaoyuan/RoseChatApp#preliminary-requirements)
+* [Screen Mock](https://github.com/sunzhaoyuan/RoseChatApp#screen-mock)
+* [Sprint 1 Plan](https://github.com/sunzhaoyuan/RoseChatApp#sprint-1-plan)
+* [Also](https://github.com/sunzhaoyuan/RoseChatApp#also)
 
 ## Summary
 After two years in Rose-Hulman, we have noticed one of the biggest problems of group activities and projects is declaring a good means of communication. Some students do not want a Facebook account so they cannot access Facebook messenger, and some students do not want to download GroupMe or WhatsApp because of each application's shortcomings. By creating RoseChat, we hope to establish a means of communication for all Rose-Hulman students that is easy to access (on the phone), memory efficient (only useful features), and private. Additionally, in order to make sure all users are able to use this, it is critical that the this chat is inclusive of people who do not speak English natively.     
@@ -43,3 +43,6 @@ You can find our UI demo on [Ninja Mock](https://ninjamock.com/s/5FZF2)
     - [ ] EditProfile
     - [ ] Settings (All Pages)
 - [ ] Do and write down some research on how to send messages to other users in real time
+
+## Also
+* RoseChat tries to be as [KISS](https://en.wikipedia.org/wiki/KISS_principle) as possible
