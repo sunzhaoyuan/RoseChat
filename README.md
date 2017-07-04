@@ -36,12 +36,18 @@ You can find our UI demo on [Ninja Mock](https://ninjamock.com/s/5FZF2)
 - [ ] Finish all the XML for the key/primary parts of the app
     - [ ] Chat
     - [ ] Message
+    - [ ] Contact
     - [ ] Login
     - [ ] NewChat
     - [ ] NewContact
     - [ ] ViewProfile
     - [ ] EditProfile
-    - [ ] Settings (All Pages)
+    - [ ] Settings
+        - [ ] Main Settings
+        - [ ] Notifications
+        - [ ] Feedbacks
+        - [ ] DeleteAccount
+        - [ ] Language
 - [ ] Do and write down some research on how to send messages to other users in real time
 
 ## Also
