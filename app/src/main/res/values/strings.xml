@@ -3,4 +3,10 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="navi_message">message</string>
+    <string name="navi_contact">contact</string>
+    <string name="navi_profile">profile</string>
+    <string name="action_new_chat">New Chat</string>
+    <string name="aciton_add_contact">Add Contact</string>
+    <string name="action_settings">settings</string>
 </resources>
