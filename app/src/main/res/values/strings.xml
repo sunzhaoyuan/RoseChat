@@ -17,4 +17,7 @@
     <string name="settings_log_out">Log Out</string>
     <string name="settings_feedback">Feedback</string>
     <string name="settings_delete_account">Delete Account</string>
+    <string name="rosechat">RoseChat</string>
+    <string name="log_in_text">Log In With Rose Fire</string>
+    <string name="sys_fake_login_stage">fake-logIn-stage</string>
 </resources>
