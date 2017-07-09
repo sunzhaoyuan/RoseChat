@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
                 // TODO: pop up a new activity probably (no bottom navi bar)
                 return true;
             case R.id.action_add_contact:
-                // TODO: maybe a new activity
+                addContact();
                 return true;
             case R.id.aciton_settings:
                 // TODO: settings screen
@@ -67,5 +67,8 @@ public class MainActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void addContact() {
     }
 }
