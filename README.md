@@ -37,7 +37,7 @@ You can find our UI demo on [Ninja Mock](https://ninjamock.com/s/5FZF2)
     - [ ] Chat
     - [ ] Message
     - [ ] Contact
-    - [ ] Login
+    - [x] Login
     - [ ] NewChat
     - [ ] NewContact
     - [ ] ViewProfile
