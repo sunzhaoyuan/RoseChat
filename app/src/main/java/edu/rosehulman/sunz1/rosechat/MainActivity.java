@@ -9,6 +9,7 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -32,6 +33,9 @@ import edu.rosehulman.sunz1.rosechat.fragments.ProfileFragment;
 public class MainActivity extends AppCompatActivity {
 
     final private String DEBUG_KEY = "Debug";
+
+    private NavigationPagerAdapter mNavigationPagerAdapter;
+    private ViewPager mViewPager;
     private Fragment mFragmentMain;
     private HashMap<Integer, Integer> mTitlesMap = new HashMap<Integer, Integer>() {{
         put(R.id.navigation_message, R.string.navi_message);
@@ -50,6 +54,9 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.navigation_message:
                     Log.d(DEBUG_KEY, "message pressed");
                     mFragmentMain = new MessageFragment();
+                    mViewPager.setCurrentItem(0);
+
+                    //TODO: maybe this loop can be wrapped up as a method? - Sun
                     for (int i = 0; i < getSupportFragmentManager().getBackStackEntryCount() + 1; i++) {
                         getSupportFragmentManager().popBackStackImmediate();
                     }
@@ -57,17 +64,15 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.navigation_contact:
                     Log.d(DEBUG_KEY, "contact pressed");
                     mFragmentMain = new ContactsFragment();
+                    mViewPager.setCurrentItem(1);
                     break;
                 case R.id.navigation_profile:
                     Log.d(DEBUG_KEY, "profile pressed");
                     mFragmentMain = new ProfileFragment();
+                    mViewPager.setCurrentItem(2);
                     break;
-//                default:
-//                    mFragmentMain = new MessageFragment();
-//                    break;
             }
             setTitle(id);
-            drawFragmentMain();
             return true;
         }
 
@@ -81,8 +86,13 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
+        mNavigationPagerAdapter = new NavigationPagerAdapter(getSupportFragmentManager());
+        mViewPager = (ViewPager) findViewById(R.id.fragment_container);
+        setupViewPager(mViewPager);
+
         mFragmentMain = new MessageFragment();
         setTitle(R.id.navigation_message);
+
 
     }
 
@@ -107,9 +117,8 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.action_settings:
                 // TODO: settings screen
-                mFragmentMain = new MainSettingsFragment();
-                drawFragmentMain();
                 setTitle(id);
+                mViewPager.setCurrentItem(3);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -157,23 +166,26 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
-    private void drawFragmentMain() {
-        if (mFragmentMain != null) {
-            FragmentManager fm = getSupportFragmentManager();
-            FragmentTransaction ft = fm.beginTransaction();
-            ft.addToBackStack("detail");
-            ft.replace(R.id.fragment_main, mFragmentMain);
-            ft.commit();
-        }
+    private void setupViewPager(ViewPager viewPager){
+        NavigationPagerAdapter adapter = new NavigationPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(new MessageFragment(), getTitle(R.id.navigation_message));
+        adapter.addFragment(new ContactsFragment(), getTitle(R.id.navigation_contact));
+        adapter.addFragment(new ProfileFragment(), getTitle(R.id.navigation_profile));
+        adapter.addFragment(new MainSettingsFragment(), getTitle(R.id.action_settings));
+        viewPager.setAdapter(adapter);
+    }
+
+    public void setViewPager(int fragmentNumber){
+        mViewPager.setCurrentItem(fragmentNumber);
     }
 
     public void setTitle(int id) {
-        String title = getString(getTitle(id)).toUpperCase();
+        String title = getTitle(id).toUpperCase();
         Log.d(DEBUG_KEY, title);
         getSupportActionBar().setTitle(title);
     }
 
-    private Integer getTitle(Integer itemID) {
-        return this.mTitlesMap.get(itemID);
+    private String getTitle(Integer itemID) {
+        return getString(this.mTitlesMap.get(itemID));
     }
 }

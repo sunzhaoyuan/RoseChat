@@ -4,9 +4,11 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import edu.rosehulman.sunz1.rosechat.R;
 
@@ -18,7 +20,15 @@ import edu.rosehulman.sunz1.rosechat.R;
  * Use the {@link MainSettingsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MainSettingsFragment extends Fragment {
+public class MainSettingsFragment extends Fragment implements View.OnClickListener{
+
+    private Button mButtonProfile;
+    private Button mButtonLanguage;
+    private Button mButtonNotification;
+    private Button mButtonLogOut;
+    private Button mButtonFeedback;
+    private Button mButtonDeleteAccount;
+
 //    // TODO: Rename parameter arguments, choose names that match
 //    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 //    private static final String ARG_PARAM1 = "param1";
@@ -65,7 +75,44 @@ public class MainSettingsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_main_settings, container, false);
+        View view =  inflater.inflate(R.layout.fragment_main_settings, container, false);
+
+        mButtonDeleteAccount = (Button) view.findViewById(R.id.button_settings_deleteAccount);
+        mButtonFeedback= (Button) view.findViewById(R.id.button_settings_feedback);
+        mButtonLanguage = (Button) view.findViewById(R.id.button_settings_Language);
+        mButtonLogOut= (Button) view.findViewById(R.id.button_settings_logOut);
+        mButtonNotification= (Button) view.findViewById(R.id.button_settings_notification);
+        mButtonProfile= (Button) view.findViewById(R.id.button_settings_profile);
+
+        mButtonDeleteAccount.setOnClickListener(this);
+        mButtonProfile.setOnClickListener(this);
+        mButtonFeedback.setOnClickListener(this);
+        mButtonLanguage.setOnClickListener(this);
+        mButtonLogOut.setOnClickListener(this);
+        mButtonNotification.setOnClickListener(this);
+
+
+        return view;
+    }
+
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        switch (id){
+            case R.id.button_settings_profile:
+                return;
+            case R.id.button_settings_Language:
+                return;
+            case R.id.button_settings_logOut:
+                return;
+            case R.id.button_settings_deleteAccount:
+                return;
+            case R.id.button_settings_notification:
+                return;
+            case R.id.button_settings_feedback:
+                return;
+        }
+
     }
 //
 //    // TODO: Rename method, update argument and hook method into UI event
