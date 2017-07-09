@@ -18,7 +18,7 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/aciton_settings"
+        android:id="@+id/action_settings"
         android:orderInCategory="30"
         android:title="@string/action_settings"
         app:showAsAction="never"/>

@@ -39,7 +39,7 @@ You can find our UI demo on [Ninja Mock](https://ninjamock.com/s/5FZF2)
     - [ ] Contact
     - [x] Login
     - [ ] NewChat
-    - [ ] NewContact
+    - [x] NewContact
     - [ ] ViewProfile
     - [ ] EditProfile
     - [ ] Settings

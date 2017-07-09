@@ -4,8 +4,8 @@
     android:layout_height="match_parent"
     tools:context="edu.rosehulman.sunz1.rosechat.fragments.MainSettingsFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <LinearLayout
+        android:id="@+id/fragment_settings_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
