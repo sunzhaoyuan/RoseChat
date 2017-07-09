@@ -3,34 +3,53 @@ package edu.rosehulman.sunz1.rosechat;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import edu.rosehulman.sunz1.rosechat.fragments.ContactsFragment;
+import edu.rosehulman.sunz1.rosechat.fragments.MessageFragment;
+import edu.rosehulman.sunz1.rosechat.fragments.ProfileFragment;
+
 public class MainActivity extends AppCompatActivity {
 
-    private TextView mTextMessage;
+    final private String DEBUG_KEY = "Debug";
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            Fragment fragment;
             switch (item.getItemId()) {
                 case R.id.navigation_message:
-                    mTextMessage.setText(R.string.navi_message);
-                    return true;
+                    Log.d(DEBUG_KEY, "message pressed");
+                    fragment = new MessageFragment();
+                    break;
                 case R.id.navigation_contact:
-                    mTextMessage.setText(R.string.navi_contact);
-                    return true;
+                    Log.d(DEBUG_KEY, "contact pressed");
+                    fragment = new ContactsFragment();
+                    break;
                 case R.id.navigation_profile:
-                    mTextMessage.setText(R.string.navi_profile);
-                    return true;
+                    Log.d(DEBUG_KEY, "profile pressed");
+                    fragment = new ProfileFragment();
+                    break;
+                default:
+                    fragment = new MessageFragment();
+                    break;
             }
-            return false;
+            FragmentManager fm = getSupportFragmentManager();
+            FragmentTransaction ft = fm.beginTransaction();
+            ft.replace(R.id.fragment_main, fragment);
+            ft.commit();
+            return true;
         }
 
     };
@@ -40,7 +59,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 

@@ -11,4 +11,10 @@
     <string name="action_settings">settings</string>
     <string name="blank">blank</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="settings_profile">Profile</string>
+    <string name="settings_language">Language</string>
+    <string name="settings_notifications">Notifications</string>
+    <string name="settings_log_out">Log Out</string>
+    <string name="settings_feedback">Feedback</string>
+    <string name="settings_delete_account">Delete Account</string>
 </resources>

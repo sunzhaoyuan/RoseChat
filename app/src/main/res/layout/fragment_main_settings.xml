@@ -1,0 +1,99 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="edu.rosehulman.sunz1.rosechat.fragments.MainSettingsFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/button_settings_profile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/background_light"
+            android:fontFamily="sans"
+            android:padding="10dp"
+            android:text="@string/settings_profile"
+            android:textAlignment="textStart"
+            android:textAllCaps="false"
+            android:textSize="20sp"
+            tools:ignore="RtlCompat"
+            tools:targetApi="jelly_bean" />
+
+        <Button
+            android:id="@+id/button_settings_Language"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/background_light"
+            android:fontFamily="sans"
+            android:padding="10dp"
+            android:text="@string/settings_language"
+            android:textAlignment="textStart"
+            android:textAllCaps="false"
+            android:textSize="20sp"
+            tools:ignore="RtlCompat"
+            tools:targetApi="jelly_bean" />
+
+        <Button
+            android:id="@+id/button_settings_notification"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/background_light"
+            android:fontFamily="sans"
+            android:padding="10dp"
+            android:text="@string/settings_notifications"
+            android:textAlignment="textStart"
+            android:textAllCaps="false"
+            android:textSize="20sp"
+            tools:ignore="RtlCompat"
+            tools:targetApi="jelly_bean" />
+
+        <Button
+            android:id="@+id/button_settings_logOut"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/background_light"
+            android:fontFamily="sans"
+            android:padding="10dp"
+            android:text="@string/settings_log_out"
+            android:textAlignment="textStart"
+            android:textAllCaps="false"
+            android:textSize="20sp"
+            tools:ignore="RtlCompat"
+            tools:targetApi="jelly_bean" />
+
+        <Button
+            android:id="@+id/button_settings_feedback"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/background_light"
+            android:fontFamily="sans"
+            android:padding="10dp"
+            android:text="@string/settings_feedback"
+            android:textAlignment="textStart"
+            android:textAllCaps="false"
+            android:textSize="20sp"
+            tools:ignore="RtlCompat"
+            tools:targetApi="jelly_bean" />
+
+        <Button
+            android:id="@+id/button_settings_deleteAccount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/background_light"
+            android:fontFamily="sans"
+            android:padding="10dp"
+            android:text="@string/settings_delete_account"
+            android:textAlignment="textStart"
+            android:textAllCaps="false"
+            android:textSize="20sp"
+            tools:ignore="RtlCompat"
+            tools:targetApi="jelly_bean" />
+
+    </LinearLayout>
+
+</FrameLayout>

@@ -43,7 +43,7 @@ You can find our UI demo on [Ninja Mock](https://ninjamock.com/s/5FZF2)
     - [ ] ViewProfile
     - [ ] EditProfile
     - [ ] Settings
-        - [ ] Main Settings
+        - [x] Main Settings
         - [ ] Notifications
         - [ ] Feedbacks
         - [ ] DeleteAccount
