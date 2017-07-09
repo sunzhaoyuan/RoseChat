@@ -1,18 +1,25 @@
 package edu.rosehulman.sunz1.rosechat;
 
+import android.app.DialogFragment;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import edu.rosehulman.sunz1.rosechat.fragments.ContactsFragment;
 import edu.rosehulman.sunz1.rosechat.fragments.MessageFragment;
@@ -32,6 +39,9 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.navigation_message:
                     Log.d(DEBUG_KEY, "message pressed");
                     fragment = new MessageFragment();
+                    for(int i =0; i < getSupportFragmentManager().getBackStackEntryCount()+1; i++){
+                        getSupportFragmentManager().popBackStackImmediate();
+                    }
                     break;
                 case R.id.navigation_contact:
                     Log.d(DEBUG_KEY, "contact pressed");
@@ -45,10 +55,14 @@ public class MainActivity extends AppCompatActivity {
                     fragment = new MessageFragment();
                     break;
             }
-            FragmentManager fm = getSupportFragmentManager();
-            FragmentTransaction ft = fm.beginTransaction();
-            ft.replace(R.id.fragment_main, fragment);
-            ft.commit();
+            if(fragment != null) {
+                FragmentManager fm = getSupportFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+                ft.addToBackStack("detail");
+                ft.replace(R.id.fragment_main, fragment);
+                ft.commit();
+            }
+
             return true;
         }
 
@@ -91,5 +105,44 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void addContact() {
+        final AlertDialog.Builder mBuilder = new AlertDialog.Builder(MainActivity.this);
+        View mView = getLayoutInflater().inflate(R.layout.dialog_add_contact, null);
+        final EditText mEmail = (EditText) mView.findViewById(R.id.add_contact_email);
+        final EditText mMessage = (EditText) mView.findViewById(R.id.add_contact_message);
+        Button mAddContactButton = (Button) mView.findViewById(R.id.button_add_contact);
+        Button mCancel = (Button) mView.findViewById(R.id.button_add_contact_cancel);
+        mAddContactButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!mEmail.getText().toString().isEmpty() && !mMessage.getText().toString().isEmpty()){
+                    if(containsContact(mEmail.getText().toString())){
+                        Toast.makeText(MainActivity.this, R.string.error_add_contact_existing_contact, Toast.LENGTH_SHORT).show();
+                    }//TODO: May want to put a more thorough checks e.g. does the email ID exist?
+                    else {
+                        Toast.makeText(MainActivity.this, R.string.successful_add_contact, Toast.LENGTH_SHORT).show();
+                    }
+                }
+                else{
+                    Toast.makeText(MainActivity.this, R.string.error_add_contact_empty_field, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        //TODO: Finish cancel button
+        mCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            //Tried finish(); but that quits the whole application.
+            }
+        });
+        mBuilder.setView(mView);
+        AlertDialog dialog = mBuilder.create();
+        dialog.show();
+    }
+
+    private boolean containsContact(String email) {
+        //TODO: Check if email entered is already in contact or not.
+
+        return false;
     }
 }

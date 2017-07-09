@@ -20,4 +20,7 @@
     <string name="rosechat">RoseChat</string>
     <string name="log_in_text">Log In With Rose Fire</string>
     <string name="sys_fake_login_stage">fake-logIn-stage</string>
+    <string name="error_add_contact_empty_field">Please fill both fields</string>
+    <string name="error_add_contact_existing_contact">Contact already added</string>
+    <string name="successful_add_contact">Request sent</string>
 </resources>
