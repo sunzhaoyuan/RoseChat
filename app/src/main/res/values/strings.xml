@@ -9,4 +9,5 @@
     <string name="action_new_chat">New Chat</string>
     <string name="aciton_add_contact">Add Contact</string>
     <string name="action_settings">settings</string>
+    <string name="blank">blank</string>
 </resources>
