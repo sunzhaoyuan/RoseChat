@@ -10,4 +10,5 @@
     <string name="aciton_add_contact">Add Contact</string>
     <string name="action_settings">settings</string>
     <string name="blank">blank</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
