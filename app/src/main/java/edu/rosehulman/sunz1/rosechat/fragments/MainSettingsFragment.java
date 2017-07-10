@@ -1,8 +1,13 @@
 package edu.rosehulman.sunz1.rosechat.fragments;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,14 +17,14 @@ import android.widget.Button;
 
 import edu.rosehulman.sunz1.rosechat.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link MainSettingsFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link MainSettingsFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+///**
+// * A simple {@link Fragment} subclass.
+// * Activities that contain this fragment must implement the
+// * {@link MainSettingsFragment.OnFragmentInteractionListener} interface
+// * to handle interaction events.
+// * Use the {@link MainSettingsFragment#newInstance} factory method to
+// * create an instance of this fragment.
+// */
 public class MainSettingsFragment extends Fragment implements View.OnClickListener{
 
     private Button mButtonProfile;
@@ -28,6 +33,11 @@ public class MainSettingsFragment extends Fragment implements View.OnClickListen
     private Button mButtonLogOut;
     private Button mButtonFeedback;
     private Button mButtonDeleteAccount;
+
+//    private String[] mLanguages = new String[]{
+//            getResources().getString(R.string.language_english),
+//            getResources().getString(R.string.language_Chinese)
+//    };
 
 //    // TODO: Rename parameter arguments, choose names that match
 //    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -102,6 +112,8 @@ public class MainSettingsFragment extends Fragment implements View.OnClickListen
             case R.id.button_settings_profile:
                 return;
             case R.id.button_settings_Language:
+                //TODO: the method has error. Don't use. -Sun
+//                showLanguageDialog();
                 return;
             case R.id.button_settings_logOut:
                 return;
@@ -113,6 +125,33 @@ public class MainSettingsFragment extends Fragment implements View.OnClickListen
                 return;
         }
 
+    }
+
+    private void showLanguageDialog(){
+        LanguageDialog df = new LanguageDialog(){
+            @Override
+            public Dialog onCreateDialog(Bundle savedInstanceState) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle(R.string.Title_Language);
+                builder.setItems(new String[]{getResources().getString(R.string.language_english),
+                        getResources().getString(R.string.language_Chinese)}, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // TODO: switch languages
+                    }
+                });
+                builder.setNegativeButton(android.R.string.cancel, null);
+                return builder.create();
+            }
+        };
+        df.show(getFragmentManager(), "language");
+    }
+
+    public static class LanguageDialog extends DialogFragment{
+
+        public LanguageDialog(){
+            super();
+        }
     }
 //
 //    // TODO: Rename method, update argument and hook method into UI event

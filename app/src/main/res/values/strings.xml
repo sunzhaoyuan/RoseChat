@@ -23,4 +23,17 @@
     <string name="error_add_contact_empty_field">Please fill both fields</string>
     <string name="error_add_contact_existing_contact">Contact already added</string>
     <string name="successful_add_contact">Request sent</string>
+    <string name="Title_Language">Language</string>
+    <string name="language_english">English</string>
+    <string name="language_Chinese">中文（简体）</string>
+    <string name="profile_sample_email">sample_email@rose-hulman.edu</string>
+    <string name="profile_sample_name">Sample Name</string>
+    <string name="profile_sample_phone_number">812-877-1511</string>
+    <string name="sunday">Sunday</string>
+    <string name="monday">Monday</string>
+    <string name="wednesday">Wednesday</string>
+    <string name="thursday">Thursday</string>
+    <string name="friday">Friday</string>
+    <string name="saturday">Saturday</string>
+    <string name="tuesday">Tuesday</string>
 </resources>

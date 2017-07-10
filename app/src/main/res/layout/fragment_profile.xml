@@ -2,13 +2,123 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="edu.rosehulman.sunz1.rosechat.fragments.ProfileFragment"
-    android:background="@color/colorPrimary">
+    tools:context="edu.rosehulman.sunz1.rosechat.fragments.ProfileFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/navi_profile" />
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/profile_picture"
+            android:layout_width="150sp"
+            android:layout_height="150dp"
+            android:paddingTop="15dp"
+            android:paddingLeft="15dp"
+            android:src="@drawable/rose_logo"
+            style="@style/ProfileBorder"
+            />
+
+        <TextView
+            android:id="@+id/profile_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/profile_picture"
+            android:paddingTop="20dp"
+            android:paddingLeft="10dp"
+            android:text="@string/profile_sample_name"
+            android:textSize="34sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/profile_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="15dp"
+            android:paddingLeft="10dp"
+            android:layout_toRightOf="@+id/profile_picture"
+            android:layout_below="@+id/profile_name"
+            android:text="@string/profile_sample_email"
+            android:textSize="14sp"/>
+
+        <TextView
+            android:id="@+id/profile_phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="15dp"
+            android:paddingLeft="10dp"
+            android:layout_toRightOf="@+id/profile_picture"
+            android:layout_below="@+id/profile_email"
+            android:text="@string/profile_sample_phone_number"
+            android:textSize="14sp"/>
+
+        <TableLayout
+            android:id="@+id/profile_schedule"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/profile_picture"
+            android:paddingTop="15dp"
+            android:layout_margin="5dp">
+
+            <TableRow
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp">
+
+                <TextView
+                    android:id="@+id/profile_schedule_Sun_0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:text="@string/sunday"
+                    android:textSize="15sp"
+                    android:padding="2dp"/>
+
+                <TextView
+                    android:id="@+id/profile_schedule_Mon_0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:text="@string/monday"
+                    android:textSize="15sp"
+                    android:padding="2dp"/>
+                <TextView
+                    android:id="@+id/profile_schedule_Tue_0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:text="@string/tuesday"
+                    android:textSize="15sp"
+                    android:padding="2dp"/>
+                <TextView
+                    android:id="@+id/profile_schedule_Wed_0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:text="@string/wednesday"
+                    android:textSize="15sp"
+                    android:padding="2dp"/>
+                <TextView
+                    android:id="@+id/profile_schedule_Thur_0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:text="@string/thursday"
+                    android:textSize="15sp"
+                    android:padding="2dp"/>
+                <TextView
+                    android:id="@+id/profile_schedule_Fri_0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:text="@string/friday"
+                    android:textSize="15sp"
+                    android:padding="2dp"/>
+                <TextView
+                    android:id="@+id/profile_schedule_Sat_0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:text="@string/saturday"
+                    android:textSize="15sp"
+                    android:padding="2dp"/>
+            </TableRow>
+
+        </TableLayout>
+
+    </RelativeLayout>
 
 </FrameLayout>
