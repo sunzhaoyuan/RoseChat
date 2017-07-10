@@ -4,8 +4,10 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -114,6 +116,8 @@ public class MainSettingsFragment extends Fragment implements View.OnClickListen
             case R.id.button_settings_Language:
                 //TODO: the method has error. Don't use. -Sun
 //                showLanguageDialog();
+                //TODO: Use this instead -Sun
+                switchLanguage();
                 return;
             case R.id.button_settings_logOut:
                 return;
@@ -125,6 +129,11 @@ public class MainSettingsFragment extends Fragment implements View.OnClickListen
                 return;
         }
 
+    }
+
+    private void switchLanguage(){
+        Intent intent = new Intent(Settings.ACTION_LOCALE_SETTINGS);
+        startActivity(intent);
     }
 
     private void showLanguageDialog(){

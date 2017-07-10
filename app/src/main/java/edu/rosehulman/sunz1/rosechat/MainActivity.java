@@ -26,6 +26,7 @@ import android.widget.Toast;
 import java.util.HashMap;
 
 import edu.rosehulman.sunz1.rosechat.fragments.ContactsFragment;
+import edu.rosehulman.sunz1.rosechat.fragments.EditProfileFragment;
 import edu.rosehulman.sunz1.rosechat.fragments.MainSettingsFragment;
 import edu.rosehulman.sunz1.rosechat.fragments.MessageFragment;
 import edu.rosehulman.sunz1.rosechat.fragments.ProfileFragment;
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
         put(R.id.navigation_contact, R.string.navi_contact);
         put(R.id.navigation_profile, R.string.navi_profile);
         put(R.id.action_settings, R.string.action_settings);
+        put(R.id.edit_profile, R.string.profile_edit_name);
     }};
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -164,6 +166,7 @@ public class MainActivity extends AppCompatActivity {
         adapter.addFragment(new ContactsFragment(), getTitle(R.id.navigation_contact));
         adapter.addFragment(new ProfileFragment(), getTitle(R.id.navigation_profile));
         adapter.addFragment(new MainSettingsFragment(), getTitle(R.id.action_settings));
+        adapter.addFragment(new EditProfileFragment(), getTitle(R.id.edit_profile));
         viewPager.setAdapter(adapter);
     }
 

@@ -40,15 +40,15 @@ You can find our UI demo on [Ninja Mock](https://ninjamock.com/s/5FZF2)
     - [x] Login (Sun)
     - [ ] NewChat (Abu)
     - [x] NewContact (Abu)
-    - [ ] ViewProfile (Sun)
-    - [ ] EditProfile (Sun)
+    - [x] ViewProfile (Sun)
+    - [x] EditProfile (Sun)
     - [ ] Settings
         - [x] Main Settings (Sun)
         - [ ] Notifications (Abu)
         - [ ] Feedbacks (Abu)
         - [ ] DeleteAccount (Abu)
-        - [ ] Language (Sun)
-- [ ] Do and write down some research on how to send messages to other users in real time
+        - [x] Language (Sun)
+- [x] Do and write down some research on how to send messages to other users in real time
 
 ## Also
 * RoseChat tries to be as [KISS](https://en.wikipedia.org/wiki/KISS_principle) as possible

@@ -1,8 +1,5 @@
 <resources>
     <string name="app_name">RoseChat</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
     <string name="navi_message">message</string>
     <string name="navi_contact">contact</string>
     <string name="navi_profile">profile</string>
@@ -36,4 +33,14 @@
     <string name="friday">Fri</string>
     <string name="saturday">Sat</string>
     <string name="tuesday">Tue</string>
+    <string name="profile_schedule_class">class</string>
+    <string name="profile_schedule_meeting">meeting</string>
+    <string name="profile_schedule_outdoor">outdoor</string>
+    <string name="profile_schedule_game">game</string>
+    <string name="profile_schedule_sleeping">sleeping</string>
+    <string name="profile_schedule_with_friends">with friends</string>
+    <string name="profile_schedule_working">working</string>
+    <string name="profile_edit">edit</string>
+    <string name="profile_confirm">confirm</string>
+    <string name="profile_edit_name">Edit Profile</string>
 </resources>

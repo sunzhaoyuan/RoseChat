@@ -2,7 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="edu.rosehulman.sunz1.rosechat.fragments.ProfileFragment">
+    tools:context="edu.rosehulman.sunz1.rosechat.fragments.ProfileFragment"
+    android:id="@+id/edit_profile">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -24,47 +25,43 @@
             android:layout_alignBottom="@+id/profile_picture"
             android:orientation="vertical">
 
-            <TextView
+            <EditText
                 android:id="@+id/profile_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingTop="20dp"
                 android:paddingLeft="10dp"
                 android:text="@string/profile_sample_name"
                 android:textSize="30sp"
                 android:textStyle="bold" />
 
-            <TextView
+            <EditText
                 android:id="@+id/profile_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingLeft="10dp"
-                android:paddingTop="15dp"
                 android:text="@string/profile_sample_email"
                 android:textSize="13sp" />
 
-            <TextView
+            <EditText
                 android:id="@+id/profile_phone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingLeft="10dp"
-                android:paddingTop="15dp"
                 android:text="@string/profile_sample_phone_number"
                 android:textSize="14sp" />
 
             <TextView
-                android:id="@+id/profile_edit"
+                android:id="@+id/profile_confirm"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingLeft="10dp"
-                android:paddingTop="15dp"
-                android:text="@string/profile_edit"
+                android:text="@string/profile_confirm"
                 android:textColor="#57a0d4"
                 android:textAlignment="textStart"
                 android:textSize="14sp" />
 
             <View
-                android:layout_width="40sp"
+                android:layout_width="70sp"
                 android:layout_height="3sp"
                 android:layout_alignLeft="@+id/profile_edit"
                 android:layout_alignRight="@+id/profile_edit"
