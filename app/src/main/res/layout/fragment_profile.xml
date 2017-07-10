@@ -15,8 +15,7 @@
             android:paddingTop="15dp"
             android:paddingLeft="15dp"
             android:src="@drawable/rose_logo"
-            style="@style/ProfileBorder"
-            />
+            style="@style/ProfileBorder" />
 
         <TextView
             android:id="@+id/profile_name"
@@ -67,54 +66,376 @@
 
                 <TextView
                     android:id="@+id/profile_schedule_Sun_0"
-                    android:layout_width="wrap_content"
+                    android:layout_width="50dp"
                     android:layout_height="40dp"
                     android:text="@string/sunday"
                     android:textSize="15sp"
-                    android:padding="2dp"/>
+                    android:padding="2dp"
+                    android:textAlignment="center"/>
 
                 <TextView
                     android:id="@+id/profile_schedule_Mon_0"
-                    android:layout_width="wrap_content"
+                    android:layout_width="50dp"
                     android:layout_height="40dp"
                     android:text="@string/monday"
                     android:textSize="15sp"
-                    android:padding="2dp"/>
+                    android:padding="2dp"
+                    android:textAlignment="center"/>
                 <TextView
                     android:id="@+id/profile_schedule_Tue_0"
-                    android:layout_width="wrap_content"
+                    android:layout_width="50dp"
                     android:layout_height="40dp"
                     android:text="@string/tuesday"
                     android:textSize="15sp"
-                    android:padding="2dp"/>
+                    android:padding="2dp"
+                    android:textAlignment="center"/>
                 <TextView
                     android:id="@+id/profile_schedule_Wed_0"
-                    android:layout_width="wrap_content"
+                    android:layout_width="50dp"
                     android:layout_height="40dp"
                     android:text="@string/wednesday"
                     android:textSize="15sp"
-                    android:padding="2dp"/>
+                    android:padding="2dp"
+                    android:textAlignment="center"/>
                 <TextView
                     android:id="@+id/profile_schedule_Thur_0"
-                    android:layout_width="wrap_content"
+                    android:layout_width="50dp"
                     android:layout_height="40dp"
                     android:text="@string/thursday"
                     android:textSize="15sp"
-                    android:padding="2dp"/>
+                    android:padding="2dp"
+                    android:textAlignment="center"/>
                 <TextView
                     android:id="@+id/profile_schedule_Fri_0"
-                    android:layout_width="wrap_content"
+                    android:layout_width="50dp"
                     android:layout_height="40dp"
                     android:text="@string/friday"
                     android:textSize="15sp"
-                    android:padding="2dp"/>
+                    android:padding="2dp"
+                    android:textAlignment="center"/>
                 <TextView
                     android:id="@+id/profile_schedule_Sat_0"
-                    android:layout_width="wrap_content"
+                    android:layout_width="50dp"
                     android:layout_height="40dp"
                     android:text="@string/saturday"
                     android:textSize="15sp"
-                    android:padding="2dp"/>
+                    android:padding="2dp"
+                    android:textAlignment="center"/>
+            </TableRow>
+            <TableRow
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp">
+
+                <TextView
+                    android:id="@+id/profile_schedule_Sun_1"
+                    android:layout_width="50dp"
+                    android:layout_height="40dp"
+                    android:text="@string/sunday"
+                    android:textSize="15sp"
+                    android:padding="2dp"
+                    android:textAlignment="center"/>
+
+                <TextView
+                    android:id="@+id/profile_schedule_Mon_1"
+                    android:layout_width="50dp"
+                    android:layout_height="40dp"
+                    android:text="@string/monday"
+                    android:textSize="15sp"
+                    android:padding="2dp"
+                    android:textAlignment="center"/>
+                <TextView
+                    android:id="@+id/profile_schedule_Tue_1"
+                    android:layout_width="50dp"
+                    android:layout_height="40dp"
+                    android:text="@string/tuesday"
+                    android:textSize="15sp"
+                    android:padding="2dp"
+                    android:textAlignment="center"/>
+                <TextView
+                    android:id="@+id/profile_schedule_Wed_1"
+                    android:layout_width="50dp"
+                    android:layout_height="40dp"
+                    android:text="@string/wednesday"
+                    android:textSize="15sp"
+                    android:padding="2dp"
+                    android:textAlignment="center"/>
+                <TextView
+                    android:id="@+id/profile_schedule_Thur_1"
+                    android:layout_width="50dp"
+                    android:layout_height="40dp"
+                    android:text="@string/thursday"
+                    android:textSize="15sp"
+                    android:padding="2dp"
+                    android:textAlignment="center"/>
+                <TextView
+                    android:id="@+id/profile_schedule_Fri_1"
+                    android:layout_width="50dp"
+                    android:layout_height="40dp"
+                    android:text="@string/friday"
+                    android:textSize="15sp"
+                    android:padding="2dp"
+                    android:textAlignment="center"/>
+                <TextView
+                    android:id="@+id/profile_schedule_Sat_1"
+                    android:layout_width="50dp"
+                    android:layout_height="40dp"
+                    android:text="@string/saturday"
+                    android:textSize="15sp"
+                    android:padding="2dp"
+                    android:textAlignment="center"/>
+            </TableRow>
+            <TableRow
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp">
+
+                <TextView
+                    android:id="@+id/profile_schedule_Sun_2"
+                    android:layout_width="50dp"
+                    android:layout_height="40dp"
+                    android:text="@string/sunday"
+                    android:textSize="15sp"
+                    android:padding="2dp"
+                    android:textAlignment="center"/>
+
+                <TextView
+                    android:id="@+id/profile_schedule_Mon_2"
+                    android:layout_width="50dp"
+                    android:layout_height="40dp"
+                    android:text="@string/monday"
+                    android:textSize="15sp"
+                    android:padding="2dp"
+                    android:textAlignment="center"/>
+                <TextView
+                    android:id="@+id/profile_schedule_Tue_2"
+                    android:layout_width="50dp"
+                    android:layout_height="40dp"
+                    android:text="@string/tuesday"
+                    android:textSize="15sp"
+                    android:padding="2dp"
+                    android:textAlignment="center"/>
+                <TextView
+                    android:id="@+id/profile_schedule_Wed_2"
+                    android:layout_width="50dp"
+                    android:layout_height="40dp"
+                    android:text="@string/wednesday"
+                    android:textSize="15sp"
+                    android:padding="2dp"
+                    android:textAlignment="center"/>
+                <TextView
+                    android:id="@+id/profile_schedule_Thur_2"
+                    android:layout_width="50dp"
+                    android:layout_height="40dp"
+                    android:text="@string/thursday"
+                    android:textSize="15sp"
+                    android:padding="2dp"
+                    android:textAlignment="center"/>
+                <TextView
+                    android:id="@+id/profile_schedule_Fri_0"
+                    android:layout_width="50dp"
+                    android:layout_height="40dp"
+                    android:text="@string/friday"
+                    android:textSize="15sp"
+                    android:padding="2dp"
+                    android:textAlignment="center"/>
+                <TextView
+                    android:id="@+id/profile_schedule_Sat_0"
+                    android:layout_width="50dp"
+                    android:layout_height="40dp"
+                    android:text="@string/saturday"
+                    android:textSize="15sp"
+                    android:padding="2dp"
+                    android:textAlignment="center"/>
+            </TableRow>
+            <TableRow
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp">
+
+                <TextView
+                    android:id="@+id/profile_schedule_Sun_0"
+                    android:layout_width="50dp"
+                    android:layout_height="40dp"
+                    android:text="@string/sunday"
+                    android:textSize="15sp"
+                    android:padding="2dp"
+                    android:textAlignment="center"/>
+
+                <TextView
+                    android:id="@+id/profile_schedule_Mon_0"
+                    android:layout_width="50dp"
+                    android:layout_height="40dp"
+                    android:text="@string/monday"
+                    android:textSize="15sp"
+                    android:padding="2dp"
+                    android:textAlignment="center"/>
+                <TextView
+                    android:id="@+id/profile_schedule_Tue_0"
+                    android:layout_width="50dp"
+                    android:layout_height="40dp"
+                    android:text="@string/tuesday"
+                    android:textSize="15sp"
+                    android:padding="2dp"
+                    android:textAlignment="center"/>
+                <TextView
+                    android:id="@+id/profile_schedule_Wed_0"
+                    android:layout_width="50dp"
+                    android:layout_height="40dp"
+                    android:text="@string/wednesday"
+                    android:textSize="15sp"
+                    android:padding="2dp"
+                    android:textAlignment="center"/>
+                <TextView
+                    android:id="@+id/profile_schedule_Thur_0"
+                    android:layout_width="50dp"
+                    android:layout_height="40dp"
+                    android:text="@string/thursday"
+                    android:textSize="15sp"
+                    android:padding="2dp"
+                    android:textAlignment="center"/>
+                <TextView
+                    android:id="@+id/profile_schedule_Fri_0"
+                    android:layout_width="50dp"
+                    android:layout_height="40dp"
+                    android:text="@string/friday"
+                    android:textSize="15sp"
+                    android:padding="2dp"
+                    android:textAlignment="center"/>
+                <TextView
+                    android:id="@+id/profile_schedule_Sat_0"
+                    android:layout_width="50dp"
+                    android:layout_height="40dp"
+                    android:text="@string/saturday"
+                    android:textSize="15sp"
+                    android:padding="2dp"
+                    android:textAlignment="center"/>
+            </TableRow>
+            <TableRow
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp">
+
+                <TextView
+                    android:id="@+id/profile_schedule_Sun_0"
+                    android:layout_width="50dp"
+                    android:layout_height="40dp"
+                    android:text="@string/sunday"
+                    android:textSize="15sp"
+                    android:padding="2dp"
+                    android:textAlignment="center"/>
+
+                <TextView
+                    android:id="@+id/profile_schedule_Mon_0"
+                    android:layout_width="50dp"
+                    android:layout_height="40dp"
+                    android:text="@string/monday"
+                    android:textSize="15sp"
+                    android:padding="2dp"
+                    android:textAlignment="center"/>
+                <TextView
+                    android:id="@+id/profile_schedule_Tue_0"
+                    android:layout_width="50dp"
+                    android:layout_height="40dp"
+                    android:text="@string/tuesday"
+                    android:textSize="15sp"
+                    android:padding="2dp"
+                    android:textAlignment="center"/>
+                <TextView
+                    android:id="@+id/profile_schedule_Wed_0"
+                    android:layout_width="50dp"
+                    android:layout_height="40dp"
+                    android:text="@string/wednesday"
+                    android:textSize="15sp"
+                    android:padding="2dp"
+                    android:textAlignment="center"/>
+                <TextView
+                    android:id="@+id/profile_schedule_Thur_0"
+                    android:layout_width="50dp"
+                    android:layout_height="40dp"
+                    android:text="@string/thursday"
+                    android:textSize="15sp"
+                    android:padding="2dp"
+                    android:textAlignment="center"/>
+                <TextView
+                    android:id="@+id/profile_schedule_Fri_0"
+                    android:layout_width="50dp"
+                    android:layout_height="40dp"
+                    android:text="@string/friday"
+                    android:textSize="15sp"
+                    android:padding="2dp"
+                    android:textAlignment="center"/>
+                <TextView
+                    android:id="@+id/profile_schedule_Sat_0"
+                    android:layout_width="50dp"
+                    android:layout_height="40dp"
+                    android:text="@string/saturday"
+                    android:textSize="15sp"
+                    android:padding="2dp"
+                    android:textAlignment="center"/>
+            </TableRow>
+            <TableRow
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp">
+
+                <TextView
+                    android:id="@+id/profile_schedule_Sun_0"
+                    android:layout_width="50dp"
+                    android:layout_height="40dp"
+                    android:text="@string/sunday"
+                    android:textSize="15sp"
+                    android:padding="2dp"
+                    android:textAlignment="center"/>
+
+                <TextView
+                    android:id="@+id/profile_schedule_Mon_0"
+                    android:layout_width="50dp"
+                    android:layout_height="40dp"
+                    android:text="@string/monday"
+                    android:textSize="15sp"
+                    android:padding="2dp"
+                    android:textAlignment="center"/>
+                <TextView
+                    android:id="@+id/profile_schedule_Tue_0"
+                    android:layout_width="50dp"
+                    android:layout_height="40dp"
+                    android:text="@string/tuesday"
+                    android:textSize="15sp"
+                    android:padding="2dp"
+                    android:textAlignment="center"/>
+                <TextView
+                    android:id="@+id/profile_schedule_Wed_0"
+                    android:layout_width="50dp"
+                    android:layout_height="40dp"
+                    android:text="@string/wednesday"
+                    android:textSize="15sp"
+                    android:padding="2dp"
+                    android:textAlignment="center"/>
+                <TextView
+                    android:id="@+id/profile_schedule_Thur_0"
+                    android:layout_width="50dp"
+                    android:layout_height="40dp"
+                    android:text="@string/thursday"
+                    android:textSize="15sp"
+                    android:padding="2dp"
+                    android:textAlignment="center"/>
+                <TextView
+                    android:id="@+id/profile_schedule_Fri_0"
+                    android:layout_width="50dp"
+                    android:layout_height="40dp"
+                    android:text="@string/friday"
+                    android:textSize="15sp"
+                    android:padding="2dp"
+                    android:textAlignment="center"/>
+                <TextView
+                    android:id="@+id/profile_schedule_Sat_0"
+                    android:layout_width="50dp"
+                    android:layout_height="40dp"
+                    android:text="@string/saturday"
+                    android:textSize="15sp"
+                    android:padding="2dp"
+                    android:textAlignment="center"/>
             </TableRow>
 
         </TableLayout>

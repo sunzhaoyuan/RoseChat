@@ -29,11 +29,11 @@
     <string name="profile_sample_email">sample_email@rose-hulman.edu</string>
     <string name="profile_sample_name">Sample Name</string>
     <string name="profile_sample_phone_number">812-877-1511</string>
-    <string name="sunday">Sunday</string>
-    <string name="monday">Monday</string>
-    <string name="wednesday">Wednesday</string>
-    <string name="thursday">Thursday</string>
-    <string name="friday">Friday</string>
-    <string name="saturday">Saturday</string>
-    <string name="tuesday">Tuesday</string>
+    <string name="sunday">Sun</string>
+    <string name="monday">Mon</string>
+    <string name="wednesday">Wed</string>
+    <string name="thursday">Thur</string>
+    <string name="friday">Fri</string>
+    <string name="saturday">Sat</string>
+    <string name="tuesday">Tue</string>
 </resources>
