@@ -43,4 +43,8 @@
     <string name="profile_edit">edit</string>
     <string name="profile_confirm">confirm</string>
     <string name="profile_edit_name">Edit Profile</string>
+    <string name="delete_account_message">Are you sure you would like to delete your account? All this means is the backed up chats and contacts will be deleted</string>
+    <string name="delete_account_title">Delete Account</string>
+    <string name="logout_title">Log Out</string>
+    <string name="logout_message">Are you sure you would like to log out?</string>
 </resources>

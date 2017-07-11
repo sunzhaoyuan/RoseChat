@@ -116,11 +116,10 @@ public class MainSettingsFragment extends Fragment implements View.OnClickListen
                 switchLanguage();
                 return;
             case R.id.button_settings_logOut:
+                logOutConfirmationDialog();
                 return;
             case R.id.button_settings_deleteAccount:
-                if(deleteAccountConfirmationDialog()){
-                    deleteAccount();
-                }
+                deleteAccountConfirmationDialog();
                 return;
             case R.id.button_settings_notification:
                 return;
@@ -130,14 +129,45 @@ public class MainSettingsFragment extends Fragment implements View.OnClickListen
 
     }
 
-    private void deleteAccount() {
+    private void logOutConfirmationDialog() {
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
+        mBuilder.setTitle(R.string.logout_title);
+        mBuilder.setMessage(R.string.logout_message);
+        mBuilder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                logOut();
+            }
+        });
+
+        mBuilder.setNegativeButton(android.R.string.cancel, null);
+        AlertDialog dialog = mBuilder.create();
+        dialog.show();
     }
 
-    private boolean deleteAccountConfirmationDialog() {
-        Boolean result =false;
+    private void logOut() {
+        //TODO:
+    }
+
+
+    private void deleteAccount() {
+        //TODO:
+    }
+
+    private void deleteAccountConfirmationDialog() {
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
-        
-        return result;
+        mBuilder.setTitle(R.string.delete_account_title);
+        mBuilder.setMessage(R.string.delete_account_message);
+        mBuilder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                deleteAccount();
+            }
+        });
+
+        mBuilder.setNegativeButton(android.R.string.cancel, null);
+        AlertDialog dialog = mBuilder.create();
+        dialog.show();
     }
 
     private void switchLanguage(){
