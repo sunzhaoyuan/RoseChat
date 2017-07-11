@@ -46,7 +46,8 @@ You can find our UI demo on [Ninja Mock](https://ninjamock.com/s/5FZF2)
         - [x] Main Settings (Sun)
         - [ ] Notifications (Abu)
         - [ ] Feedbacks (Abu)
-        - [ ] DeleteAccount (Abu)
+        - [x] LogOut (Abu)
+        - [x] DeleteAccount (Abu)
         - [x] Language (Sun)
 - [x] Do and write down some research on how to send messages to other users in real time
 
