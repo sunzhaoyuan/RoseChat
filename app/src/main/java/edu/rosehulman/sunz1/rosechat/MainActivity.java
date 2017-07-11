@@ -135,23 +135,37 @@ public class MainActivity extends AppCompatActivity {
         mBuilder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+            // This is overwritten
+            }
+        });
+
+        mBuilder.setNegativeButton(android.R.string.cancel, null);
+        mBuilder.setView(mView);
+        final AlertDialog dialog = mBuilder.create();
+        dialog.show();
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Boolean wantToCloseDialog = false;
                 if (!mEmail.getText().toString().isEmpty() && !mMessage.getText().toString().isEmpty()) {
                     if (containsContact(mEmail.getText().toString())) {
                         Toast.makeText(MainActivity.this, R.string.error_add_contact_existing_contact, Toast.LENGTH_LONG).show();
                     }//TODO: May want to put a more thorough checks e.g. does the email ID exist?
                     else {
+                        wantToCloseDialog = true;
                         Toast.makeText(MainActivity.this, R.string.successful_add_contact, Toast.LENGTH_LONG).show();
                     }
                 } else {
                     Toast.makeText(MainActivity.this, R.string.error_add_contact_empty_field, Toast.LENGTH_LONG).show();
                 }
+                if(wantToCloseDialog)
+                    dialog.dismiss();
             }
         });
-        
-        mBuilder.setNegativeButton(android.R.string.cancel, null);
-        mBuilder.setView(mView);
-        AlertDialog dialog = mBuilder.create();
-        dialog.show();
+
+
     }
 
     private boolean containsContact(String email) {
