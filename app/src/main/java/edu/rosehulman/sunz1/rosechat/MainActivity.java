@@ -95,7 +95,6 @@ public class MainActivity extends AppCompatActivity {
         mFragmentMain = new MessageFragment();
         setTitle(R.id.navigation_message);
 
-
     }
 
     /**

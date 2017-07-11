@@ -74,6 +74,8 @@ public class EditProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 ((MainActivity)getActivity()).setViewPager(2); // 2 is profile
+                //TODO: one thing: do we need a wrapper class that store all resources and relationships that we need?
+                ((MainActivity) getActivity()).getSupportActionBar().setTitle(getResources().getString(R.string.navi_profile).toUpperCase());
             }
         });
         return view;

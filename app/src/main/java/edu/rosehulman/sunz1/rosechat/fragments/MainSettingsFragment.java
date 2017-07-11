@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import edu.rosehulman.sunz1.rosechat.MainActivity;
 import edu.rosehulman.sunz1.rosechat.R;
 
 ///**
@@ -108,6 +109,8 @@ public class MainSettingsFragment extends Fragment implements View.OnClickListen
         int id = v.getId();
         switch (id){
             case R.id.button_settings_profile:
+                ((MainActivity)getActivity()).setViewPager(2);
+                ((MainActivity) getActivity()).getSupportActionBar().setTitle(getResources().getString(R.string.navi_profile).toUpperCase());
                 return;
             case R.id.button_settings_Language:
                 //TODO: the method has error. Don't use. -Sun
