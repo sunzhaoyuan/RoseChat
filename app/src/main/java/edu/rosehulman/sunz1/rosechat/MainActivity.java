@@ -58,10 +58,10 @@ public class MainActivity extends AppCompatActivity {
                     mFragmentMain = new MessageFragment();
                     mViewPager.setCurrentItem(0);
 
-                    //TODO: maybe this loop can be wrapped up as a method? - Sun
-                    for (int i = 0; i < getSupportFragmentManager().getBackStackEntryCount() + 1; i++) {
-                        getSupportFragmentManager().popBackStackImmediate();
-                    }
+                    //DONE: maybe this loop can be wrapped up as a method? - Sun
+                    // New method created called clearBackStack();
+
+                    clearBackStack();
                     break;
                 case R.id.navigation_contact:
                     Log.d(DEBUG_KEY, "contact pressed");
@@ -79,6 +79,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
     };
+
+    public void clearBackStack(){
+        for (int i = 0; i < getSupportFragmentManager().getBackStackEntryCount() + 1; i++) {
+            getSupportFragmentManager().popBackStackImmediate();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
