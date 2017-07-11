@@ -135,7 +135,8 @@ public class MainSettingsFragment extends Fragment implements View.OnClickListen
 
     private boolean deleteAccountConfirmationDialog() {
         Boolean result =false;
-
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
+        
         return result;
     }
 
