@@ -76,6 +76,7 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 ((MainActivity)getActivity()).setViewPager(4); // 4 is edit profile
+//                ((MainActivity)getActivity()).getNavigationbar().setCurrentItem(2);
                 ((MainActivity) getActivity()).getSupportActionBar().setTitle(R.string.profile_edit_name);
             }
         });

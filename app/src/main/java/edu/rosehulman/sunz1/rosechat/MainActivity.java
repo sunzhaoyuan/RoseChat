@@ -23,6 +23,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
+
 import java.util.HashMap;
 
 import edu.rosehulman.sunz1.rosechat.fragments.ContactsFragment;
@@ -38,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private NavigationPagerAdapter mNavigationPagerAdapter;
     private ViewPager mViewPager;
     private Fragment mFragmentMain;
+//    private BottomNavigationViewEx mNavigation;
     private HashMap<Integer, Integer> mTitlesMap = new HashMap<Integer, Integer>() {{
         put(R.id.navigation_message, R.string.navi_message);
         put(R.id.navigation_contact, R.string.navi_contact);
@@ -94,9 +97,14 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
+//        mNavigation = (BottomNavigationViewEx) findViewById(R.id.bnve);
+//        mNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+
         mNavigationPagerAdapter = new NavigationPagerAdapter(getSupportFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.fragment_container);
-        setupViewPager(mViewPager);
+        ViewPager viewPager = setupViewPager(mViewPager);
+//        mNavigation.setupWithViewPager(viewPager);
 
         mFragmentMain = new MessageFragment();
         setTitle(R.id.navigation_message);
@@ -125,12 +133,17 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_settings:
                 // TODO: settings screen
                 setTitle(id);
+//                mNavigation.setCurrentItem(mNavigation.getCurrentItem());
                 mViewPager.setCurrentItem(3);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
+
+//    public BottomNavigationViewEx getNavigationbar(){
+//        return mNavigation;
+//    }
 
     private void addContact() {
         final AlertDialog.Builder mBuilder = new AlertDialog.Builder(MainActivity.this);
@@ -179,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
-    private void setupViewPager(ViewPager viewPager){
+    private ViewPager setupViewPager(ViewPager viewPager){
         NavigationPagerAdapter adapter = new NavigationPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new MessageFragment(), getTitle(R.id.navigation_message));
         adapter.addFragment(new ContactsFragment(), getTitle(R.id.navigation_contact));
@@ -187,6 +200,7 @@ public class MainActivity extends AppCompatActivity {
         adapter.addFragment(new MainSettingsFragment(), getTitle(R.id.action_settings));
         adapter.addFragment(new EditProfileFragment(), getTitle(R.id.edit_profile));
         viewPager.setAdapter(adapter);
+        return viewPager;
     }
 
     public void setViewPager(int fragmentNumber){

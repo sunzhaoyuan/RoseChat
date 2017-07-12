@@ -53,3 +53,6 @@ You can find our UI demo on [Ninja Mock](https://ninjamock.com/s/5FZF2)
 
 ## Also
 * RoseChat tries to be as [KISS](https://en.wikipedia.org/wiki/KISS_principle) as possible
+
+## Thanks
+Thanks for [天宇工作室 ittianyu.com](https://github.com/ittianyu/BottomNavigationViewEx)

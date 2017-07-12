@@ -15,12 +15,11 @@
         android:layout_weight="1">
 
         <android.support.v4.view.ViewPager
+            android:id="@+id/fragment_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/fragment_container">
+            android:layout_height="match_parent">
 
         </android.support.v4.view.ViewPager>
-
     </RelativeLayout>
 
     <android.support.design.widget.BottomNavigationView
@@ -30,5 +29,15 @@
         android:layout_gravity="bottom"
         android:background="?android:attr/windowBackground"
         app:menu="@menu/navigation" />
+
+    <!--<com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx-->
+    <!--android:id="@+id/bnve"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_alignParentBottom="true"-->
+    <!--android:background="?android:attr/windowBackground"-->
+    <!--app:itemIconTint="@color/colorPrimary"-->
+    <!--app:itemTextColor="@color/dark_grey"-->
+    <!--app:menu="@menu/navigation" />-->
 
 </LinearLayout>
