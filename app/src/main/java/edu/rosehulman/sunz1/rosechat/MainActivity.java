@@ -33,14 +33,15 @@ import edu.rosehulman.sunz1.rosechat.fragments.MainSettingsFragment;
 import edu.rosehulman.sunz1.rosechat.fragments.MessageFragment;
 import edu.rosehulman.sunz1.rosechat.fragments.ProfileFragment;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
 
     final private String DEBUG_KEY = "Debug";
 
     private NavigationPagerAdapter mNavigationPagerAdapter;
     private ViewPager mViewPager;
     private Fragment mFragmentMain;
-//    private BottomNavigationViewEx mNavigation;
+    //    private BottomNavigationViewEx mNavigation;
+    private BottomNavigationView mBottomNavigationView;
     private HashMap<Integer, Integer> mTitlesMap = new HashMap<Integer, Integer>() {{
         put(R.id.navigation_message, R.string.navi_message);
         put(R.id.navigation_contact, R.string.navi_contact);
@@ -83,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
 
     };
 
-    public void clearBackStack(){
+    public void clearBackStack() {
         for (int i = 0; i < getSupportFragmentManager().getBackStackEntryCount() + 1; i++) {
             getSupportFragmentManager().popBackStackImmediate();
         }
@@ -94,8 +95,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        mBottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+        mBottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
 //        mNavigation = (BottomNavigationViewEx) findViewById(R.id.bnve);
 //        mNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -103,7 +104,9 @@ public class MainActivity extends AppCompatActivity {
 
         mNavigationPagerAdapter = new NavigationPagerAdapter(getSupportFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.fragment_container);
-        ViewPager viewPager = setupViewPager(mViewPager);
+        setupViewPager(mViewPager);
+
+        mViewPager.addOnPageChangeListener(this);
 //        mNavigation.setupWithViewPager(viewPager);
 
         mFragmentMain = new MessageFragment();
@@ -153,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
         mBuilder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-            // This is overwritten
+                // This is overwritten
             }
         });
 
@@ -161,11 +164,9 @@ public class MainActivity extends AppCompatActivity {
         mBuilder.setView(mView);
         final AlertDialog dialog = mBuilder.create();
         dialog.show();
-        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener()
-        {
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 Boolean wantToCloseDialog = false;
                 if (!mEmail.getText().toString().isEmpty() && !mMessage.getText().toString().isEmpty()) {
                     if (containsContact(mEmail.getText().toString())) {
@@ -178,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText(MainActivity.this, R.string.error_add_contact_empty_field, Toast.LENGTH_LONG).show();
                 }
-                if(wantToCloseDialog)
+                if (wantToCloseDialog)
                     dialog.dismiss();
             }
         });
@@ -192,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
-    private ViewPager setupViewPager(ViewPager viewPager){
+    private void setupViewPager(ViewPager viewPager) {
         NavigationPagerAdapter adapter = new NavigationPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new MessageFragment(), getTitle(R.id.navigation_message));
         adapter.addFragment(new ContactsFragment(), getTitle(R.id.navigation_contact));
@@ -200,10 +201,9 @@ public class MainActivity extends AppCompatActivity {
         adapter.addFragment(new MainSettingsFragment(), getTitle(R.id.action_settings));
         adapter.addFragment(new EditProfileFragment(), getTitle(R.id.edit_profile));
         viewPager.setAdapter(adapter);
-        return viewPager;
     }
 
-    public void setViewPager(int fragmentNumber){
+    public void setViewPager(int fragmentNumber) {
         mViewPager.setCurrentItem(fragmentNumber);
     }
 
@@ -216,4 +216,26 @@ public class MainActivity extends AppCompatActivity {
     private String getTitle(Integer itemID) {
         return getString(this.mTitlesMap.get(itemID));
     }
+
+    // ViewPager OnPageChange Listener: BEGINS
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        if (mViewPager != null) {
+//            mBottomNavigationView.setCurrentItem(position);
+            if (position < 3) {
+                mBottomNavigationView.setSelectedItemId(position);
+                Log.d(DEBUG_KEY, "item id is " + position);
+            }
+        }
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+    }
+    //ViewPager OnPageChange Listener: ENDS
 }
