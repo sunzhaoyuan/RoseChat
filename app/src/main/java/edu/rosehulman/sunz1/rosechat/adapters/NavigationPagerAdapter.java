@@ -1,4 +1,4 @@
-package edu.rosehulman.sunz1.rosechat;
+package edu.rosehulman.sunz1.rosechat.adapters;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

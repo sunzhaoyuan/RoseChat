@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/amber_50"
+    android:clickable="true"
+    android:orientation="horizontal"
+    android:paddingBottom="@dimen/padding_small"
+    android:paddingEnd="@dimen/padding_mid"
+    android:paddingStart="@dimen/padding_mid"
+    android:paddingTop="@dimen/padding_small">
+
+    <TextView
+        android:id="@+id/chat_profile_pic_me"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="@dimen/margin_small"
+        android:background="@drawable/user_profile_pic_chat_bg"
+        android:gravity="center"
+        android:text="@string/chat_me_profile_blank"
+        android:textAllCaps="true"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/grey_200"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/chat_text_me"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_max"
+        android:layout_toStartOf="@+id/chat_profile_pic_me"
+        android:background="@drawable/chat_rounded_rect_bg"
+        android:padding="@dimen/padding_min"
+        android:text="@string/chat_me_blank"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@color/purple_700" />
+
+</RelativeLayout>

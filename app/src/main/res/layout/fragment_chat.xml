@@ -19,6 +19,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_margin="8dp"
-        android:background="@drawable/rounded_rect_bg" />
+        android:background="@drawable/rounded_rect_bg"
+        android:imeOptions="actionSend"
+        android:inputType="text"
+        android:padding="4dp" />
 
 </RelativeLayout>
