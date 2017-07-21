@@ -1,4 +1,4 @@
-package edu.rosehulman.sunz1.rosechat;
+package edu.rosehulman.sunz1.rosechat.utils;
 
 import android.content.Context;
 import android.content.res.ColorStateList;

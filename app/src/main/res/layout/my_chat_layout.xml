@@ -20,7 +20,7 @@
         android:gravity="center"
         android:text="@string/chat_me_profile_blank"
         android:textAllCaps="true"
-        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@color/grey_200"
         android:textStyle="bold" />
 

@@ -48,7 +48,7 @@
     <string name="logout_title">Log Out</string>
     <string name="logout_message">Are you sure you would like to log out?</string>
     <string name="chat_me_blank">hello myself!</string>
-    <string name="chat_me_profile_blank">Sun</string>
-    <string name="chat_other_profile_blank">ABU</string>
+    <string name="chat_me_profile_blank">S</string>
+    <string name="chat_other_profile_blank">A</string>
     <string name="chat_other_blank">hello others!</string>
 </resources>
