@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">RoseChat</string>
+    <string name="app_name">罗斯聊</string>
     <string name="navi_message">信息</string>
     <string name="navi_contact">联系人</string>
     <string name="navi_profile">个人</string>
@@ -15,16 +15,13 @@
     <string name="settings_log_out">登出</string>
     <string name="settings_feedback">反馈</string>
     <string name="settings_delete_account">删除账户</string>
-    <string name="rosechat">RoseChat</string>
-    <string name="log_in_text">链接RoseFire登陆</string>
-    <string name="sys_fake_login_stage">fake-logIn-stage</string>
+    <string name="log_in_text">用RoseFire账户登录</string>
     <string name="error_add_contact_empty_field">请填写全部对话框</string>
     <string name="error_add_contact_existing_contact">已有该联系人</string>
     <string name="successful_add_contact">请求已发送</string>
     <string name="Title_Language">语言</string>
     <string name="language_english">English</string>
     <string name="language_Chinese">中文（简体）</string>
-    <string name="profile_sample_email">sample_email@rose-hulman.edu</string>
     <string name="profile_sample_name">范例姓名</string>
     <string name="profile_sample_phone_number">812-877-1511</string>
     <string name="sunday">周日</string>
@@ -39,9 +36,21 @@
     <string name="profile_schedule_outdoor">外出</string>
     <string name="profile_schedule_game">游戏</string>
     <string name="profile_schedule_sleeping">休息</string>
-    <string name="profile_schedule_with_friends">with friends</string>
+    <string name="profile_schedule_with_friends">和朋友一起</string>
     <string name="profile_schedule_working">工作</string>
     <string name="profile_edit">编辑</string>
     <string name="profile_confirm">确认</string>
     <string name="profile_edit_name">编辑个人信息</string>
+    <string name="chat_me_blank">你好！（自己）</string>
+    <string name="chat_me_profile_blank">S</string>
+    <string name="chat_other_blank">你好！（对方）</string>
+    <string name="chat_other_profile_blank">A</string>
+    <string name="delete_account_message">你确定你想要删除账户么？这将会使你的聊天记录和联系人被永久抹除。</string>
+    <string name="delete_account_title">删除账户</string>
+    <string name="logout_message">你确定要登出么？</string>
+    <string name="logout_title">登出</string>
+    <string name="settings_feedback_author"></string>
+    <string name="settings_feedback_hint">请在这里填写你的反馈</string>
+    <string name="settings_feedback_message">非常感谢您使用我们的软件。为了提升我们的软件质量，我们希望能听到您的反馈与声音。</string>
+    <string name="profile_sample_email" translatable="false">范例邮箱@rose-hulman.com</string>
 </resources>

@@ -89,6 +89,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         notifyItemRemoved(position);
     }
     private void enterChat(int adapterPosition) {
+        //TODO: link ChatFragment here
     }
 
     private void messageOptions(int adapterPosition) {

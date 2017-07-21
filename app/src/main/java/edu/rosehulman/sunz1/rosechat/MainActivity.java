@@ -179,8 +179,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                     dialog.dismiss();
             }
         });
-
-
     }
 
     private boolean containsContact(String email) {
