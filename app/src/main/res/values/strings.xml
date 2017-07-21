@@ -51,4 +51,7 @@
     <string name="chat_me_profile_blank">S</string>
     <string name="chat_other_profile_blank">A</string>
     <string name="chat_other_blank">hello others!</string>
+    <string name="settings_feedback_message">Thank you very much for using our application. In order to improve our app, we would like to get feedback on your experience.</string>
+    <string name="settings_feedback_hint">Please write your feedback here</string>
+    <string name="settings_feedback_author">- Abu Agarwal and Chris Sun</string>
 </resources>

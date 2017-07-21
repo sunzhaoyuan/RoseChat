@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -18,13 +19,16 @@ import android.widget.Toast;
 import java.util.HashMap;
 
 import edu.rosehulman.sunz1.rosechat.adapters.NavigationPagerAdapter;
+import edu.rosehulman.sunz1.rosechat.fragments.ChatFragment;
 import edu.rosehulman.sunz1.rosechat.fragments.ContactsFragment;
 import edu.rosehulman.sunz1.rosechat.fragments.EditProfileFragment;
 import edu.rosehulman.sunz1.rosechat.fragments.MainSettingsFragment;
 import edu.rosehulman.sunz1.rosechat.fragments.MessageFragment;
 import edu.rosehulman.sunz1.rosechat.fragments.ProfileFragment;
+import edu.rosehulman.sunz1.rosechat.models.Chat;
+import edu.rosehulman.sunz1.rosechat.models.Message;
 
-public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
+public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, MessageFragment.Callback {
 
     final private String DEBUG_KEY = "Debug";
 
@@ -227,6 +231,16 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
     @Override
     public void onPageScrollStateChanged(int state) {
+    }
+
+    @Override
+    public void onMessageSelected(Message message) {
+        //TODO:
+//        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+//        ChatFragment fragment = ChatFragment();
+//        ft.addToBackStack("detail");
+//        ft.replace(R.id.fragment_container, fragment);
+//        ft.commit();
     }
     //ViewPager OnPageChange Listener: ENDS
 }

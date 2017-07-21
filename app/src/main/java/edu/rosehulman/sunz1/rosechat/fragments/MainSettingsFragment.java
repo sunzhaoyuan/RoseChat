@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -127,6 +128,11 @@ public class MainSettingsFragment extends Fragment implements View.OnClickListen
             case R.id.button_settings_notification:
                 return;
             case R.id.button_settings_feedback:
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                FeedbackSettingsFragment fragment = new FeedbackSettingsFragment();
+                transaction.addToBackStack("detail");
+                transaction.replace(R.id.container, fragment);
+                transaction.commit();
                 return;
         }
 

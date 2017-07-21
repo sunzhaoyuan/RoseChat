@@ -4,11 +4,16 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import edu.rosehulman.sunz1.rosechat.R;
+import edu.rosehulman.sunz1.rosechat.adapters.MessageAdapter;
+import edu.rosehulman.sunz1.rosechat.models.Message;
 
 ///**
 // * A simple {@link Fragment} subclass.
@@ -19,6 +24,15 @@ import edu.rosehulman.sunz1.rosechat.R;
 // * create an instance of this fragment.
 // */
 public class MessageFragment extends Fragment {
+
+    RecyclerView mRecyclerView;
+    MessageAdapter mAdapter;
+    protected RecyclerView.LayoutManager mLayoutManager;
+    private Callback mCallback;
+
+    public MessageFragment(){
+
+    }
 //    // TODO: Rename parameter arguments, choose names that match
 //    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 //    private static final String ARG_PARAM1 = "param1";
@@ -62,35 +76,41 @@ public class MessageFragment extends Fragment {
 //    }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // Initialize dataset, this data would usually come from a local content provider or
+        // remote server.
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_message, container, false);
+        RecyclerView view = (RecyclerView)inflater.inflate(R.layout.fragment_message, container, false);
+//        mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+        final LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+        view.setLayoutManager(mLayoutManager);
+        mAdapter = new MessageAdapter(getContext(), mCallback);
+        view.setAdapter(mAdapter);
+        return view;
     }
-//
-//    // TODO: Rename method, update argument and hook method into UI event
-//    public void onButtonPressed(Uri uri) {
-//        if (mListener != null) {
-//            mListener.onFragmentInteraction(uri);
-//        }
-//    }
-//
-//    @Override
-//    public void onAttach(Context context) {
-//        super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
-//    }
-//
-//    @Override
-//    public void onDetach() {
-//        super.onDetach();
-//        mListener = null;
-//    }
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof Callback) {
+            mCallback = (Callback) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement Callback");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCallback = null;
+    }
 //
 //    /**
 //     * This interface must be implemented by activities that contain this
@@ -102,8 +122,10 @@ public class MessageFragment extends Fragment {
 //     * "http://developer.android.com/training/basics/fragments/communicating.html"
 //     * >Communicating with Other Fragments</a> for more information.
 //     */
-//    public interface OnFragmentInteractionListener {
-//        // TODO: Update argument type and name
-//        void onFragmentInteraction(Uri uri);
-//    }
+
+    public interface Callback {
+        // TODO: Update argument type and name
+        void onMessageSelected(Message message);
+    }
+
 }

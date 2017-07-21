@@ -22,6 +22,8 @@
         </android.support.v4.view.ViewPager>
     </RelativeLayout>
 
+    <!--<include layout="@layout/content_main" />-->
+
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navigation"
         android:layout_width="match_parent"

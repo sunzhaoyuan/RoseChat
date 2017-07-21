@@ -7,16 +7,27 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 import edu.rosehulman.sunz1.rosechat.R;
+import edu.rosehulman.sunz1.rosechat.fragments.MessageFragment;
+import edu.rosehulman.sunz1.rosechat.models.Message;
 
 /**
  * Created by agarwaa on 10-Jul-17.
  */
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
+    private Context mContext;
+    ArrayList<Message> mMessageList;
+    MessageFragment.Callback mCallback;
 
-    public MessageAdapter(Context context){
-
+    public MessageAdapter(Context context, MessageFragment.Callback callback){
+        mCallback = callback;
+        mContext = context;
+        mMessageList = new ArrayList<Message>();
+        Message temp = new Message("Temp", "LastInteractionTemp", "pictureURL");
+        addChat(temp);
     }
 
     @Override
@@ -27,17 +38,19 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(MessageAdapter.ViewHolder holder, int position) {
-
+        Message message = mMessageList.get(position);
+        holder.mNameTextView.setText(message.getName());
+        holder.mLastInteraction.setText(message.getLastMessage());
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return mMessageList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         private TextView mNameTextView;
-        private TextView mPositionTextView;
+        private TextView mLastInteraction;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -55,13 +68,31 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                     enterChat(getAdapterPosition());
                 }
             });
+
+            mNameTextView = (TextView) itemView.findViewById(R.id.message_name);
+            mLastInteraction = (TextView) itemView.findViewById(R.id.message_last_interaction);
         }
+
+
     }
 
+    public void addChat(Message message){
+        //TODO: Adds names from firebase
+        mMessageList.add(0, message);
+        notifyItemInserted(0);
+        //   notifyDataSetChanged();
+    }
+
+    public void removeChat(int position){
+        //TODO: Removes name from firebase
+        mMessageList.remove(position);
+        notifyItemRemoved(position);
+    }
     private void enterChat(int adapterPosition) {
     }
 
     private void messageOptions(int adapterPosition) {
     }
+
 
 }

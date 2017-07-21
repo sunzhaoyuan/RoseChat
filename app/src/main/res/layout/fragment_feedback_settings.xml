@@ -15,7 +15,7 @@
         android:paddingTop="10dp"
         android:layout_gravity="left"
         android:textSize="15sp"
-        android:text="Thank you very much for using our application. In order to improve our app, we would like to get feedback on your experience." />
+        android:text="@string/settings_feedback_message" />
 
     <TextView
         android:id="@+id/textView4"
@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="right"
         android:textSize="15sp"
-        android:text="- Abu Agarwal and Chris Sun" />
+        android:text="@string/settings_feedback_author" />
 
     <Space
         android:layout_width="match_parent"
@@ -34,7 +34,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="Please write your feedback here"
+        android:hint="@string/settings_feedback_hint"
         android:textSize="12sp"
         android:inputType="textMultiLine" />
 
