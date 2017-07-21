@@ -25,9 +25,7 @@ import edu.rosehulman.sunz1.rosechat.models.Message;
 // */
 public class MessageFragment extends Fragment {
 
-    RecyclerView mRecyclerView;
     MessageAdapter mAdapter;
-    protected RecyclerView.LayoutManager mLayoutManager;
     private Callback mCallback;
 
     public MessageFragment(){

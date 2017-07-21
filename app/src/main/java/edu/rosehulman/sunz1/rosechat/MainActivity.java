@@ -26,9 +26,10 @@ import edu.rosehulman.sunz1.rosechat.fragments.MainSettingsFragment;
 import edu.rosehulman.sunz1.rosechat.fragments.MessageFragment;
 import edu.rosehulman.sunz1.rosechat.fragments.ProfileFragment;
 import edu.rosehulman.sunz1.rosechat.models.Chat;
+import edu.rosehulman.sunz1.rosechat.models.Contact;
 import edu.rosehulman.sunz1.rosechat.models.Message;
 
-public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, MessageFragment.Callback {
+public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, MessageFragment.Callback, ContactsFragment.Callback  {
 
     final private String DEBUG_KEY = "Debug";
 
@@ -235,6 +236,16 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
     @Override
     public void onMessageSelected(Message message) {
+        //TODO:
+//        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+//        ChatFragment fragment = ChatFragment();
+//        ft.addToBackStack("detail");
+//        ft.replace(R.id.fragment_container, fragment);
+//        ft.commit();
+    }
+
+    @Override
+    public void onContactSelected(Contact contact) {
         //TODO:
 //        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 //        ChatFragment fragment = ChatFragment();

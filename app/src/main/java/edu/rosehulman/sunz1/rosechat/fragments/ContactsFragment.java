@@ -4,11 +4,17 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.telecom.Call;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import edu.rosehulman.sunz1.rosechat.R;
+import edu.rosehulman.sunz1.rosechat.adapters.ContactsAdapter;
+import edu.rosehulman.sunz1.rosechat.models.Contact;
+
 //
 ///**
 // * A simple {@link Fragment} subclass.
@@ -20,16 +26,25 @@ public class ContactsFragment extends Fragment {
 //
 //    private OnFragmentInteractionListener mListener;
 //
-//    public ContactsFragment() {
-//        // Required empty public constructor
-//    }
-//
+    Callback mCallback;
+    ContactsAdapter mAdapter;
+
+    public ContactsFragment() {
+        // Required empty public constructor
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_contacts, container, false);
+        RecyclerView view = (RecyclerView)inflater.inflate(R.layout.fragment_contacts, container, false);
+//        mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+        final LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+        view.setLayoutManager(mLayoutManager);
+        mAdapter = new ContactsAdapter(getContext(), mCallback);
+        view.setAdapter(mAdapter);
+        return view;
     }
 //
 //    // TODO: Rename method, update argument and hook method into UI event
@@ -39,22 +54,22 @@ public class ContactsFragment extends Fragment {
 //        }
 //    }
 //
-//    @Override
-//    public void onAttach(Context context) {
-//        super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
-//    }
-//
-//    @Override
-//    public void onDetach() {
-//        super.onDetach();
-//        mListener = null;
-//    }
+@Override
+public void onAttach(Context context) {
+    super.onAttach(context);
+    if (context instanceof MessageFragment.Callback) {
+        mCallback = (ContactsFragment.Callback) context;
+    } else {
+        throw new RuntimeException(context.toString()
+                + " must implement Callback");
+    }
+}
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCallback = null;
+    }
 //
 //    /**
 //     * This interface must be implemented by activities that contain this
@@ -70,4 +85,9 @@ public class ContactsFragment extends Fragment {
 //        // TODO: Update argument type and name
 //        void onFragmentInteraction(Uri uri);
 //    }
+
+    public interface Callback {
+        // TODO: Update argument type and name
+        void onContactSelected(Contact contact);
+    }
 }
