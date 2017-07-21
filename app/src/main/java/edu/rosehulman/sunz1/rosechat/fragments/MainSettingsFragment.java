@@ -126,6 +126,7 @@ public class MainSettingsFragment extends Fragment implements View.OnClickListen
                 deleteAccountConfirmationDialog();
                 return;
             case R.id.button_settings_notification:
+                notificationDialog();
                 return;
             case R.id.button_settings_feedback:
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
@@ -136,6 +137,22 @@ public class MainSettingsFragment extends Fragment implements View.OnClickListen
                 return;
         }
 
+    }
+
+    private void notificationDialog() {
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
+        mBuilder.setTitle("Notifications");
+        mBuilder.setMessage("Would you like to turn off notifications?");
+        mBuilder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                ///TODO:
+            }
+        });
+
+        mBuilder.setNegativeButton(android.R.string.cancel, null);
+        AlertDialog dialog = mBuilder.create();
+        dialog.show();
     }
 
     private void logOutConfirmationDialog() {
