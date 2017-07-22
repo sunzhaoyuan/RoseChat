@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "446906853465",
+    "firebase_url": "https://rosechat-64ae9.firebaseio.com",
+    "project_id": "rosechat-64ae9",
+    "storage_bucket": "rosechat-64ae9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:446906853465:android:4928b8cc8d9b5c3e",
+        "android_client_info": {
+          "package_name": "edu.rosehulman.sunz1.rosechat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "446906853465-mlh7onntkheqpmoj4f5mocslu0it2ufg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAYoiUtGjT80UVYyyW2PprhrsKSX56J7GU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
