@@ -51,6 +51,14 @@ You can find our UI demo on [Ninja Mock](https://ninjamock.com/s/5FZF2)
         - [x] Language (Sun)
 - [x] Do and write down some research on how to send messages to other users in real time
 
+## Sprint 2 Plan
+- [ ] complete the Chat function
+- [ ] be able to add Contacts
+- [ ] invitation
+- [ ] log in with RoseFire
+- [ ] check others' profiles
+- [ ] connect UI completely
+
 ## Also
 * RoseChat tries to be as [KISS](https://en.wikipedia.org/wiki/KISS_principle) as possible
 
