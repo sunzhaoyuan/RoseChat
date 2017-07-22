@@ -33,18 +33,18 @@ You can find our UI demo on [Ninja Mock](https://ninjamock.com/s/5FZF2)
 
 ## Sprint 1 Plan
 - [x] Learn how to use GitHub to do version control
-- [ ] Finish all the XML for the key/primary parts of the app
-    - [ ] Chat (Sun)
+- [x] Finish all the XML for the key/primary parts of the app
+    - [x] Chat (Sun)
     - [x] Message (Abu)
     - [x] Contact (Abu)
     - [x] Login (Sun)
-    - [ ] NewChat (Abu)
+    - [x] NewChat (Abu)
     - [x] NewContact (Abu)
     - [x] ViewProfile (Sun)
     - [x] EditProfile (Sun)
-    - [ ] Settings
+    - [x] Settings
         - [x] Main Settings (Sun)
-        - [ ] Notifications (Abu)
+        - [x] Notifications (Abu)
         - [x] Feedbacks (Abu)
         - [x] LogOut (Abu)
         - [x] DeleteAccount (Abu)
