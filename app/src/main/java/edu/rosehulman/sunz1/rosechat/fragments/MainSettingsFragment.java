@@ -14,7 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import edu.rosehulman.sunz1.rosechat.MainActivity;
+import edu.rosehulman.sunz1.rosechat.activities.MainActivity;
 import edu.rosehulman.sunz1.rosechat.R;
 
 ///**

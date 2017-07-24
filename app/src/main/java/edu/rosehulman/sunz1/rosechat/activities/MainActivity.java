@@ -1,11 +1,11 @@
-package edu.rosehulman.sunz1.rosechat;
+package edu.rosehulman.sunz1.rosechat.activities;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -18,14 +18,13 @@ import android.widget.Toast;
 
 import java.util.HashMap;
 
+import edu.rosehulman.sunz1.rosechat.R;
 import edu.rosehulman.sunz1.rosechat.adapters.NavigationPagerAdapter;
-import edu.rosehulman.sunz1.rosechat.fragments.ChatFragment;
 import edu.rosehulman.sunz1.rosechat.fragments.ContactsFragment;
 import edu.rosehulman.sunz1.rosechat.fragments.EditProfileFragment;
 import edu.rosehulman.sunz1.rosechat.fragments.MainSettingsFragment;
 import edu.rosehulman.sunz1.rosechat.fragments.MessageFragment;
 import edu.rosehulman.sunz1.rosechat.fragments.ProfileFragment;
-import edu.rosehulman.sunz1.rosechat.models.Chat;
 import edu.rosehulman.sunz1.rosechat.models.Contact;
 import edu.rosehulman.sunz1.rosechat.models.Message;
 
@@ -133,7 +132,9 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                 // TODO: settings screen
                 setTitle(id);
 //                mNavigation.setCurrentItem(mNavigation.getCurrentItem());
-                mViewPager.setCurrentItem(3);
+//                mViewPager.setCurrentItem(3);
+                Intent intent = new Intent(this, SettingsActivity.class);
+                startActivity(intent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -192,7 +193,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         adapter.addFragment(new MessageFragment(), getTitle(R.id.navigation_message));
         adapter.addFragment(new ContactsFragment(), getTitle(R.id.navigation_contact));
         adapter.addFragment(new ProfileFragment(), getTitle(R.id.navigation_profile));
-        adapter.addFragment(new MainSettingsFragment(), getTitle(R.id.action_settings));
+        adapter.addFragment(new MainSettingsFragment(), getTitle(R.id.action_settings)); //TODO: delete this. No Longer in use - Sun
         adapter.addFragment(new EditProfileFragment(), getTitle(R.id.edit_profile));
         viewPager.setAdapter(adapter);
     }
