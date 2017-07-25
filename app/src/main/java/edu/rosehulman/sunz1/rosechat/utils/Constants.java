@@ -12,6 +12,7 @@ public class Constants {
 
     public static final String ARG_USERS = "users";
     public static final String ARG_RECEIVER = "receiver";
+    public static final String ARG_CHAT = "chats";
 
     public static final int VIEW_PAGER_MESSAGE = 0;
     public static final int VIEW_PAGER_CONTACT = 1;

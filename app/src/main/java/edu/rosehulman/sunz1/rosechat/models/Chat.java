@@ -12,16 +12,19 @@ public class Chat {
     public String senderUid;
     public String receiverUid;
     public String message;
+    public Long timeStamp;
+
 
     public Chat(){
 
     }
 
-    public Chat(String sender, String receiver, String senderUid, String receiverUid, String message){
+    public Chat(String sender, String receiver, String senderUid, String receiverUid, String message, Long timeStamp){
         this.sender = sender;
         this.receiver = receiver;
         this.senderUid = senderUid;
         this.receiverUid = receiverUid;
         this.message = message;
+        this.timeStamp = timeStamp;
     }
 }
