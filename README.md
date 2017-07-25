@@ -52,12 +52,16 @@ You can find our UI demo on [Ninja Mock](https://ninjamock.com/s/5FZF2)
 - [x] Do and write down some research on how to send messages to other users in real time
 
 ## Sprint 2 Plan
-- [ ] complete the Chat function
-- [ ] be able to add Contacts
-- [ ] invitation
-- [ ] log in with RoseFire
-- [ ] check others' profiles
-- [ ] connect UI completely
+- [ ] Complete the Chat function (Sun)
+- [ ] Be able to add new chat (Together)
+- [ ] Invitation, add contacts (Abu)
+- [ ] Log in with RoseFire (Sun)
+- [ ] Check others' profiles (Sun)
+- [ ] Connect UI completely (Abu)
+    - [ ]Set up ViewPager
+    
+## Sprint 3 Plan
+- [ ] Schedule Button -> Fragment 
 
 ## Also
 * RoseChat tries to be as [KISS](https://en.wikipedia.org/wiki/KISS_principle) as possible
