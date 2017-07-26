@@ -1,5 +1,6 @@
 package edu.rosehulman.sunz1.rosechat.activities;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -28,7 +29,7 @@ import edu.rosehulman.sunz1.rosechat.fragments.ProfileFragment;
 import edu.rosehulman.sunz1.rosechat.models.Contact;
 import edu.rosehulman.sunz1.rosechat.models.Message;
 
-public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, MessageFragment.Callback, ContactsFragment.Callback  {
+public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, MessageFragment.Callback, ContactsFragment.Callback {
 
     final private String DEBUG_KEY = "Debug";
 
@@ -253,4 +254,9 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 //        ft.commit();
     }
     //ViewPager OnPageChange Listener: ENDS
+
+    public static void startActivity(Context context) {
+        Intent intent = new Intent(context, MainActivity.class);
+        context.startActivity(intent);
+    }
 }

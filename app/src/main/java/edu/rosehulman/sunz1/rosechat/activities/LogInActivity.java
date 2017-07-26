@@ -1,5 +1,6 @@
 package edu.rosehulman.sunz1.rosechat.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,7 +9,7 @@ import android.widget.Button;
 
 import edu.rosehulman.sunz1.rosechat.R;
 
-public class LogInActivity extends AppCompatActivity implements View.OnClickListener{
+public class LogInActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Button mButtonLogIn;
 
@@ -24,10 +25,15 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onClick(View v) {
-        if (v == mButtonLogIn){
+        if (v == mButtonLogIn) {
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
             finish(); // once logged in, never go back
         }
+    }
+
+    public static void startActivity(Context context) {
+        Intent intent = new Intent(context, LogInActivity.class);
+        context.startActivity(intent);
     }
 }

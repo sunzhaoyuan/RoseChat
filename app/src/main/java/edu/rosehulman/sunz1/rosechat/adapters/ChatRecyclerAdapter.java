@@ -1,10 +1,14 @@
 package edu.rosehulman.sunz1.rosechat.adapters;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.List;
 
@@ -17,8 +21,11 @@ import edu.rosehulman.sunz1.rosechat.utils.Constants;
  */
 
 public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    public static final int VIEW_TYPE_CHAT_ME = 0;
+    public static final int VIEW_TYPE_CHAT_OTHER = 1;
 
     List<Chat> mChats;
+    FirebaseUser mUser;
 
     public ChatRecyclerAdapter(List<Chat> chats) {
         mChats = chats;
@@ -26,14 +33,15 @@ public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        mUser = FirebaseAuth.getInstance().getCurrentUser();
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         RecyclerView.ViewHolder viewHolder = null;
         switch (viewType){
-            case Constants.VIEW_TYPE_CHAT_ME:
+            case VIEW_TYPE_CHAT_ME:
                 View viewChatMe = layoutInflater.inflate(R.layout.my_chat_layout, parent, false);
                 viewHolder = new MyChatViewHolder(viewChatMe);
                 break;
-            case Constants.VIEW_TYPE_CHAT_OTHER:
+            case VIEW_TYPE_CHAT_OTHER:
                 View viewChatOther = layoutInflater.inflate(R.layout.other_chat_layout, parent, false);
                 viewHolder = new OthersChatViewHolder(viewChatOther);
                 break;
@@ -45,6 +53,11 @@ public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         // if me: configureMyChatViewHolder
         // if others: configureOtherChatViewHolder
+        if (TextUtils.equals(mChats.get(position).senderUid, mUser.getUid())) {
+            configureMyChatViewHolder((MyChatViewHolder) holder, position);
+        } else {
+            configureOtherChatViewHolder((OthersChatViewHolder) holder, position);
+        }
     }
 
     @Override
