@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,9 +7,19 @@
     tools:context="edu.rosehulman.sunz1.rosechat.activities.SplashActivity">
 
     <ImageView
+        android:id="@+id/splash_image"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_height="100dp"
         android:layout_margin="@dimen/margin_small"
         android:src="@drawable/rosenamelogo" />
 
-</android.support.design.widget.CoordinatorLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/splash_image"
+        android:layout_centerHorizontal="true"
+        android:text="RoseChat Alpha Stage"
+        android:textSize="20sp"/>
+
+</RelativeLayout>

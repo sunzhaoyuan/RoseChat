@@ -15,21 +15,33 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.NumberPicker;
 import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.HashMap;
 
+import edu.rosehulman.rosefire.Rosefire;
+import edu.rosehulman.rosefire.RosefireResult;
 import edu.rosehulman.sunz1.rosechat.R;
 import edu.rosehulman.sunz1.rosechat.adapters.NavigationPagerAdapter;
 import edu.rosehulman.sunz1.rosechat.fragments.ContactsFragment;
 import edu.rosehulman.sunz1.rosechat.fragments.EditProfileFragment;
+import edu.rosehulman.sunz1.rosechat.fragments.LoginFragment;
 import edu.rosehulman.sunz1.rosechat.fragments.MainSettingsFragment;
 import edu.rosehulman.sunz1.rosechat.fragments.MessageFragment;
 import edu.rosehulman.sunz1.rosechat.fragments.ProfileFragment;
 import edu.rosehulman.sunz1.rosechat.models.Contact;
 import edu.rosehulman.sunz1.rosechat.models.Message;
+import edu.rosehulman.sunz1.rosechat.utils.Constants;
 
-public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, MessageFragment.Callback, ContactsFragment.Callback {
+public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener,
+        MessageFragment.Callback,
+        ContactsFragment.Callback {
 
     final private String DEBUG_KEY = "Debug";
 
@@ -38,6 +50,8 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     private Fragment mFragmentMain;
     //    private BottomNavigationViewEx mNavigation;
     private BottomNavigationView mBottomNavigationView;
+
+    // consider to get rid of it, this class is too messy
     private HashMap<Integer, Integer> mTitlesMap = new HashMap<Integer, Integer>() {{
         put(R.id.navigation_message, R.string.navi_message);
         put(R.id.navigation_contact, R.string.navi_contact);
@@ -46,39 +60,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         put(R.id.edit_profile, R.string.profile_edit_name);
     }};
 
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            int id = item.getItemId();
-            switch (id) {
-                case R.id.navigation_message:
-                    Log.d(DEBUG_KEY, "message pressed");
-                    mFragmentMain = new MessageFragment();
-                    mViewPager.setCurrentItem(0);
-
-                    //DONE: maybe this loop can be wrapped up as a method? - Sun
-                    // New method created called clearBackStack();
-
-                    clearBackStack();
-                    break;
-                case R.id.navigation_contact:
-                    Log.d(DEBUG_KEY, "contact pressed");
-                    mFragmentMain = new ContactsFragment();
-                    mViewPager.setCurrentItem(1);
-                    break;
-                case R.id.navigation_profile:
-                    Log.d(DEBUG_KEY, "profile pressed");
-                    mFragmentMain = new ProfileFragment();
-                    mViewPager.setCurrentItem(2);
-                    break;
-            }
-            setTitle(id);
-            return true;
-        }
-
-    };
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNISListener;
 
     public void clearBackStack() {
         for (int i = 0; i < getSupportFragmentManager().getBackStackEntryCount() + 1; i++) {
@@ -92,7 +74,33 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         setContentView(R.layout.activity_main);
 
         mBottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
-        mBottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        mOnNISListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+                switch (id) {
+                    case R.id.navigation_message:
+                        Log.d(DEBUG_KEY, "message pressed");
+                        mFragmentMain = new MessageFragment();
+                        mViewPager.setCurrentItem(0);
+                        clearBackStack();
+                        break;
+                    case R.id.navigation_contact:
+                        Log.d(DEBUG_KEY, "contact pressed");
+                        mFragmentMain = new ContactsFragment();
+                        mViewPager.setCurrentItem(1);
+                        break;
+                    case R.id.navigation_profile:
+                        Log.d(DEBUG_KEY, "profile pressed");
+                        mFragmentMain = new ProfileFragment();
+                        mViewPager.setCurrentItem(2);
+                        break;
+                }
+                setTitle(id);
+                return true;
+            }
+        };
+        mBottomNavigationView.setOnNavigationItemSelectedListener(mOnNISListener);
 
 //        mNavigation = (BottomNavigationViewEx) findViewById(R.id.bnve);
 //        mNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -107,7 +115,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
         mFragmentMain = new MessageFragment();
         setTitle(R.id.navigation_message);
-
     }
 
     /**
@@ -258,5 +265,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     public static void startActivity(Context context) {
         Intent intent = new Intent(context, MainActivity.class);
         context.startActivity(intent);
+//        intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
     }
 }

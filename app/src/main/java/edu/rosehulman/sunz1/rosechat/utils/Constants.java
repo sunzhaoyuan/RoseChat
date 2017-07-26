@@ -8,6 +8,8 @@ package edu.rosehulman.sunz1.rosechat.utils;
 
 public class Constants {
 
+    public static final String TAG = "RC";
+
     public static final String ARG_USERS = "users";
     public static final String ARG_RECEIVER = "receiver";
     public static final String ARG_CHAT = "chats";

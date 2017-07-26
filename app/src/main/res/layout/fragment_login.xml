@@ -14,6 +14,15 @@
         android:paddingTop="20dp"
         android:src="@drawable/rose_logo" />
 
+    <ProgressBar
+        android:id="@+id/login_progress"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:visibility="gone" />
+
     <TextView
         android:id="@+id/app_name_login"
         android:layout_width="wrap_content"
@@ -30,5 +39,13 @@
         android:layout_below="@+id/logo_login"
         android:layout_centerHorizontal="true"
         android:text="@string/log_in_text" />
+
+    <Button
+        android:id="@+id/button_login_fake"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/button_login"
+        android:layout_centerHorizontal="true"
+        android:text="@string/login_with_test_mode"/>
 
 </RelativeLayout>
