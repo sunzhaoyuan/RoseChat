@@ -21,12 +21,15 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     private Context mContext;
     ArrayList<Message> mMessageList;
     MessageFragment.Callback mCallback;
+    public static final String senderUID = "tempSun";
+    public static final ArrayList<String> receiverUID = new ArrayList<>();
+
 
     public MessageAdapter(Context context, MessageFragment.Callback callback){
         mCallback = callback;
         mContext = context;
         mMessageList = new ArrayList<Message>();
-        Message temp = new Message("Temp", "LastInteractionTemp", "pictureURL");
+        Message temp = new Message("Temp", "LastInteractionTemp", "pictureURL", senderUID, receiverUID);
         addChat(temp);
     }
 
