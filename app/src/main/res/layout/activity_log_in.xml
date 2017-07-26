@@ -6,39 +6,11 @@
     android:layout_height="match_parent"
     tools:context="edu.rosehulman.sunz1.rosechat.activities.LogInActivity">
 
-    <ImageView
-        android:id="@+id/logo_login"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:src="@drawable/rose_logo"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:paddingTop="20dp"
-        android:paddingBottom="50dp" />
 
-    <TextView
-        android:id="@+id/app_name_login"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/rosechat"
-        android:textSize="36sp"
-        android:layout_above="@+id/logo_login"
-        android:layout_centerHorizontal="true" />
-
-    <Button
-        android:id="@+id/button_login"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/logo_login"
-        android:layout_centerHorizontal="true"
-        android:text="@string/log_in_text"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/button_login"
-        android:text="@string/sys_fake_login_stage"
-        android:paddingTop="20dp"
-        android:layout_centerHorizontal="true"/>
+    <FrameLayout
+        android:id="@+id/frame_layout_login_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 </RelativeLayout>

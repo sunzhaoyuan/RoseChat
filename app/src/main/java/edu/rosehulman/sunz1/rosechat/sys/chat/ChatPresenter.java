@@ -25,12 +25,12 @@ public class ChatPresenter implements ChatSystem.Presenter,
     //////////////////// PRESENTER BEGINS ////////////////////
     @Override
     public void sendMessage(Context context, Chat chat, String receiverFirebaseToken) {
-        mChatComm.sendMessageToFirebaseUser(context, chat, receiverFirebaseToken);
+        mChatComm.sendMessageToUser(context, chat, receiverFirebaseToken);
     }
 
     @Override
     public void getMessage(String senderUid, String receiverUid) {
-        mChatComm.getMessageFromFirebaseUser(senderUid, receiverUid);
+        mChatComm.getMessageFromUser(senderUid, receiverUid);
     }
     ///////////////////////// PRESENTER ENDS /////////////////////////
 
