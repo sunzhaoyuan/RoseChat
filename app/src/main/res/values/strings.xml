@@ -59,4 +59,6 @@
     <string name="rosefire_login_failed">RoseFire Login Failed.</string>
     <string name="request_code_error">requestCode error</string>
     <string name="login_with_test_mode">Login with test mode</string>
+    <string name="loading">loading</string>
+    <string name="please_wait">Please wait...</string>
 </resources>

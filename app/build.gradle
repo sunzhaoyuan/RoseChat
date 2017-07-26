@@ -41,5 +41,7 @@ dependencies {
     compile 'com.google.firebase:firebase-auth:11.0.2'
     compile 'edu.rosehulman.csse.rosefire:rosefire-android-client:2.1.0'
     testCompile 'junit:junit:4.12'
+
+    compile 'org.greenrobot:eventbus:3.0.0'
 }
 apply plugin: 'com.google.gms.google-services'

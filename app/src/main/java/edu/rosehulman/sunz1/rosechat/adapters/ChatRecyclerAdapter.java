@@ -36,7 +36,7 @@ public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         mUser = FirebaseAuth.getInstance().getCurrentUser();
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         RecyclerView.ViewHolder viewHolder = null;
-        switch (viewType){
+        switch (viewType) {
             case VIEW_TYPE_CHAT_ME:
                 View viewChatMe = layoutInflater.inflate(R.layout.my_chat_layout, parent, false);
                 viewHolder = new MyChatViewHolder(viewChatMe);
@@ -65,24 +65,40 @@ public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         return mChats.size();
     }
 
-    private void configureMyChatViewHolder(MyChatViewHolder myChatViewHolder, int position){
-        Chat chat =  mChats.get(position);
-        String profileNameString = chat.sender.substring(0,1); // we other want one char
+    @Override
+    public int getItemViewType(int position) {
+        if (TextUtils.equals(mChats.get(position).senderUid,
+                FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+            return VIEW_TYPE_CHAT_ME;
+        } else {
+            return VIEW_TYPE_CHAT_OTHER;
+        }
+    }
+
+    public void add(Chat chat) {
+        mChats.add(chat);
+        notifyItemInserted(mChats.size() - 1);
+    }
+
+    private void configureMyChatViewHolder(MyChatViewHolder myChatViewHolder, int position) {
+        Chat chat = mChats.get(position);
+        String profileNameString = chat.sender.substring(0, 1); // we other want one char
 
         myChatViewHolder.chatProfilePicMeTxt.setText(profileNameString);
         myChatViewHolder.chatMessageMeTxt.setText(chat.message);
     }
 
-    private void configureOtherChatViewHolder(OthersChatViewHolder otherChatViewHolder, int position){
+    private void configureOtherChatViewHolder(OthersChatViewHolder otherChatViewHolder, int position) {
         Chat chat = mChats.get(position);
-        String profileNameString = chat.sender.substring(0,1);
+        String profileNameString = chat.sender.substring(0, 1); //TODO
 
         otherChatViewHolder.chatProfilePicOtherTxt.setText(profileNameString);
         otherChatViewHolder.chatMessageOtherTxt.setText(chat.message);
 
     }
 
-    private static class MyChatViewHolder extends RecyclerView.ViewHolder{
+
+    private static class MyChatViewHolder extends RecyclerView.ViewHolder {
         private TextView chatMessageMeTxt, chatProfilePicMeTxt;
 
         public MyChatViewHolder(View itemView) {
@@ -92,7 +108,7 @@ public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
-    private static class OthersChatViewHolder extends RecyclerView.ViewHolder{
+    private static class OthersChatViewHolder extends RecyclerView.ViewHolder {
         private TextView chatMessageOtherTxt, chatProfilePicOtherTxt;
 
         public OthersChatViewHolder(View itemView) {

@@ -80,7 +80,8 @@ public class LogInActivity extends AppCompatActivity implements LoginFragment.On
                 if (user != null) {
                     switchToMainActivity();
                 } else {
-                    switchToLoginActivity();
+//                    switchToLoginActivity();
+                    // keep it in here
                 }
             }
         };
@@ -100,8 +101,7 @@ public class LogInActivity extends AppCompatActivity implements LoginFragment.On
     }
 
     private void switchToMainActivity() {
-//        mFragmentMain = new MessageFragment();
-//        mViewPager.setCurrentItem(0);
+        MainActivity.startActivity(LogInActivity.this);
     }
 
     private void showLoginError(String message) {
