@@ -84,8 +84,9 @@ public class ChatFragment extends Fragment implements ChatSystem.View, TextView.
         mEditTextChat.setOnEditorActionListener(this);
 
         mChatPresenter = new ChatPresenter(this);
-        mChatPresenter.getMessage(FirebaseAuth.getInstance().getCurrentUser().getUid(),
-                getArguments().getString(Constants.ARG_RECEIVER));
+//        mChatPresenter.getMessage(FirebaseAuth.getInstance().getCurrentUser().getUid(),
+//                getArguments().getString(Constants.ARG_RECEIVER));
+        mChatPresenter.getMessage(Constants.FAKE_USER, Constants.FAKE_RECEIVER.get(0));
     }
 
     @Override

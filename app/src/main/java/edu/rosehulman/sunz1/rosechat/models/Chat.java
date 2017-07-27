@@ -13,12 +13,14 @@ public class Chat {
     public String receiverUid;
     public String message;
     public Long timeStamp;
+    public String firebaseToken;
 
 
     public Chat(){
 
     }
 
+    // TODO: receiver ID should be in a ArrayList<String>
     public Chat(String sender, String receiver, String senderUid, String receiverUid, String message, Long timeStamp){
         this.sender = sender;
         this.receiver = receiver;
@@ -26,5 +28,6 @@ public class Chat {
         this.receiverUid = receiverUid;
         this.message = message;
         this.timeStamp = timeStamp;
+        this.firebaseToken = firebaseToken;
     }
 }

@@ -7,9 +7,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import edu.rosehulman.sunz1.rosechat.R;
+import edu.rosehulman.sunz1.rosechat.activities.ChatActivity;
 import edu.rosehulman.sunz1.rosechat.fragments.MessageFragment;
 import edu.rosehulman.sunz1.rosechat.models.Message;
 
@@ -28,7 +30,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     public MessageAdapter(Context context, MessageFragment.Callback callback){
         mCallback = callback;
         mContext = context;
-        mMessageList = new ArrayList<Message>();
+        mMessageList = new ArrayList<>();
         Message temp = new Message("Temp", "LastInteractionTemp", "pictureURL", senderUID, receiverUID);
         addChat(temp);
     }
@@ -93,6 +95,11 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     }
     private void enterChat(int adapterPosition) {
         //TODO: link ChatFragment here
+        Message currentMessage = mMessageList.get(adapterPosition);
+        String messageName = currentMessage.getName();
+        String senderUID = currentMessage.getSenderUID();
+        ArrayList<String> receiversUID = currentMessage.getReceiverUID();
+        ChatActivity.startActivity(this.mContext, messageName, receiversUID);
     }
 
     private void messageOptions(int adapterPosition) {

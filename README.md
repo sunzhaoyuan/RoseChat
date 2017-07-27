@@ -62,7 +62,8 @@ You can find our UI demo on [Ninja Mock](https://ninjamock.com/s/5FZF2)
 - [ ] Check others' profiles (Sun)
 - [ ] Connect UI completely (Abu)
     - [ ] Set up ViewPager
-    
+- [ ] Notification system (Abu)
+ 
 ## Sprint 3 Plan
 - [ ] Schedule Button -> Fragment 
 

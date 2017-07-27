@@ -1,5 +1,9 @@
 package edu.rosehulman.sunz1.rosechat.utils;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Created by sun on 7/21/17.
  *
@@ -20,4 +24,7 @@ public class Constants {
     public static final int VIEW_PAGER_CONTACT = 1;
     public static final int VIEW_PAGER_PROFILE_VIEW = 2;
     public static final int VIEW_PAGER_PROFILE_EDIT = 4; //TODO: it should be 3. See line-196 in MainActivity.
+
+    public static final String FAKE_USER = "sunz1";
+    public static final List<String> FAKE_RECEIVER = Arrays.asList("Abu");
 }

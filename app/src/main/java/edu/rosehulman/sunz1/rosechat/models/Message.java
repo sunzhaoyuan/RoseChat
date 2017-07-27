@@ -58,7 +58,11 @@ public class Message {
         this.profilePicURL = profilePicURL;
     }
 
+    public String getSenderUID() {
+        return senderUID;
+    }
 
-
-
+    public ArrayList<String> getReceiverUID() {
+        return receiverUID;
+    }
 }
