@@ -13,7 +13,7 @@ public class Chat {
     public String receiverUid;
     public String message;
     public Long timeStamp;
-    public String firebaseToken;
+//    public String firebaseToken;
 
 
     public Chat(){
@@ -28,6 +28,6 @@ public class Chat {
         this.receiverUid = receiverUid;
         this.message = message;
         this.timeStamp = timeStamp;
-        this.firebaseToken = firebaseToken;
+//        this.firebaseToken = firebaseToken;
     }
 }

@@ -54,14 +54,16 @@ public class ChatActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        // TODO: how
+        // TODO: notification
+        RoseChatFirebaseStatus.setChatActivityOpen(true);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        //TODO:
-        // update last message
-
+        //TODO: update last message
+        RoseChatFirebaseStatus.setChatActivityOpen(false);
     }
+
+
 }

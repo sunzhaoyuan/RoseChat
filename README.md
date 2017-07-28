@@ -55,7 +55,7 @@ You can find our UI demo on [Ninja Mock](https://ninjamock.com/s/5FZF2)
 - [x] Do and write down some research on how to send messages to other users in real time
 
 ## Sprint 2 Plan
-- [ ] Complete the Chat function ~~80%~~ (Sun)
+- [ ] Complete the Chat function ~~83%~~ (Sun)
 - [ ] Be able to add new chat (Together)
 - [ ] Invitation, add contacts (Abu)
 - [ ] Log in with RoseFire ~~75%~~ (Sun)
