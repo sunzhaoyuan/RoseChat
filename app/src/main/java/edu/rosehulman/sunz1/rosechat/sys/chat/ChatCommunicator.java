@@ -68,7 +68,7 @@ public class ChatCommunicator implements ChatSystem.Communicator {
                     getMessageFromUser(chat.senderUid, chat.receiverUid);
                 }
 
-                sendPushNotificationToReceiver(); //TODO: add parameters that you like
+//                sendPushNotificationToReceiver(); //TODO: add parameters that you like
                 mOnSendMessageListener.onSendMessageSuccess();
             }
 
