@@ -3,10 +3,12 @@ package edu.rosehulman.sunz1.rosechat.activities;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -34,6 +36,7 @@ import edu.rosehulman.sunz1.rosechat.fragments.EditProfileFragment;
 import edu.rosehulman.sunz1.rosechat.fragments.LoginFragment;
 import edu.rosehulman.sunz1.rosechat.fragments.MainSettingsFragment;
 import edu.rosehulman.sunz1.rosechat.fragments.MessageFragment;
+import edu.rosehulman.sunz1.rosechat.fragments.NewChatFragment;
 import edu.rosehulman.sunz1.rosechat.fragments.ProfileFragment;
 import edu.rosehulman.sunz1.rosechat.models.Contact;
 import edu.rosehulman.sunz1.rosechat.models.Message;
@@ -41,7 +44,7 @@ import edu.rosehulman.sunz1.rosechat.utils.Constants;
 
 public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener,
         MessageFragment.Callback,
-        ContactsFragment.Callback {
+        ContactsFragment.Callback, NewChatFragment.OnFragmentInteractionListener {
 
     final private String DEBUG_KEY = "Debug";
 
@@ -132,6 +135,11 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         switch (id) {
             case R.id.action_new_chat:
                 // TODO: pop up a new activity probably (no bottom navi bar)
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                NewChatFragment fragment = new NewChatFragment();
+                ft.addToBackStack("main");
+                ft.add(R.id.container, fragment);
+                ft.commit();
                 return true;
             case R.id.action_add_contact:
                 addContact();
@@ -266,5 +274,10 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         Intent intent = new Intent(context, MainActivity.class);
         context.startActivity(intent);
 //        intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 }

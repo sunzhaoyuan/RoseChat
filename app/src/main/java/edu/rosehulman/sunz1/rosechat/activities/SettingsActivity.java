@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -27,6 +28,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     private Button mButtonLogOut;
     private Button mButtonFeedback;
     private Button mButtonDeleteAccount;
+    public static boolean NOTIFICATIONS = true;
+    private boolean feedbackPressed = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,10 +41,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         mButtonLanguage = (Button) findViewById(R.id.button_settings_Language);
         mButtonLogOut= (Button) findViewById(R.id.button_settings_logOut);
         mButtonNotification= (Button) findViewById(R.id.button_settings_notification);
-        mButtonProfile= (Button) findViewById(R.id.button_settings_profile);
 
         mButtonDeleteAccount.setOnClickListener(this);
-        mButtonProfile.setOnClickListener(this);
         mButtonFeedback.setOnClickListener(this);
         mButtonLanguage.setOnClickListener(this);
         mButtonLogOut.setOnClickListener(this);
@@ -52,10 +53,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
         int id = v.getId();
         switch (id){
-//            case R.id.button_settings_profile: //TODO: see GitHub issue #9 - Sun
-//                ((MainActivity)getActivity()).setViewPager(2);
-//                ((MainActivity) getActivity()).getSupportActionBar().setTitle(getResources().getString(R.string.navi_profile).toUpperCase());
-//                return;
             case R.id.button_settings_Language:
                 switchLanguage();
                 return;
@@ -68,13 +65,19 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             case R.id.button_settings_notification:
                 notificationDialog();
                 return;
-            case R.id.button_settings_feedback: //TODO: not working - Sun
-//                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            case R.id.button_settings_feedback:
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 FeedbackSettingsFragment fragment = new FeedbackSettingsFragment();
-                transaction.addToBackStack("detail");
-                transaction.replace(R.id.container, fragment);
-                transaction.commit();
+                if(!feedbackPressed) {
+                    transaction.addToBackStack("settings");
+                    transaction.add(R.id.settings_container, fragment);
+                    transaction.commit();
+                    feedbackPressed = true;
+                }else{
+                    getSupportFragmentManager().popBackStack("settings", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    transaction.commit();
+                    feedbackPressed = false;
+                }
                 return;
         }
 
@@ -83,15 +86,16 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     private void notificationDialog() {
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(this);
         mBuilder.setTitle("Notifications");
-        mBuilder.setMessage("Would you like to turn off notifications?");
-        mBuilder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+        mBuilder.setMessage("Would you like to turn notifications on or off?");
+        mBuilder.setPositiveButton("On", new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                ///TODO:
-            }
+            public void onClick(DialogInterface dialog, int which) {NOTIFICATIONS =true;}
         });
 
-        mBuilder.setNegativeButton(android.R.string.cancel, null);
+        mBuilder.setNegativeButton("Off", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {NOTIFICATIONS = false;}
+        });
         AlertDialog dialog = mBuilder.create();
         dialog.show();
     }
