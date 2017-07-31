@@ -64,6 +64,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 return;
             case R.id.button_settings_notification:
                 notificationDialog();
+                
                 return;
             case R.id.button_settings_feedback:
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
