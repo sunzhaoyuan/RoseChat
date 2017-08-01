@@ -22,7 +22,7 @@ public class Chat {
     }
 
     // TODO: receiver ID should be in a ArrayList<String>
-    public Chat(String sender, String receiver, String senderUid, String receiverUid, String text, Long timeStamp, String messageKey){
+    public Chat(String sender, String receiver, String senderUid, String receiverUid, String text, Long timeStamp){
         this.sender = sender;
         this.receiver = receiver;
         this.senderUid = senderUid;
@@ -30,6 +30,6 @@ public class Chat {
         this.text = text;
         this.timeStamp = timeStamp;
 //        this.firebaseToken = firebaseToken;
-        this.messageKey = messageKey;
+//        this.messageKey = messageKey;
     }
 }
