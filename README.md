@@ -59,7 +59,7 @@ You can find our UI demo on [Ninja Mock](https://ninjamock.com/s/5FZF2)
 - [ ] Be able to add new chat (Together)
 - [ ] Invitation, add contacts (Abu)
 - [x] Log in with RoseFire (Sun)
-- [ ] Log out (Sun)
+- [x] Log out (Sun)
 - [ ] Check others' profiles (Sun)
 - [ ] Connect UI completely (Abu)
     - [ ] Set up ViewPager
