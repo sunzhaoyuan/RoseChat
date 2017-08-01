@@ -8,12 +8,13 @@ package edu.rosehulman.sunz1.rosechat.models;
 
 public class Chat {
     public String sender;
-    public String receiver;
+    public String receiver; //TODO: change
     public String senderUid;
     public String receiverUid;
-    public String message;
+    public String text;
     public Long timeStamp;
 //    public String firebaseToken;
+    public String messageKey;
 
 
     public Chat(){
@@ -21,13 +22,14 @@ public class Chat {
     }
 
     // TODO: receiver ID should be in a ArrayList<String>
-    public Chat(String sender, String receiver, String senderUid, String receiverUid, String message, Long timeStamp){
+    public Chat(String sender, String receiver, String senderUid, String receiverUid, String text, Long timeStamp, String messageKey){
         this.sender = sender;
         this.receiver = receiver;
         this.senderUid = senderUid;
         this.receiverUid = receiverUid;
-        this.message = message;
+        this.text = text;
         this.timeStamp = timeStamp;
 //        this.firebaseToken = firebaseToken;
+        this.messageKey = messageKey;
     }
 }
