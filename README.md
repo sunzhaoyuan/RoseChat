@@ -58,7 +58,8 @@ You can find our UI demo on [Ninja Mock](https://ninjamock.com/s/5FZF2)
 - [ ] Complete the Chat function ~~83%~~ (Sun)
 - [ ] Be able to add new chat (Together)
 - [ ] Invitation, add contacts (Abu)
-- [ ] Log in with RoseFire ~~75%~~ (Sun)
+- [x] Log in with RoseFire (Sun)
+- [x] Log out (Sun)
 - [ ] Check others' profiles (Sun)
 - [ ] Connect UI completely (Abu)
     - [ ] Set up ViewPager
@@ -66,6 +67,7 @@ You can find our UI demo on [Ninja Mock](https://ninjamock.com/s/5FZF2)
  
 ## Sprint 3 Plan
 - [ ] Schedule Button -> Fragment 
+- [ ] Send Image
 
 ## Also
 RoseChat tries to be as [KISS](https://en.wikipedia.org/wiki/KISS_principle) as possible

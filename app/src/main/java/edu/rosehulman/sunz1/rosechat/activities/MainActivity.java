@@ -3,12 +3,10 @@ package edu.rosehulman.sunz1.rosechat.activities;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -17,30 +15,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.NumberPicker;
 import android.widget.Toast;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import java.util.HashMap;
 
-import edu.rosehulman.rosefire.Rosefire;
-import edu.rosehulman.rosefire.RosefireResult;
 import edu.rosehulman.sunz1.rosechat.R;
 import edu.rosehulman.sunz1.rosechat.adapters.NavigationPagerAdapter;
 import edu.rosehulman.sunz1.rosechat.fragments.ContactsFragment;
 import edu.rosehulman.sunz1.rosechat.fragments.EditProfileFragment;
-import edu.rosehulman.sunz1.rosechat.fragments.LoginFragment;
-import edu.rosehulman.sunz1.rosechat.fragments.MainSettingsFragment;
 import edu.rosehulman.sunz1.rosechat.fragments.MessageFragment;
 //import edu.rosehulman.sunz1.rosechat.fragments.NewChatFragment;
 import edu.rosehulman.sunz1.rosechat.fragments.ProfileFragment;
 import edu.rosehulman.sunz1.rosechat.models.Contact;
 import edu.rosehulman.sunz1.rosechat.models.Message;
-import edu.rosehulman.sunz1.rosechat.utils.Constants;
 
 public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener,
         MessageFragment.Callback,
@@ -209,7 +196,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         adapter.addFragment(new MessageFragment(), getTitle(R.id.navigation_message));
         adapter.addFragment(new ContactsFragment(), getTitle(R.id.navigation_contact));
         adapter.addFragment(new ProfileFragment(), getTitle(R.id.navigation_profile));
-        adapter.addFragment(new MainSettingsFragment(), getTitle(R.id.action_settings)); //TODO: delete this. No Longer in use - Sun
+//        adapter.addFragment(new MainSettingsFragment(), getTitle(R.id.action_settings)); //TODO: delete this. No Longer in use - Sun
         adapter.addFragment(new EditProfileFragment(), getTitle(R.id.edit_profile));
         viewPager.setAdapter(adapter);
     }

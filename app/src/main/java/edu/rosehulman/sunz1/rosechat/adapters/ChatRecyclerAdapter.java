@@ -85,7 +85,7 @@ public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         String profileNameString = chat.sender.substring(0, 1); // we other want one char
 
         myChatViewHolder.chatProfilePicMeTxt.setText(profileNameString);
-        myChatViewHolder.chatMessageMeTxt.setText(chat.message);
+        myChatViewHolder.chatMessageMeTxt.setText(chat.text);
     }
 
     private void configureOtherChatViewHolder(OthersChatViewHolder otherChatViewHolder, int position) {
@@ -93,7 +93,7 @@ public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         String profileNameString = chat.sender.substring(0, 1); //TODO
 
         otherChatViewHolder.chatProfilePicOtherTxt.setText(profileNameString);
-        otherChatViewHolder.chatMessageOtherTxt.setText(chat.message);
+        otherChatViewHolder.chatMessageOtherTxt.setText(chat.text);
 
     }
 

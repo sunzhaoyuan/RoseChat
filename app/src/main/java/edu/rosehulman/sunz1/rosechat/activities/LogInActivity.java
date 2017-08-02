@@ -20,6 +20,7 @@ import edu.rosehulman.sunz1.rosechat.fragments.LoginFragment;
 import edu.rosehulman.sunz1.rosechat.utils.Constants;
 
 public class LogInActivity extends AppCompatActivity implements LoginFragment.OnLoginListener{
+    private static final String TAG = "Login";
     private static final int RC_ROSEFIRE_LOGIN = 1;
 
     // For RoseFire Login
@@ -67,16 +68,18 @@ public class LogInActivity extends AppCompatActivity implements LoginFragment.On
     // For RoseFire Login
     @Override
     public void onRosefireLogin() {
+        Log.d(TAG, "RoseFire logging in");
         Intent signInIntent = Rosefire.getSignInIntent(this, getString(R.string.rosefire_key));
         startActivityForResult(signInIntent, RC_ROSEFIRE_LOGIN);
     }
 
     private void initializeListeners() {
+        Log.d(TAG, "initialize listeners");
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
-                Log.d(Constants.TAG, "User: " + user);
+                Log.d(TAG, "User: " + user);
                 if (user != null) {
                     switchToMainActivity();
                 } else {
@@ -96,7 +99,7 @@ public class LogInActivity extends AppCompatActivity implements LoginFragment.On
     }
 
     private void switchToLoginActivity() {
-        Log.d("Debug", "try to switch Login Activity");
+        Log.d(TAG, "try to switch Login Activity");
 //        LogInActivity.startActivity(MainActivity.this);
     }
 
@@ -114,6 +117,7 @@ public class LogInActivity extends AppCompatActivity implements LoginFragment.On
         if (requestCode == RC_ROSEFIRE_LOGIN) {
             RosefireResult result = Rosefire.getSignInResultFromIntent(data);
             if (result.isSuccessful()) {
+                Log.d(TAG, "Log in successful");
                 mAuth.signInWithCustomToken(result.getToken())
                         .addOnCompleteListener(this, mOnCompleteListener);
             } else {

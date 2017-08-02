@@ -6,15 +6,20 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import edu.rosehulman.sunz1.rosechat.activities.MainActivity;
 import edu.rosehulman.sunz1.rosechat.R;
@@ -30,6 +35,9 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     private Button mButtonDeleteAccount;
     public static boolean NOTIFICATIONS = true;
     private boolean feedbackPressed = false;
+    private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthStateListener;
+//    private OnLogoutListener mLogoutListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +55,35 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         mButtonLanguage.setOnClickListener(this);
         mButtonLogOut.setOnClickListener(this);
         mButtonNotification.setOnClickListener(this);
+
+        mAuth = FirebaseAuth.getInstance();
+        initializeListener();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mAuth.addAuthStateListener(mAuthStateListener);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mAuth.removeAuthStateListener(mAuthStateListener);
+    }
+
+    private void initializeListener() {
+        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    // empty
+                } else {
+                    LogInActivity.startActivity(SettingsActivity.this);
+                }
+            }
+        };
     }
 
     @Override
@@ -117,7 +154,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void logOut() {
-        //TODO:
+        mAuth.signOut();
     }
 
 
