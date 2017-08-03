@@ -4,11 +4,13 @@ import com.google.firebase.database.Exclude;
 
 /**
  * Created by sun on 7/21/17.
- *
+ * <p>
  * A Chat that holds everything that a "chat" needs.
  */
 
 public class Chat {
+    // Used for the query in ChatCommunicator
+    public static final String MESSAGE_KEY = "messageKey";
 
     private String key;
 
@@ -18,24 +20,25 @@ public class Chat {
     private String receiverUid;
     private String text;
     private Long timeStamp;
-//    public String firebaseToken;
     private String messageKey;
+//    public String firebaseToken;
 
 
-    public Chat(){
+    public Chat() {
 
     }
 
     // TODO: receiver ID should be in a ArrayList<String>
-    public Chat(String sender, String receiver, String senderUid, String receiverUid, String text, Long timeStamp){
+    // TODO: messageKey
+    public Chat(String messageKey, String sender, String receiver, String senderUid, String receiverUid, String text, Long timeStamp) {
         this.sender = sender;
         this.receiver = receiver;
         this.senderUid = senderUid;
         this.receiverUid = receiverUid;
         this.text = text;
         this.timeStamp = timeStamp;
+        this.messageKey = messageKey;
 //        this.firebaseToken = firebaseToken;
-//        this.messageKey = messageKey;
     }
 
     @Exclude
@@ -47,14 +50,6 @@ public class Chat {
         this.key = key;
     }
 
-    public String getMessageKey() {
-        return messageKey;
-    }
-
-    public void setMessageKey(String messageKey) {
-        this.messageKey = messageKey;
-    }
-
     public Long getTimeStamp() {
 
         return timeStamp;
@@ -63,6 +58,15 @@ public class Chat {
     public void setTimeStamp(Long timeStamp) {
         this.timeStamp = timeStamp;
     }
+
+    public String getMessageKey() {
+        return messageKey;
+    }
+
+    public void setMessageKey(String messageKey) {
+        this.messageKey = messageKey;
+    }
+
 
     public String getText() {
 
