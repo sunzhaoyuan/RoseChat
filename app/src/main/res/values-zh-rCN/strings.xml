@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">罗斯聊</string>
+    <string name="app_name">RoseChat</string>
     <string name="navi_message">信息</string>
     <string name="navi_contact">联系人</string>
     <string name="navi_profile">个人</string>
@@ -49,8 +49,17 @@
     <string name="delete_account_title">删除账户</string>
     <string name="logout_message">你确定要登出么？</string>
     <string name="logout_title">登出</string>
-    <string name="settings_feedback_author"></string>
     <string name="settings_feedback_hint">请在这里填写你的反馈</string>
     <string name="settings_feedback_message">非常感谢您使用我们的软件。为了提升我们的软件质量，我们希望能听到您的反馈与声音。</string>
-    <string name="profile_sample_email" translatable="false">范例邮箱@rose-hulman.com</string>
+    <string name="profile_sample_email" translatable="false">范例邮箱@rose-hulman.edu</string>
+    <string name="Login_error">登录错误！</string>
+    <string name="loading">加载中</string>
+    <string name="login_failed">登录失败</string>
+    <string name="login_with_test_mode">用测试模式登录</string>
+    <string name="please_wait">请稍后</string>
+    <string name="request_code_error">错误：请求代码</string>
+    <string name="rosechat" translatable="false">RoseChat</string>
+    <string name="rosefire_login_failed">RoseFire登录失败</string>
+    <string name="rosefire_key">ecbd1b2b-516f-4214-a860-0fd423668493</string>
+    <string name="settings_feedback_author" translatable="false">- Abu Agarwal and Zhaoyuan Sun</string>
 </resources>

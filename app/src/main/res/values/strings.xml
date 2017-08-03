@@ -14,9 +14,8 @@
     <string name="settings_log_out">Log Out</string>
     <string name="settings_feedback">Feedback</string>
     <string name="settings_delete_account">Delete Account</string>
-    <string name="rosechat" translatable="false">RoseChat</string>
+    <string name="rosechat">RoseChat</string>
     <string name="log_in_text">Log In With Rose Fire</string>
-    <string name="sys_fake_login_stage" translatable="false">fake-logIn-stage</string>
     <string name="error_add_contact_empty_field">Please fill both fields</string>
     <string name="error_add_contact_existing_contact">Contact already added</string>
     <string name="successful_add_contact">Request sent</string>
@@ -53,12 +52,12 @@
     <string name="chat_other_blank">hello others!</string>
     <string name="settings_feedback_message">Thank you very much for using our application. In order to improve our app, we would like to get feedback on your experience.</string>
     <string name="settings_feedback_hint">Please write your feedback here</string>
-    <string name="settings_feedback_author" translatable="false">- Abu Agarwal and Zhaoyuan Sun</string>
+    <string name="settings_feedback_author">- Abu Agarwal and Zhaoyuan Sun</string>
     <string name="Login_error">Login Error!</string>
     <string name="login_failed">Login failed.</string>
     <string name="rosefire_login_failed">RoseFire Login Failed.</string>
     <string name="request_code_error">requestCode error</string>
     <string name="login_with_test_mode">Login with test mode</string>
     <string name="loading">loading</string>
-    <string name="please_wait">Please wait...</string>
+    <string name="please_wait">Please wait…</string>
 </resources>

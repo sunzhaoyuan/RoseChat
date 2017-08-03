@@ -49,8 +49,8 @@ public class ChatCommunicator implements ChatSystem.Communicator {
      */
     @Override
     public void sendMessageToUser(Context context, final Chat chat, String receiverFirebaseToken) {
-        final String message_type_1 = chat.senderUid + "_" + chat.receiverUid; //TODO: need a helper method to get all receivers' ids
-        final String message_type_2 = chat.receiverUid + "_" + chat.senderUid;
+        final String message_type_1 = chat.getSenderUid() + "_" + chat.getReceiverUid(); //TODO: need a helper method to get all receivers' ids
+        final String message_type_2 = chat.getReceiverUid() + "_" + chat.getSenderUid();
 
         mDatabaseReference.child(Constants.ARG_MESSAGE).getRef().addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -65,7 +65,7 @@ public class ChatCommunicator implements ChatSystem.Communicator {
                     Log.e(TAG, "sendMessageToUser: success");
 
 
-                    getMessageFromUser(chat.senderUid, chat.receiverUid);
+                    getMessageFromUser(chat.getSenderUid(), chat.getReceiverUid());
                 }
 
 //                sendPushNotificationToReceiver(); //TODO: add parameters that you like

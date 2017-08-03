@@ -68,6 +68,7 @@ You can find our UI demo on [Ninja Mock](https://ninjamock.com/s/5FZF2)
 ## Sprint 3 Plan
 - [ ] Schedule Button -> Fragment 
 - [ ] Send Image
+- [ ] Group Chat
 
 ## Also
 RoseChat tries to be as [KISS](https://en.wikipedia.org/wiki/KISS_principle) as possible

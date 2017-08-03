@@ -14,7 +14,6 @@ import java.util.List;
 
 import edu.rosehulman.sunz1.rosechat.R;
 import edu.rosehulman.sunz1.rosechat.models.Chat;
-import edu.rosehulman.sunz1.rosechat.utils.Constants;
 
 /**
  * Created by sun on 7/21/17.
@@ -53,7 +52,7 @@ public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         // if me: configureMyChatViewHolder
         // if others: configureOtherChatViewHolder
-        if (TextUtils.equals(mChats.get(position).senderUid, mUser.getUid())) {
+        if (TextUtils.equals(mChats.get(position).getSenderUid(), mUser.getUid())) {
             configureMyChatViewHolder((MyChatViewHolder) holder, position);
         } else {
             configureOtherChatViewHolder((OthersChatViewHolder) holder, position);
@@ -67,7 +66,7 @@ public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public int getItemViewType(int position) {
-        if (TextUtils.equals(mChats.get(position).senderUid,
+        if (TextUtils.equals(mChats.get(position).getSenderUid(),
                 FirebaseAuth.getInstance().getCurrentUser().getUid())) {
             return VIEW_TYPE_CHAT_ME;
         } else {
@@ -82,18 +81,18 @@ public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     private void configureMyChatViewHolder(MyChatViewHolder myChatViewHolder, int position) {
         Chat chat = mChats.get(position);
-        String profileNameString = chat.sender.substring(0, 1); // we other want one char
+        String profileNameString = chat.getSender().substring(0, 1); // we other want one char
 
         myChatViewHolder.chatProfilePicMeTxt.setText(profileNameString);
-        myChatViewHolder.chatMessageMeTxt.setText(chat.text);
+        myChatViewHolder.chatMessageMeTxt.setText(chat.getText());
     }
 
     private void configureOtherChatViewHolder(OthersChatViewHolder otherChatViewHolder, int position) {
         Chat chat = mChats.get(position);
-        String profileNameString = chat.sender.substring(0, 1); //TODO
+        String profileNameString = chat.getSender().substring(0, 1); //TODO
 
         otherChatViewHolder.chatProfilePicOtherTxt.setText(profileNameString);
-        otherChatViewHolder.chatMessageOtherTxt.setText(chat.text);
+        otherChatViewHolder.chatMessageOtherTxt.setText(chat.getText());
 
     }
 
