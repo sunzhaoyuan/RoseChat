@@ -51,24 +51,11 @@ public class ChatCommunicator implements ChatSystem.Communicator {
      */
     @Override
     public void sendMessageToUser(Context context, final Chat chat, String receiverFirebaseToken) {
-//        final String message_type_1 = chat.getSenderUid() + "_" + chat.getReceiverUid(); //TODO: need a helper method to get all receivers' ids
-//        final String message_type_2 = chat.getReceiverUid() + "_" + chat.getSenderUid();
-//
+        //TODO: need a helper method to get all receivers' ids - Sprint 3
+
         mChatReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-//                if (dataSnapshot.hasChild(message_type_1)) {
-//                    Log.e(TAG, "sendMessageToUser: " + message_type_1 + " exists");
-//                    //TODO: query needed
-//                } else if (dataSnapshot.hasChild(message_type_2)) {
-//                    Log.e(TAG, "sendMessageToUser: " + message_type_2 + " exists");
-//
-//                } else {
-//                    Log.e(TAG, "sendMessageToUser: success");
-//
-//
-//                    getMessageFromUser(chat.getSenderUid(), chat.getReceiverUid());
-//                }
                 mChat = chat;
                 chat.setKey(dataSnapshot.getKey());
                 mChatReference.push().setValue(chat);
@@ -88,22 +75,13 @@ public class ChatCommunicator implements ChatSystem.Communicator {
 
     @Override
     public void getMessageFromUser(String senderUid, String receiverUid) { //TODO: receiverUid should be a ArrayList - Sprint 3
-//        final String message_type_1 = senderUid + "_" + receiverUid;
-//        final String message_type_2 = receiverUid + "_" + senderUid;
-//        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
 
         Query query = mChatReference.orderByChild("key").equalTo(mChat.getKey()); //TODO: TEST THIS IDEA IN THE MIND
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+        query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-//                if (dataSnapshot.hasChild(message_type_1)) {
-//                    //TODO: query needed
-//                } else if (dataSnapshot.hasChild(message_type_2)) {
-//
-//                } else {
-//                    Log.e(TAG, "getMessageFromUser: no such room available");
-//                }
-
+                Chat chat = dataSnapshot.getValue(Chat.class);
+                mOnGetMessagesListener.onGetMessagesSuccess(chat);
             }
 
             @Override

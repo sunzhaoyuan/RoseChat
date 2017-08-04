@@ -20,6 +20,7 @@ public class Constants {
     public static final String ARG_CHAT = "chats";
     public static final String ARG_FIREBASE_TOKEN = "firebase_token";
     public static final String ARG_MESSAGE = "message";
+    public static final String ARG_MESSAGE_KEY = "message_key";
 
     public static final int VIEW_PAGER_MESSAGE = 0;
     public static final int VIEW_PAGER_CONTACT = 1;

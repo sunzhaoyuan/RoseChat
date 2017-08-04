@@ -79,9 +79,9 @@ public class ChatFragment extends Fragment implements ChatSystem.View, TextView.
         mEditTextChat.setOnEditorActionListener(this);
 
         mChatPresenter = new ChatPresenter(this);
-//        mChatPresenter.getMessage(FirebaseAuth.getInstance().getCurrentUser().getUid(),
-//                getArguments().getString(Constants.ARG_RECEIVER));
-        mChatPresenter.getMessage(Constants.FAKE_USER, Constants.FAKE_RECEIVER.get(0));
+        mChatPresenter.getMessage(FirebaseAuth.getInstance().getCurrentUser().getUid(),
+                getArguments().getString(Constants.ARG_RECEIVER));
+//        mChatPresenter.getMessage(Constants.FAKE_USER, Constants.FAKE_RECEIVER.get(0));
     }
 
     @Override
@@ -113,7 +113,8 @@ public class ChatFragment extends Fragment implements ChatSystem.View, TextView.
         String sender = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
         String senderUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         String receiverFirebaseToken = getArguments().getString(Constants.ARG_FIREBASE_TOKEN);
-        Chat chat = new Chat(sender, receiver, senderUid, receiverUid, text, System.currentTimeMillis());
+        String messageKey = getArguments().getString(Constants.ARG_MESSAGE_KEY);
+        Chat chat = new Chat(messageKey, sender, receiver, senderUid, receiverUid, text, System.currentTimeMillis());
         mChatPresenter.sendMessage(getActivity().getApplicationContext(), chat, receiverFirebaseToken);
     }
 

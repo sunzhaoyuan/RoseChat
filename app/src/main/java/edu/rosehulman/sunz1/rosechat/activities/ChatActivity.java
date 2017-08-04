@@ -17,10 +17,11 @@ public class ChatActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
 
-    public static void startActivity(Context context, String receiver, ArrayList<String> receiverUID) {
+    public static void startActivity(Context context, String receiver, ArrayList<String> receiverUID, String messageKey) {
         Intent intent = new Intent(context, ChatActivity.class);
         intent.putExtra(Constants.ARG_RECEIVER, receiver);
         intent.putExtra(Constants.ARG_RECEIVER_UID, receiverUID);
+        intent.putExtra(Constants.ARG_MESSAGE_KEY, messageKey);
 //        intent.putExtra(Constants.ARG_FIREBASE_TOKEN, firebaseToken);
         context.startActivity(intent);
     }

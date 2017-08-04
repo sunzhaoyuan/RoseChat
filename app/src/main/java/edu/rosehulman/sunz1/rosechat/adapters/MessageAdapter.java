@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import edu.rosehulman.sunz1.rosechat.R;
@@ -98,8 +97,9 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         Message currentMessage = mMessageList.get(adapterPosition);
         String messageName = currentMessage.getName();
         String senderUID = currentMessage.getSenderUID();
+        String messageKey = currentMessage.getKey();
         ArrayList<String> receiversUID = currentMessage.getReceiverUID();
-        ChatActivity.startActivity(this.mContext, messageName, receiversUID);
+        ChatActivity.startActivity(this.mContext, messageName, receiversUID, messageKey);
     }
 
     private void messageOptions(int adapterPosition) {
