@@ -1,0 +1,63 @@
+type RoseUsername extends String {
+    validate() { this.length <= 8 }
+}
+type NickName extends String {
+    validate() { this.length > 0 && this.length <= 15 }
+}
+
+//
+//Chat Model
+//
+type Chats {
+    senderUid: RoseUsername,
+    receiverUid: RoseUsername,
+    messageKey: String,
+    text: String,
+    timeStamp: String,
+    sender: String,
+    receiver: String
+}
+
+//
+//Contact Model
+//
+type Contacts {
+    uid: RoseUsername,
+    nickName: NickName,
+    profilePicUrl: String,
+    email: String,
+    phoneNumber: String,
+    Schedule: String,
+    Friends: Map<RoseUsername, Boolean>
+}
+
+//
+//Message Model
+//
+type Messages {
+    name: NickName,
+    lastMessage: String,
+    senderUID: RoseUsername,
+    receiverUID: RoseUsername
+}
+
+//
+//Invitation Model
+//
+type Invitations {
+    senderUID: RoseUsername,
+    receiverUID: RoseUsername,
+    text: String
+}
+ 
+path /chats/{chat} is Chats;
+path /contacts/{contact} is Contacts;
+path /messages/{message} is Messages;
+path /invitations/{invitation} is Invitations;
+
+path / {
+    read() { isAuth() }
+    write() { isAuth() }
+}
+
+isAuth() { auth != null }
