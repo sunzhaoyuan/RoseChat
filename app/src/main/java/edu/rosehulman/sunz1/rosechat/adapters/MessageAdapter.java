@@ -96,7 +96,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         //TODO: link ChatFragment here
         Message currentMessage = mMessageList.get(adapterPosition);
         String messageName = currentMessage.getName();
-        String senderUID = currentMessage.getSenderUID();
+//        String senderUID = currentMessage.getSenderUID();
         String messageKey = currentMessage.getKey();
         ArrayList<String> receiversUID = currentMessage.getReceiverUID();
         ChatActivity.startActivity(this.mContext, messageName, receiversUID, messageKey);
