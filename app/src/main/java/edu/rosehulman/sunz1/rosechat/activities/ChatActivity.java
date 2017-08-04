@@ -15,9 +15,9 @@ public class ChatActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
 
-    public static void startActivity(Context context, String receiver, String receiverUID, String messageKey) {
+    public static void startActivity(Context context, String messageName, String receiverUID, String messageKey) {
         Intent intent = new Intent(context, ChatActivity.class);
-        intent.putExtra(Constants.ARG_RECEIVER, receiver);
+        intent.putExtra(Constants.ARG_MESSAGE_NAME, messageName);
         intent.putExtra(Constants.ARG_RECEIVER_UID, receiverUID);
         intent.putExtra(Constants.ARG_MESSAGE_KEY, messageKey);
 //        intent.putExtra(Constants.ARG_FIREBASE_TOKEN, firebaseToken);
@@ -38,14 +38,10 @@ public class ChatActivity extends AppCompatActivity {
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.frame_layout_chat_container,
-                ChatFragment.newInstance(getIntent().getExtras().getString(Constants.ARG_RECEIVER),
-                        getIntent().getExtras().getString(Constants.ARG_RECEIVER_UID)),
+                ChatFragment.newInstance(getIntent().getExtras().getString(Constants.ARG_MESSAGE_NAME),
+                        getIntent().getExtras().getString(Constants.ARG_RECEIVER_UID),
+                        getIntent().getExtras().getString(Constants.ARG_MESSAGE_KEY)),
                 ChatFragment.class.getSimpleName());
-//        fragmentTransaction.replace(R.id.frame_layout_chat_container,
-//                ChatFragment.newInstance(Constants.FAKE_RECEIVER.get(0),
-//                        "Agaraa",
-//                        "111"),
-//                ChatFragment.class.getSimpleName());
         fragmentTransaction.commit();
     }
 

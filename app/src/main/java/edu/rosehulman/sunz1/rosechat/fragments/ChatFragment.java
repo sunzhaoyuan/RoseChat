@@ -27,6 +27,8 @@ import edu.rosehulman.sunz1.rosechat.utils.Constants;
 
 public class ChatFragment extends Fragment implements ChatSystem.View, TextView.OnEditorActionListener {
 
+    public static final String TAG = "chat";
+
     private ProgressDialog mProgressDialog;
     private ChatRecyclerAdapter mChatAdapter;
     private ChatPresenter mChatPresenter;
@@ -38,12 +40,14 @@ public class ChatFragment extends Fragment implements ChatSystem.View, TextView.
         // Required empty public constructor
     }
 
-    public static ChatFragment newInstance(String receiver,
-                                           String receiverUid) {
+    public static ChatFragment newInstance(String messageName,
+                                           String receiverUid,
+                                           String messageKey) {
 
         Bundle args = new Bundle();
-        args.putString(Constants.ARG_RECEIVER, receiver);
+        args.putString(Constants.ARG_MESSAGE_NAME, messageName);
         args.putString(Constants.ARG_RECEIVER_UID, receiverUid);
+        args.putString(Constants.ARG_MESSAGE_KEY, messageKey);
 //        args.putString(Constants.ARG_FIREBASE_TOKEN, firebaseToken);
         ChatFragment fragment = new ChatFragment();
         fragment.setArguments(args);
@@ -79,7 +83,7 @@ public class ChatFragment extends Fragment implements ChatSystem.View, TextView.
 
         mChatPresenter = new ChatPresenter(this);
         mChatPresenter.getMessage(FirebaseAuth.getInstance().getCurrentUser().getUid(),
-                getArguments().getString(Constants.ARG_RECEIVER));
+                getArguments().getString(Constants.ARG_RECEIVER_UID));
 //        mChatPresenter.getMessage(Constants.FAKE_USER, Constants.FAKE_RECEIVER.get(0));
     }
 
@@ -107,14 +111,14 @@ public class ChatFragment extends Fragment implements ChatSystem.View, TextView.
 
     private void sendMessage() {
         String text = mEditTextChat.getText().toString();
-        String receiver = getArguments().getString(Constants.ARG_RECEIVER);
+        String receiver = getArguments().getString(Constants.ARG_MESSAGE_NAME);
         String receiverUid = getArguments().getString(Constants.ARG_RECEIVER_UID);
         String sender = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
         String senderUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        String receiverFirebaseToken = getArguments().getString(Constants.ARG_FIREBASE_TOKEN);
+//        String receiverFirebaseToken = getArguments().getString(Constants.ARG_FIREBASE_TOKEN);
         String messageKey = getArguments().getString(Constants.ARG_MESSAGE_KEY);
         Chat chat = new Chat(messageKey, sender, receiver, senderUid, receiverUid, text, System.currentTimeMillis());
-        mChatPresenter.sendMessage(getActivity().getApplicationContext(), chat, receiverFirebaseToken);
+        mChatPresenter.sendMessage(getActivity().getApplicationContext(), chat);
     }
 
     @Override

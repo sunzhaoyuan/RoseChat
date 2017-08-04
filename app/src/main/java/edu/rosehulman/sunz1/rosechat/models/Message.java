@@ -1,6 +1,6 @@
 package edu.rosehulman.sunz1.rosechat.models;
 
-import java.util.ArrayList;
+import com.google.firebase.database.Exclude;
 
 /**
  * Created by agarwaa on 21-Jul-17.
@@ -26,6 +26,17 @@ public class Message {
         receiverUID = newReceiverUID;
     }
 
+    //for test
+    public Message(String key, String newName, String newLastInteraction, String newPictureURL, String newSenderUID, String newReceiverUID) {
+        name = newName;
+        lastMessage = newLastInteraction;
+        profilePicURL = newPictureURL;
+        senderUID = newSenderUID;
+        receiverUID = newReceiverUID;
+        this.key = key;
+    }
+
+    @Exclude
     public String getKey() {
         return key;
     }
