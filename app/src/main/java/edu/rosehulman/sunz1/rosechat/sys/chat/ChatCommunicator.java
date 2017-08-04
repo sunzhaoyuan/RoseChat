@@ -103,7 +103,7 @@ public class ChatCommunicator implements ChatSystem.Communicator {
 //                } else {
 //                    Log.e(TAG, "getMessageFromUser: no such room available");
 //                }
-                
+
             }
 
             @Override

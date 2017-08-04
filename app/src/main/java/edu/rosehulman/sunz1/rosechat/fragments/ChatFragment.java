@@ -1,10 +1,7 @@
 package edu.rosehulman.sunz1.rosechat.fragments;
 
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
@@ -18,8 +15,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 
@@ -112,13 +107,13 @@ public class ChatFragment extends Fragment implements ChatSystem.View, TextView.
     }
 
     private void sendMessage() {
-        String message = mEditTextChat.getText().toString();
+        String text = mEditTextChat.getText().toString();
         String receiver = getArguments().getString(Constants.ARG_RECEIVER);
         String receiverUid = getArguments().getString(Constants.ARG_RECEIVER_UID);
         String sender = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
         String senderUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         String receiverFirebaseToken = getArguments().getString(Constants.ARG_FIREBASE_TOKEN);
-        Chat chat = new Chat(sender, receiver, senderUid, receiverUid, message, System.currentTimeMillis());
+        Chat chat = new Chat(sender, receiver, senderUid, receiverUid, text, System.currentTimeMillis());
         mChatPresenter.sendMessage(getActivity().getApplicationContext(), chat, receiverFirebaseToken);
     }
 

@@ -30,7 +30,7 @@ public class Chat {
 
     // TODO: receiver ID should be in a ArrayList<String>
     // TODO: messageKey
-    public Chat(String messageKey, String sender, String receiver, String senderUid, String receiverUid, String text, Long timeStamp) {
+    public Chat(String sender, String receiver, String senderUid, String receiverUid, String text, Long timeStamp) {
         this.sender = sender;
         this.receiver = receiver;
         this.senderUid = senderUid;

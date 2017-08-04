@@ -67,7 +67,7 @@ public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     @Override
     public int getItemViewType(int position) {
         if (TextUtils.equals(mChats.get(position).getSenderUid(),
-                FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                mUser.getUid())) {
             return VIEW_TYPE_CHAT_ME;
         } else {
             return VIEW_TYPE_CHAT_OTHER;
