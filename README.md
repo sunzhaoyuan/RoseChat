@@ -61,10 +61,10 @@ You can find our UI demo on [Ninja Mock](https://ninjamock.com/s/5FZF2)
 - [x] Log in with RoseFire (Sun)
 - [x] Log out (Sun)
 - [ ] Check others' profiles (Sun)
-- [ ] Connect UI completely (Abu) 
-    - [ ] Set up ViewPager
+- [x] Connect UI completely (Abu) 
+    - [x] Set up ViewPager
 - [ ] Notification system (Abu) (Update: Implemented, not tested)
-- [x] (Update: Not part of the orignal sprint plan) Delete account (Abu) 
+- [x] Delete account (Abu) (Update: Not part of the orignal sprint plan)
  
 ## Sprint 3 Plan
 - [ ] Schedule Button -> Fragment 
