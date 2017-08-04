@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="19dp"
         android:layout_marginStart="19dp"
-        android:text="Email:"
+        android:text="Rose ID:"
         android:layout_alignBaseline="@+id/add_contact_email"
         android:layout_alignBottom="@+id/add_contact_email"
         android:layout_alignParentLeft="true"

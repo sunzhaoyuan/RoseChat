@@ -7,6 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+
 import java.util.ArrayList;
 
 import edu.rosehulman.sunz1.rosechat.R;
@@ -24,12 +27,15 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
     private Context mContext;
     ArrayList<Contact> mContactList;
     ContactsFragment.Callback mCallback;
+    private DatabaseReference mContactRef;
+    FirebaseAuth mAuth;
 
 
     public ContactsAdapter(Context context, ContactsFragment.Callback callback){
         mCallback = callback;
         mContext = context;
         mContactList = new ArrayList<Contact>();
+
         Contact temp = new Contact("Temp", "pictureURL");
         addContact(temp);
     }

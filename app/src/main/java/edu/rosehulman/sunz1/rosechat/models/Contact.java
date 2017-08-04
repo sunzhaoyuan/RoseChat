@@ -1,5 +1,7 @@
 package edu.rosehulman.sunz1.rosechat.models;
 
+import java.util.HashMap;
+
 /**
  * Created by agarwaa on 21-Jul-17.
  */
@@ -8,7 +10,25 @@ public class Contact {
 
 
     String name;
-    String ProfilePicUrl;
+    String profilePicUrl;
+    HashMap<String, Boolean> friends;
+    String uid;
+    int phoneNumber;
+    String email;
+
+
+    public Contact(String temp, String pictureURL) {
+        name = temp;
+        profilePicUrl = pictureURL;
+    }
+
+    public HashMap<String, Boolean> getFriends() {
+        return friends;
+    }
+
+    public void setFriends(HashMap<String, Boolean> friends) {
+        this.friends = friends;
+    }
 
     public String getUid() {
         return uid;
@@ -34,16 +54,6 @@ public class Contact {
         this.email = email;
     }
 
-    String uid;
-    int phoneNumber;
-    String email;
-
-
-    public Contact(String temp, String pictureURL) {
-        name = temp;
-        ProfilePicUrl = pictureURL;
-    }
-
     public String getName() {
         return name;
     }
@@ -53,10 +63,10 @@ public class Contact {
     }
 
     public String getProfilePicUrl() {
-        return ProfilePicUrl;
+        return profilePicUrl;
     }
 
     public void setProfilePicUrl(String profilePicUrl) {
-        ProfilePicUrl = profilePicUrl;
+        profilePicUrl = profilePicUrl;
     }
 }
