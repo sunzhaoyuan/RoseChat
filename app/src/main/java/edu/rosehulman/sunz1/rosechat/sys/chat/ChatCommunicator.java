@@ -46,7 +46,7 @@ public class ChatCommunicator implements ChatSystem.Communicator {
 
     /*
     Say if we have two users A and B in a Chat x. In the FireBase, what would the key of this Chat x be?
-    Would it be chat_A_B or chat_B_A? TODO: -Sun
+    Would it be chat_A_B or chat_B_A?
     I think it should be chat_A_B, but there is no specific reason behind it. - Abu
      */
     @Override
@@ -91,7 +91,7 @@ public class ChatCommunicator implements ChatSystem.Communicator {
         });
     }
 
-    private void sendPushNotificationToReceiver(String sender, String message, Context context) { //TODO: add parameters that you like - sun
+    private void sendPushNotificationToReceiver(String sender, String message, Context context) {
         if (!NOTIFICATIONS) {
             return;
         }

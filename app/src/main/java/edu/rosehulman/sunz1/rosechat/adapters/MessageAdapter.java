@@ -22,8 +22,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     private Context mContext;
     ArrayList<Message> mMessageList;
     MessageFragment.Callback mCallback;
-    String senderUID = "tempSun";
-    String receiverUID = "tempAbu";
+    String senderUID = "sunz1";
+    String receiverUID = "agaraa";
 
 
     public MessageAdapter(Context context, MessageFragment.Callback callback){
@@ -98,7 +98,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         String messageName = currentMessage.getName();
 //        String senderUID = currentMessage.getSenderUID();
         String messageKey = currentMessage.getKey();
-        ArrayList<String> receiversUID = currentMessage.getReceiverUID();
+        String receiversUID = currentMessage.getReceiverUID();
         ChatActivity.startActivity(this.mContext, messageName, receiversUID, messageKey);
     }
 
