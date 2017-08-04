@@ -56,14 +56,15 @@ You can find our UI demo on [Ninja Mock](https://ninjamock.com/s/5FZF2)
 
 ## Sprint 2 Plan
 - [ ] Complete the Chat function ~~83%~~ (Sun)
-- [ ] Be able to add new chat (Together)
+- [ ] Be able to add new chat (Together) (Update: UI Complete - Abu)
 - [ ] Invitation, add contacts (Abu)
 - [x] Log in with RoseFire (Sun)
 - [x] Log out (Sun)
 - [ ] Check others' profiles (Sun)
-- [ ] Connect UI completely (Abu)
+- [ ] Connect UI completely (Abu) 
     - [ ] Set up ViewPager
-- [ ] Notification system (Abu)
+- [ ] Notification system (Abu) (Update: Implemented, not tested)
+- [x] (Update: Not part of the orignal sprint plan) Delete account (Abu) 
  
 ## Sprint 3 Plan
 - [ ] Schedule Button -> Fragment 
