@@ -40,12 +40,12 @@
         android:layout_centerHorizontal="true"
         android:text="@string/log_in_text" />
 
-    <Button
-        android:id="@+id/button_login_fake"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/button_login"
-        android:layout_centerHorizontal="true"
-        android:text="@string/login_with_test_mode"/>
+    <!--<Button-->
+        <!--android:id="@+id/button_login_fake"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@+id/button_login"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:text="@string/login_with_test_mode"/>-->
 
 </RelativeLayout>

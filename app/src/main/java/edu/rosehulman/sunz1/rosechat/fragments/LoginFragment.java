@@ -2,7 +2,6 @@ package edu.rosehulman.sunz1.rosechat.fragments;
 
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import edu.rosehulman.sunz1.rosechat.R;
-import edu.rosehulman.sunz1.rosechat.activities.MainActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -21,7 +19,7 @@ import edu.rosehulman.sunz1.rosechat.activities.MainActivity;
 public class LoginFragment extends Fragment implements View.OnClickListener{
 
     private Button mLoginBtn;
-    private Button mLoginBtnTest;
+//    private Button mLoginBtnTest;
     private boolean mLoggingIn;
     private View mProgressSpinner;
     private OnLoginListener mListener;
@@ -51,7 +49,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
         mLoginBtn = (Button) view.findViewById(R.id.button_login);
-        mLoginBtnTest = (Button) view.findViewById(R.id.button_login_fake);
+//        mLoginBtnTest = (Button) view.findViewById(R.id.button_login_fake);
         mProgressSpinner = view.findViewById(R.id.login_progress);
         return view;
     }
@@ -61,7 +59,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mLoginBtn.setOnClickListener(this);
-        mLoginBtnTest.setOnClickListener(this);
+//        mLoginBtnTest.setOnClickListener(this);
     }
 
     @Override
@@ -111,11 +109,11 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
         switch (v.getId()){
             case R.id.button_login:
                 loginWithRoseFire();
-                return;
-            case R.id.button_login_fake:
-                Intent intent = new Intent(getContext(), MainActivity.class);
-                startActivity(intent);
-                getActivity().finish();
+//                return;
+//            case R.id.button_login_fake:
+//                Intent intent = new Intent(getContext(), MainActivity.class);
+//                startActivity(intent);
+//                getActivity().finish();
         }
     }
 
