@@ -25,6 +25,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
     ArrayList<Contact> mContactList;
     ContactsFragment.Callback mCallback;
 
+
     public ContactsAdapter(Context context, ContactsFragment.Callback callback){
         mCallback = callback;
         mContext = context;

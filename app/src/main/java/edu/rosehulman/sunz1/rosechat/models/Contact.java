@@ -9,6 +9,11 @@ public class Contact {
 
     String name;
     String ProfilePicUrl;
+    String uid;
+    int phoneNumber;
+    String email;
+
+
 
     public Contact(String temp, String pictureURL) {
         name = temp;
