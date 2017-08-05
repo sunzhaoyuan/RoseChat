@@ -7,10 +7,8 @@ package edu.rosehulman.sunz1.rosechat.models;
 public class Contact {
 
 
-    String nickName;
+    String name;
     String ProfilePicUrl;
-    String uid;
-    int phoneNumber;
 
     public String getUid() {
         return uid;
@@ -36,21 +34,22 @@ public class Contact {
         this.email = email;
     }
 
+    String uid;
+    int phoneNumber;
     String email;
 
 
-
     public Contact(String temp, String pictureURL) {
-        nickName = temp;
+        name = temp;
         ProfilePicUrl = pictureURL;
     }
 
-    public String getNickName() {
-        return nickName;
+    public String getName() {
+        return name;
     }
 
-    public void setNickName(String nickName) {
-        this.nickName = nickName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getProfilePicUrl() {

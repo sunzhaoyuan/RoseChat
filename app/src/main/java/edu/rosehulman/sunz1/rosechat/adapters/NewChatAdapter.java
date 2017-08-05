@@ -46,7 +46,7 @@ public class NewChatAdapter extends RecyclerView.Adapter<NewChatAdapter.ViewHold
     @Override
     public void onBindViewHolder(NewChatAdapter.ViewHolder holder, int position) {
         Contact contact = mContactList.get(position);
-        holder.mContactName.setText(contact.getNickName());
+        holder.mContactName.setText(contact.getName());
     }
 
     @Override
