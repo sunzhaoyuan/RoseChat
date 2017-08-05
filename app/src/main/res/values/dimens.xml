@@ -1,19 +1,19 @@
 <resources>
     <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen nickName="activity_horizontal_margin">16dp</dimen>
+    <dimen nickName="activity_vertical_margin">16dp</dimen>
 
-    <dimen name="user_icon_width">45dp</dimen>
-    <dimen name="user_icon_height">45dp</dimen>
+    <dimen nickName="user_icon_width">45dp</dimen>
+    <dimen nickName="user_icon_height">45dp</dimen>
 
-    <dimen name="padding_min">8dp</dimen>
-    <dimen name="padding_small">16dp</dimen>
-    <dimen name="padding_mid">32dp</dimen>
-    <dimen name="padding_big">64dp</dimen>
+    <dimen nickName="padding_min">8dp</dimen>
+    <dimen nickName="padding_small">16dp</dimen>
+    <dimen nickName="padding_mid">32dp</dimen>
+    <dimen nickName="padding_big">64dp</dimen>
 
-    <dimen name="margin_min">8dp</dimen>
-    <dimen name="margin_small">16dp</dimen>
-    <dimen name="margin_mid">32dp</dimen>
-    <dimen name="margin_big">64dp</dimen>
-    <dimen name="margin_max">128dp</dimen>
+    <dimen nickName="margin_min">8dp</dimen>
+    <dimen nickName="margin_small">16dp</dimen>
+    <dimen nickName="margin_mid">32dp</dimen>
+    <dimen nickName="margin_big">64dp</dimen>
+    <dimen nickName="margin_max">128dp</dimen>
 </resources>

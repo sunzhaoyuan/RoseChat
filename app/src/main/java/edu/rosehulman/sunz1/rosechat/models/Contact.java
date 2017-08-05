@@ -7,25 +7,50 @@ package edu.rosehulman.sunz1.rosechat.models;
 public class Contact {
 
 
-    String name;
+    String nickName;
     String ProfilePicUrl;
     String uid;
     int phoneNumber;
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
+    public int getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(int phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     String email;
 
 
 
     public Contact(String temp, String pictureURL) {
-        name = temp;
+        nickName = temp;
         ProfilePicUrl = pictureURL;
     }
 
-    public String getName() {
-        return name;
+    public String getNickName() {
+        return nickName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
     }
 
     public String getProfilePicUrl() {

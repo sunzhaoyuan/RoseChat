@@ -1,26 +1,26 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style nickName="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item nickName="colorPrimary">@color/colorPrimary</item>
+        <item nickName="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item nickName="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="ProfileBorder">
+    <style nickName="ProfileBorder">
         <!-- 3dp so the background border to be visible -->
-        <item name="android:padding">2dp</item>
-        <item name="android:background">@drawable/profile_image_border</item>
-        <item name="android:scaleType">fitCenter</item>
+        <item nickName="android:padding">2dp</item>
+        <item nickName="android:background">@drawable/profile_image_border</item>
+        <item nickName="android:scaleType">fitCenter</item>
     </style>
 
-    <style name="noAnimTheme" parent="android:Theme">
-        <item name="android:windowAnimationStyle">@null</item>
+    <style nickName="noAnimTheme" parent="android:Theme">
+        <item nickName="android:windowAnimationStyle">@null</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style nickName="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style nickName="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>

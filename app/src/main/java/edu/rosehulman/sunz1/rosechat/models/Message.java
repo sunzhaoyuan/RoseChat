@@ -11,14 +11,14 @@ public class Message {
     String lastMessage;
     String profilePicURL;
     String senderUID;
-    ArrayList<String> receiverUID;
+    String receiverUID;
     String key;
 
     public Message(){
 
     }
 
-    public Message(String newName, String newLastInteraction, String newPictureURL, String newSenderUID, ArrayList<String> newReceiverUID) {
+    public Message(String newName, String newLastInteraction, String newPictureURL, String newSenderUID, String newReceiverUID) {
         name = newName;
         lastMessage = newLastInteraction;
         profilePicURL = newPictureURL;
@@ -62,7 +62,7 @@ public class Message {
         return senderUID;
     }
 
-    public ArrayList<String> getReceiverUID() {
+    public String getReceiverUID() {
         return receiverUID;
     }
 }
