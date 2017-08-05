@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import edu.rosehulman.sunz1.rosechat.R;
 import edu.rosehulman.sunz1.rosechat.fragments.ContactsFragment;
+import edu.rosehulman.sunz1.rosechat.fragments.NewChatFragment;
 import edu.rosehulman.sunz1.rosechat.models.Contact;
 
 /**
@@ -21,9 +22,9 @@ public class NewChatAdapter extends RecyclerView.Adapter<NewChatAdapter.ViewHold
     private Context mContext;
     ArrayList<Contact> mContactList;
     ArrayList<Contact> mSelectedContactsList;
-    ContactsFragment.Callback mCallback;
+    NewChatFragment.Callback mCallback;
 
-    public NewChatAdapter(Context context, ContactsFragment.Callback callback){
+    public NewChatAdapter(Context context, NewChatFragment.Callback callback){
         mCallback = callback;
         mContext = context;
         mContactList = new ArrayList<Contact>();
@@ -39,7 +40,7 @@ public class NewChatAdapter extends RecyclerView.Adapter<NewChatAdapter.ViewHold
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.contact_view, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.new_chat_view, parent, false);
         return new ViewHolder(itemView);
     }
 
@@ -65,6 +66,11 @@ public class NewChatAdapter extends RecyclerView.Adapter<NewChatAdapter.ViewHold
                 @Override
                 public void onClick(View v) {
                     select(getAdapterPosition());
+                    if(mSelected.isChecked()){
+                        mSelected.setChecked(false);
+                    }else{
+                        mSelected.setChecked(true);
+                    }
                 }
             });
 

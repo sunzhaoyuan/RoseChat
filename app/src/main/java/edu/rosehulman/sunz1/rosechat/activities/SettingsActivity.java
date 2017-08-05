@@ -159,7 +159,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
 
     private void deleteAccount() {
-        //TODO:
+        FirebaseUser user = mAuth.getCurrentUser();
+        user.delete();
     }
 
     private void deleteAccountConfirmationDialog() {

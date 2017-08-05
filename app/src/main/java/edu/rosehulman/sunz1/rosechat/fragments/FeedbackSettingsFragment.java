@@ -15,8 +15,6 @@ import edu.rosehulman.sunz1.rosechat.R;
  * Activities that contain this fragment must implement the
  * {@link FeedbackSettingsFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link FeedbackSettingsFragment#newInstance} factory method to
- * create an instance of this fragment.
  */
 public class FeedbackSettingsFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
