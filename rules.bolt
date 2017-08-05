@@ -13,7 +13,7 @@ type Chats {
     receiverUid: RoseUsername,
     messageKey: String,
     text: String,
-    timeStamp: String,
+    timeStamp: Number,
     sender: String,
     receiver: String
 }
@@ -26,7 +26,7 @@ type Contacts {
     nickName: NickName,
     profilePicUrl: String,
     email: String,
-    phoneNumber: String,
+    phoneNumber: Number,
     Schedule: String,
     Friends: Map<RoseUsername, Boolean>
 }

@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -60,7 +61,7 @@ public class ChatCommunicator implements ChatSystem.Communicator {
                 mChat = chat;
                 chat.setKey(dataSnapshot.getKey());
                 mChatReference.push().setValue(chat);
-                getMessageFromUser(chat.getSenderUid(), chat.getReceiverUid());
+                getMessageFromUser(chat.getSenderUid(), chat.getReceiverUid(), chat.getMessageKey());
 //                sendPushNotificationToReceiver(); //TODO: waiting for the test
                 mOnSendMessageListener.onSendMessageSuccess();
             }
@@ -75,24 +76,41 @@ public class ChatCommunicator implements ChatSystem.Communicator {
     }
 
     @Override
-    public void getMessageFromUser(String senderUid, String receiverUid) { //TODO: receiverUid should be a ArrayList - Sprint 3
+    public void getMessageFromUser(final String senderUid, String receiverUid, String messageKey) { //TODO: receiverUid should be a ArrayList - Sprint 3
 
-        Query sender1 = mChatReference.orderByChild("senderUid").equalTo(senderUid);
-        Query sender2 = mChatReference.orderByChild("senderUid").equalTo(receiverUid);
-        Query receiver1 = mChatReference.orderByChild("receiverUid").equalTo(senderUid);
-        Query receiver2 = mChatReference.orderByChild("receiverUid").equalTo(receiverUid);
+//        Query sender1 = mChatReference.orderByChild("senderUid").equalTo(senderUid);
+//        Query sender2 = mChatReference.orderByChild("senderUid").equalTo(receiverUid);
+//        Query receiver1 = mChatReference.orderByChild("receiverUid").equalTo(senderUid);
+//        Query receiver2 = mChatReference.orderByChild("receiverUid").equalTo(receiverUid);
 
         Log.d(TAG, "sender ID: " + senderUid + "\nreceiver ID: " + receiverUid + "\ndata path: " + mChatReference.getRef().toString());
-
-        mChatReference.addValueEventListener(new ValueEventListener() {
+        Query query = mChatReference.orderByChild(Constants.ARG_MESSAGE_KEY).equalTo(messageKey);
+        Log.d(TAG, "query: " + query.toString());
+        query.addChildEventListener(new ChildEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-//                if (dataSnapshot.hasChild())
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Chat chat = dataSnapshot.getValue(Chat.class);
+                mOnGetMessagesListener.onGetMessagesSuccess(chat);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                mOnGetMessagesListener.onGetMessagesFailure("unable to get message " + databaseError.getMessage());
             }
         });
 

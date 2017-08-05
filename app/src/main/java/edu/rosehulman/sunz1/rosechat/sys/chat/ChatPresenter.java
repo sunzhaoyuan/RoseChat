@@ -29,8 +29,8 @@ public class ChatPresenter implements ChatSystem.Presenter,
     }
 
     @Override
-    public void getMessage(String senderUid, String receiverUid) {
-        mChatComm.getMessageFromUser(senderUid, receiverUid);
+    public void getMessage(String senderUid, String receiverUid, String messageKey) {
+        mChatComm.getMessageFromUser(senderUid, receiverUid, messageKey);
     }
     ///////////////////////// PRESENTER ENDS /////////////////////////
 

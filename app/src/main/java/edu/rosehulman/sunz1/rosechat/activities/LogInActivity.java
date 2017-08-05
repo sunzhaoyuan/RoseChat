@@ -2,10 +2,10 @@ package edu.rosehulman.sunz1.rosechat.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -17,7 +17,7 @@ import edu.rosehulman.rosefire.Rosefire;
 import edu.rosehulman.rosefire.RosefireResult;
 import edu.rosehulman.sunz1.rosechat.R;
 import edu.rosehulman.sunz1.rosechat.fragments.LoginFragment;
-import edu.rosehulman.sunz1.rosechat.utils.Constants;
+import edu.rosehulman.sunz1.rosechat.utils.SharedPreferencesUtils;
 
 public class LogInActivity extends AppCompatActivity implements LoginFragment.OnLoginListener{
     private static final String TAG = "Login";
@@ -81,6 +81,7 @@ public class LogInActivity extends AppCompatActivity implements LoginFragment.On
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 Log.d(TAG, "User: " + user);
                 if (user != null) {
+                    SharedPreferencesUtils.setCurrentUser(getApplicationContext(), user.getUid());
                     switchToMainActivity();
                 } else {
 //                    switchToLoginActivity();
@@ -117,7 +118,7 @@ public class LogInActivity extends AppCompatActivity implements LoginFragment.On
         if (requestCode == RC_ROSEFIRE_LOGIN) {
             RosefireResult result = Rosefire.getSignInResultFromIntent(data);
             if (result.isSuccessful()) {
-                Log.d(TAG, "Log in successful");
+//                Log.d(TAG, "Log in successful" + "\nuser is " + mAuth.getCurrentUser().getUid());
                 mAuth.signInWithCustomToken(result.getToken())
                         .addOnCompleteListener(this, mOnCompleteListener);
             } else {

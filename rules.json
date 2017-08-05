@@ -16,7 +16,7 @@
           ".validate": "newData.isString()"
         },
         "timeStamp": {
-          ".validate": "newData.isString()"
+          ".validate": "newData.isNumber()"
         },
         "sender": {
           ".validate": "newData.isString()"
@@ -45,7 +45,7 @@
           ".validate": "newData.isString()"
         },
         "phoneNumber": {
-          ".validate": "newData.isString()"
+          ".validate": "newData.isNumber()"
         },
         "Schedule": {
           ".validate": "newData.isString()"

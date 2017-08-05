@@ -22,13 +22,13 @@ public interface ChatSystem {
     interface Presenter {
         void sendMessage(Context context, Chat chat);
 
-        void getMessage(String senderUid, String receiverUid);
+        void getMessage(String senderUid, String receiverUid, String messageKey);
     }
 
     interface Communicator {
         void sendMessageToUser(Context context, Chat chat);
 
-        void getMessageFromUser(String senderUid, String receiverUid);
+        void getMessageFromUser(String senderUid, String receiverUid, String messageKey);
     }
 
     interface OnSendMessageListener {

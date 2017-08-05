@@ -21,7 +21,7 @@ public class Constants {
     public static final String ARG_CHAT = "chats";
     public static final String ARG_FIREBASE_TOKEN = "firebase_token";
     public static final String ARG_MESSAGE = "message";
-    public static final String ARG_MESSAGE_KEY = "message_key";
+    public static final String ARG_MESSAGE_KEY = "messageKey";
 
     public static final int VIEW_PAGER_MESSAGE = 0;
     public static final int VIEW_PAGER_CONTACT = 1;
@@ -30,4 +30,7 @@ public class Constants {
 
     public static final String FAKE_USER = "sunz1";
     public static final List<String> FAKE_RECEIVER = singletonList("Abu");
+
+    public static final String PREFS = "PREFS";
+    public static final String UID_KEY = "UID_KEY";
 }

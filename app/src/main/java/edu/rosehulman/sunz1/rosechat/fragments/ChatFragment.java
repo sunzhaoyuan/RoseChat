@@ -83,7 +83,8 @@ public class ChatFragment extends Fragment implements ChatSystem.View, TextView.
 
         mChatPresenter = new ChatPresenter(this);
         mChatPresenter.getMessage(FirebaseAuth.getInstance().getCurrentUser().getUid(),
-                getArguments().getString(Constants.ARG_RECEIVER_UID));
+                getArguments().getString(Constants.ARG_RECEIVER_UID),
+                getArguments().getString(Constants.ARG_MESSAGE_KEY));
 //        mChatPresenter.getMessage(Constants.FAKE_USER, Constants.FAKE_RECEIVER.get(0));
     }
 
@@ -135,7 +136,7 @@ public class ChatFragment extends Fragment implements ChatSystem.View, TextView.
     @Override
     public void onGetMessagesSuccess(Chat chat) {
         if (mChatAdapter == null) {
-            mChatAdapter = new ChatRecyclerAdapter(new ArrayList<Chat>());
+            mChatAdapter = new ChatRecyclerAdapter(getContext(), new ArrayList<Chat>());
             mRecyclerViewChat.setAdapter(mChatAdapter);
         }
         mChatAdapter.add(chat);
