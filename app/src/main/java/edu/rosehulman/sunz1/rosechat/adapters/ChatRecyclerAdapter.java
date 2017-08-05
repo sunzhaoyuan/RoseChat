@@ -3,6 +3,7 @@ package edu.rosehulman.sunz1.rosechat.adapters;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,8 @@ import edu.rosehulman.sunz1.rosechat.utils.SharedPreferencesUtils;
  */
 
 public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    public static final String TAG = "ChatAdapter";
+
     public static final int VIEW_TYPE_CHAT_ME = 0;
     public static final int VIEW_TYPE_CHAT_OTHER = 1;
 
@@ -82,39 +85,41 @@ public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     private void configureMyChatViewHolder(MyChatViewHolder myChatViewHolder, int position) {
         Chat chat = mChats.get(position);
-        String profileNameString = chat.getSender().substring(0, 1); // we other want one char
-
-        myChatViewHolder.chatProfilePicMeTxt.setText(profileNameString);
-        myChatViewHolder.chatMessageMeTxt.setText(chat.getText());
+        Log.d(TAG, chat.getText());
+//        String profileNameString = chat.getSender().substring(0, 1); // we other want one char
+//
+        myChatViewHolder.chatProfilePicTxt.setText("Z");
+        myChatViewHolder.chatTxt.setText(chat.getText());
     }
 
     private void configureOtherChatViewHolder(OthersChatViewHolder otherChatViewHolder, int position) {
         Chat chat = mChats.get(position);
-        String profileNameString = chat.getSender().substring(0, 1); //TODO
-
-        otherChatViewHolder.chatProfilePicOtherTxt.setText(profileNameString);
-        otherChatViewHolder.chatMessageOtherTxt.setText(chat.getText());
+        Log.d(TAG, chat.getText());
+//        String profileNameString = chat.getSender().substring(0, 1); //TODO
+//
+        otherChatViewHolder.chatProfilePicTxt.setText("A");
+        otherChatViewHolder.chatTxt.setText(chat.getText());
 
     }
 
 
     private static class MyChatViewHolder extends RecyclerView.ViewHolder {
-        private TextView chatMessageMeTxt, chatProfilePicMeTxt;
+        private TextView chatTxt, chatProfilePicTxt;
 
         public MyChatViewHolder(View itemView) {
             super(itemView);
-            chatMessageMeTxt = (TextView) itemView.findViewById(R.id.chat_text_me);
-            chatProfilePicMeTxt = (TextView) itemView.findViewById(R.id.chat_profile_pic_me);
+            chatTxt = (TextView) itemView.findViewById(R.id.chat_text_me);
+            chatProfilePicTxt = (TextView) itemView.findViewById(R.id.chat_profile_pic_me);
         }
     }
 
     private static class OthersChatViewHolder extends RecyclerView.ViewHolder {
-        private TextView chatMessageOtherTxt, chatProfilePicOtherTxt;
+        private TextView chatTxt, chatProfilePicTxt;
 
         public OthersChatViewHolder(View itemView) {
             super(itemView);
-            chatMessageOtherTxt = (TextView) itemView.findViewById(R.id.chat_text_other);
-            chatProfilePicOtherTxt = (TextView) itemView.findViewById(R.id.chat_profile_pic_other);
+            chatTxt = (TextView) itemView.findViewById(R.id.chat_text_other);
+            chatProfilePicTxt = (TextView) itemView.findViewById(R.id.chat_profile_pic_other);
         }
     }
 }

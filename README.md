@@ -55,7 +55,7 @@ You can find our UI demo on [Ninja Mock](https://ninjamock.com/s/5FZF2)
 - [x] Do and write down some research on how to send messages to other users in real time
 
 ## Sprint 2 Plan
-- [ ] Complete the Chat function ~~83%~~ (Sun)
+- [x] Complete the Chat function (Sun)
 - [ ] Be able to add new chat (Together) (Update: UI Complete - Abu)
 - [ ] Invitation, add contacts (Abu)
 - [x] Log in with RoseFire (Sun)
@@ -63,7 +63,7 @@ You can find our UI demo on [Ninja Mock](https://ninjamock.com/s/5FZF2)
 - [ ] Check others' profiles (Sun)
 - [x] Connect UI completely (Abu) 
     - [x] Set up ViewPager
-- [ ] Notification system (Abu) (Update: Implemented, not tested)
+- [ ] Notification system (Abu) (Update: could be tested - Sun)
 - [x] Delete account (Abu) (Update: Not part of the orignal sprint plan)
  
 ## Sprint 3 Plan
