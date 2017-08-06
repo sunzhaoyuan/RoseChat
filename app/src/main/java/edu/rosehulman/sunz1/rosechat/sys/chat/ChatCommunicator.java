@@ -29,27 +29,20 @@ import static edu.rosehulman.sunz1.rosechat.activities.SettingsActivity.NOTIFICA
 public class ChatCommunicator implements ChatSystem.Communicator {
 
 
-    private static final String TAG = "ChatsComm";
+    private static final String TAG = Constants.TAG_CHAT_COMMUNICATOR;
     private static final int notificationID = 3446;
 
     private ChatSystem.OnSendMessageListener mOnSendMessageListener;
     private ChatSystem.OnGetMessagesListener mOnGetMessagesListener;
     private DatabaseReference mChatReference;
-//    private Query query;
 
     public ChatCommunicator(ChatSystem.OnSendMessageListener onSendMessageListener,
                             ChatSystem.OnGetMessagesListener onGetMessagesListener) {
         mOnSendMessageListener = onSendMessageListener;
         mOnGetMessagesListener = onGetMessagesListener;
-        mChatReference = FirebaseDatabase.getInstance().getReference().child(Constants.ARG_CHAT);
-
+        mChatReference = FirebaseDatabase.getInstance().getReference().child(Constants.PATH_CHAT);
     }
 
-    /*
-    Say if we have two users A and B in a Chat x. In the FireBase, what would the key of this Chat x be?
-    Would it be chat_A_B or chat_B_A?
-    I think it should be chat_A_B, but there is no specific reason behind it. - Abu
-     */
     @Override
     public void sendMessageToUser(Context context, final Chat chat) {
         //TODO: need a helper method to get all receivers' ids - Sprint 3
@@ -69,8 +62,6 @@ public class ChatCommunicator implements ChatSystem.Communicator {
                 mOnSendMessageListener.onSendMessageFailure("Unable to send message: " + databaseError.getMessage());
             }
         });
-
-
     }
 
     @Override
