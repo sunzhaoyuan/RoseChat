@@ -61,15 +61,22 @@ You can find our UI demo on [Ninja Mock](https://ninjamock.com/s/5FZF2)
 - [x] Log in with RoseFire (Sun)
 - [x] Log out (Sun)
 - [ ] Check others' profiles (Sun)
-- [x] Connect UI completely (Abu) 
-    - [x] Set up ViewPager
+- [ ] Connect UI completely (Abu) 
+    - [ ] Set up ViewPager (the issue #5)
+    - [ ] Issue #15
+    - [ ] Issue #17
 - [ ] Notification system (Abu) (Update: could be tested - Sun)
 - [x] Delete account (Abu) (Update: Not part of the orignal sprint plan)
  
 ## Sprint 3 Plan
-- [ ] Schedule Button -> Fragment 
+- [ ] Schedule
+- [ ] Check my profile (Sun) 
 - [ ] Send Image
 - [ ] Group Chat
+- [ ] Notification in the Settings
+- [ ] Get Contacts from FireBase
+- [ ] Get Messages from Firebase
+- [ ] Get Feedbacks from Users
 
 ## Also
 RoseChat tries to be as [KISS](https://en.wikipedia.org/wiki/KISS_principle) as possible
