@@ -20,7 +20,7 @@ public class SharedPreferencesUtils {
         SharedPreferences prefs = context.getSharedPreferences(Constants.PREFS, Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString(Constants.UID_KEY, uid);
-        editor.commit();
+        editor.apply();
     }
 
     public static void removeCurrentUser(Context context) {

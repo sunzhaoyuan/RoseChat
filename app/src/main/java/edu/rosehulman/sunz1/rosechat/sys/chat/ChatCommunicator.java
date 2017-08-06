@@ -35,7 +35,6 @@ public class ChatCommunicator implements ChatSystem.Communicator {
     private ChatSystem.OnSendMessageListener mOnSendMessageListener;
     private ChatSystem.OnGetMessagesListener mOnGetMessagesListener;
     private DatabaseReference mChatReference;
-    private Chat mChat;
 //    private Query query;
 
     public ChatCommunicator(ChatSystem.OnSendMessageListener onSendMessageListener,
@@ -58,7 +57,6 @@ public class ChatCommunicator implements ChatSystem.Communicator {
         mChatReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                mChat = chat;
                 chat.setKey(dataSnapshot.getKey());
                 mChatReference.push().setValue(chat);
                 getMessageFromUser(chat.getSenderUid(), chat.getReceiverUid(), chat.getMessageKey());
@@ -78,11 +76,6 @@ public class ChatCommunicator implements ChatSystem.Communicator {
     @Override
     public void getMessageFromUser(final String senderUid, String receiverUid, String messageKey) { //TODO: receiverUid should be a ArrayList - Sprint 3
 
-//        Query sender1 = mChatReference.orderByChild("senderUid").equalTo(senderUid);
-//        Query sender2 = mChatReference.orderByChild("senderUid").equalTo(receiverUid);
-//        Query receiver1 = mChatReference.orderByChild("receiverUid").equalTo(senderUid);
-//        Query receiver2 = mChatReference.orderByChild("receiverUid").equalTo(receiverUid);
-
         Log.d(TAG, "sender ID: " + senderUid + "\nreceiver ID: " + receiverUid + "\ndata path: " + mChatReference.getRef().toString());
         Query query = mChatReference.orderByChild(Constants.ARG_MESSAGE_KEY).equalTo(messageKey);
         Log.d(TAG, "query: " + query.toString());
@@ -100,7 +93,7 @@ public class ChatCommunicator implements ChatSystem.Communicator {
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-
+                //TODO: Sprint 3 ??
             }
 
             @Override
@@ -113,27 +106,6 @@ public class ChatCommunicator implements ChatSystem.Communicator {
                 mOnGetMessagesListener.onGetMessagesFailure("unable to get message " + databaseError.getMessage());
             }
         });
-
-//        if (sender1 != null && receiver1 != null) {
-//            Log.d(TAG, "SENDER_RECEIVER\n" + sender1.toString());
-//        } else if (receiver2 != null && sender2 != null) {
-//            Log.d(TAG, "RECEIVER_SENDER\n" + receiver1.toString());
-//        } else {
-//            // no chat yet
-//            Log.d(TAG, "no chat yet");
-//        }
-//        query.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                Chat chat = dataSnapshot.getValue(Chat.class);
-//                mOnGetMessagesListener.onGetMessagesSuccess(chat);
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//                mOnGetMessagesListener.onGetMessagesFailure("unable to get message " + databaseError.getMessage());
-//            }
-//        });
     }
 
     private void sendPushNotificationToReceiver(String sender, String message, Context context) {

@@ -71,6 +71,8 @@ You can find our UI demo on [Ninja Mock](https://ninjamock.com/s/5FZF2)
 ## Sprint 3 Plan
 - [ ] Schedule
 - [ ] Check my profile (Sun) 
+    - [ ] Set up AsyncTask
+    - [ ] Create new Contact or get Existed Contact
 - [ ] Send Image
 - [ ] Group Chat
 - [ ] Notification in the Settings
