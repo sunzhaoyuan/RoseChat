@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -25,10 +24,11 @@ import edu.rosehulman.sunz1.rosechat.adapters.NavigationPagerAdapter;
 import edu.rosehulman.sunz1.rosechat.fragments.ContactsFragment;
 import edu.rosehulman.sunz1.rosechat.fragments.EditProfileFragment;
 import edu.rosehulman.sunz1.rosechat.fragments.MessageFragment;
-//import edu.rosehulman.sunz1.rosechat.activities.NewChatActivity;
 import edu.rosehulman.sunz1.rosechat.fragments.ProfileFragment;
 import edu.rosehulman.sunz1.rosechat.models.Contact;
 import edu.rosehulman.sunz1.rosechat.models.Message;
+
+//import edu.rosehulman.sunz1.rosechat.activities.NewChatActivity;
 
 public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener,
         MessageFragment.Callback,
@@ -43,7 +43,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     //    private BottomNavigationViewEx mNavigation;
     private BottomNavigationView mBottomNavigationView;
 
-    // consider to get rid of it, this class is too messy
     private HashMap<Integer, Integer> mTitlesMap = new HashMap<Integer, Integer>() {{
         put(R.id.navigation_message, R.string.navi_message);
         put(R.id.navigation_contact, R.string.navi_contact);
@@ -109,9 +108,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         setTitle(R.id.navigation_message);
     }
 
-    /**
-     * //TODO: need to add icons for each menu options - Zhaoyuan
-     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -131,10 +127,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                 addContact();
                 return true;
             case R.id.action_settings:
-                // TODO: settings screen
                 setTitle(id);
-//                mNavigation.setCurrentItem(mNavigation.getCurrentItem());
-//                mViewPager.setCurrentItem(3);
                 Intent intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);
                 return true;
@@ -142,10 +135,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                 return super.onOptionsItemSelected(item);
         }
     }
-
-//    public BottomNavigationViewEx getNavigationbar(){
-//        return mNavigation;
-//    }
 
     private void addContact() {
         final AlertDialog.Builder mBuilder = new AlertDialog.Builder(MainActivity.this);
@@ -222,7 +211,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     @Override
     public void onPageSelected(int position) {
         if (mViewPager != null) {
-//            mBottomNavigationView.setCurrentItem(position);
             if (position < 3) {
                 mBottomNavigationView.setSelectedItemId(position);
                 Log.d(DEBUG_KEY, "item id is " + position);
@@ -258,7 +246,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     public static void startActivity(Context context) {
         Intent intent = new Intent(context, MainActivity.class);
         context.startActivity(intent);
-//        intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
     }
 
     @Override
