@@ -3,6 +3,8 @@ package edu.rosehulman.sunz1.rosechat.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,8 +61,13 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         if (v.getId() == R.id.profile_edit) {
             //TODO: goes to edit profile fragment
-            Fragment editProfileFragment = EditProfileFragment.newInstance(mEmailTxt.getText().toString(),
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            EditProfileFragment editProfileFragment = EditProfileFragment.newInstance(mEmailTxt.getText().toString(),
                     mNickNameTxt.getText().toString(), mPhoneTxt.getText().toString());
+            transaction.addToBackStack("edit");
+            transaction.replace(R.id.container, editProfileFragment);
+            transaction.commit();
+
         }
     }
 }
