@@ -14,6 +14,7 @@ public class Constants {
 
     public static final String TAG = "RC";
 
+    // For the Chat Feature
     public static final String ARG_USERS = "users";
     public static final String ARG_RECEIVER = "receiver";
     public static final String ARG_MESSAGE_NAME = "message_name";
@@ -22,6 +23,11 @@ public class Constants {
     public static final String ARG_FIREBASE_TOKEN = "firebase_token";
     public static final String ARG_MESSAGE = "message";
     public static final String ARG_MESSAGE_KEY = "messageKey";
+
+    // For the Profile Festure
+    public static final String PROF_NICK_NAME = "prof_nick_name";
+    public static final String PROF_EMAIL = "prof_email";
+    public static final String PROF_PHONE = "prof_phone";
 
     public static final int VIEW_PAGER_MESSAGE = 0;
     public static final int VIEW_PAGER_CONTACT = 1;
