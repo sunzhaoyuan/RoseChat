@@ -25,8 +25,7 @@ import edu.rosehulman.sunz1.rosechat.adapters.NavigationPagerAdapter;
 import edu.rosehulman.sunz1.rosechat.fragments.ContactsFragment;
 import edu.rosehulman.sunz1.rosechat.fragments.EditProfileFragment;
 import edu.rosehulman.sunz1.rosechat.fragments.MessageFragment;
-//import edu.rosehulman.sunz1.rosechat.fragments.NewChatFragment;
-import edu.rosehulman.sunz1.rosechat.fragments.NewChatFragment;
+//import edu.rosehulman.sunz1.rosechat.activities.NewChatActivity;
 import edu.rosehulman.sunz1.rosechat.fragments.ProfileFragment;
 import edu.rosehulman.sunz1.rosechat.models.Contact;
 import edu.rosehulman.sunz1.rosechat.models.Message;
@@ -34,7 +33,7 @@ import edu.rosehulman.sunz1.rosechat.models.Message;
 public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener,
         MessageFragment.Callback,
         ContactsFragment.Callback,
-        NewChatFragment.Callback{
+        NewChatActivity.Callback{
 
     final private String DEBUG_KEY = "Debug";
 
@@ -125,11 +124,8 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         switch (id) {
             case R.id.action_new_chat:
                 // TODO: pop up a new activity probably (no bottom navi bar)
-                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                NewChatFragment fragment = new NewChatFragment();
-                ft.addToBackStack("main");
-                ft.add(R.id.container, fragment);
-                ft.commit();
+                Intent newChatIntent = new Intent(this, NewChatActivity.class);
+                startActivity(newChatIntent);
                 return true;
             case R.id.action_add_contact:
                 addContact();
@@ -199,7 +195,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         adapter.addFragment(new MessageFragment(), getTitle(R.id.navigation_message));
         adapter.addFragment(new ContactsFragment(), getTitle(R.id.navigation_contact));
         adapter.addFragment(new ProfileFragment(), getTitle(R.id.navigation_profile));
-//        adapter.addFragment(new MainSettingsFragment(), getTitle(R.id.action_settings)); //TODO: delete this. No Longer in use - Sun
         adapter.addFragment(new EditProfileFragment(), getTitle(R.id.edit_profile));
         viewPager.setAdapter(adapter);
     }

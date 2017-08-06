@@ -10,8 +10,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import edu.rosehulman.sunz1.rosechat.R;
-import edu.rosehulman.sunz1.rosechat.fragments.ContactsFragment;
-import edu.rosehulman.sunz1.rosechat.fragments.NewChatFragment;
+import edu.rosehulman.sunz1.rosechat.activities.NewChatActivity;
 import edu.rosehulman.sunz1.rosechat.models.Contact;
 
 /**
@@ -22,9 +21,9 @@ public class NewChatAdapter extends RecyclerView.Adapter<NewChatAdapter.ViewHold
     private Context mContext;
     ArrayList<Contact> mContactList;
     ArrayList<Contact> mSelectedContactsList;
-    NewChatFragment.Callback mCallback;
+    NewChatActivity.Callback mCallback;
 
-    public NewChatAdapter(Context context, NewChatFragment.Callback callback){
+    public NewChatAdapter(Context context, NewChatActivity.Callback callback){
         mCallback = callback;
         mContext = context;
         mContactList = new ArrayList<Contact>();
