@@ -60,4 +60,6 @@
     <string name="login_with_test_mode">Login with test mode</string>
     <string name="loading">loading</string>
     <string name="please_wait">Please wait…</string>
+    <string name="get_contact_error">Could not get contact.</string>
+    <string name="contact_initiate_error">Cannot initiate current user.</string>
 </resources>
