@@ -74,9 +74,9 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         mPPicStorageRef = FirebaseStorage.getInstance().getReference();
         mCurrentUID = SharedPreferencesUtils.getCurrentUser(getContext());
 
-        mEmailTxtE.setText(getArguments().getString(Constants.PROF_EMAIL));
-        mNickNameTxtE.setText(getArguments().getString(Constants.PROF_NICK_NAME));
-        mPhoneTxtE.setText(getArguments().getString(Constants.PROF_PHONE));
+//        mEmailTxtE.setText(getArguments().getString(Constants.PROF_EMAIL));
+//        mNickNameTxtE.setText(getArguments().getString(Constants.PROF_NICK_NAME));
+//        mPhoneTxtE.setText(getArguments().getString(Constants.PROF_PHONE));
     }
 
     @Override
