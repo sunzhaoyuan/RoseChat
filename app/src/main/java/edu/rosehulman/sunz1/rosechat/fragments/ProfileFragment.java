@@ -201,4 +201,10 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, G
 //
 //        }
     }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        // TODO: stop listeners?
+    }
 }

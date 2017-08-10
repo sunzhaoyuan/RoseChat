@@ -72,11 +72,11 @@ You can find our UI demo on [Ninja Mock](https://ninjamock.com/s/5FZF2)
 - [ ] Schedule
 - [ ] Check my profile (Sun)
     - [x] FireBase Storage 
-    - [ ] Create new Contact or get Existed Contact
+    - [x] Create new Contact or get Existed Contact
     - [ ] Get the Query to work
 - [ ] Edit my profile (Sun)
     - [ ] Edit texts
-    - [ ] Choose photos from system Album
+    - [x] Choose photos from system Album - need tests
 - [ ] Create an Image Selector (Sun)
 - [ ] Send Image
 - [ ] Group Chat
@@ -90,3 +90,4 @@ RoseChat tries to be as [KISS](https://en.wikipedia.org/wiki/KISS_principle) as 
 
 ## Thanks
 Thanks for [天宇工作室 ittianyu.com](https://github.com/ittianyu/BottomNavigationViewEx)
+Thanks for [hdante](https://stackoverflow.com/users/1797000/hdante)
