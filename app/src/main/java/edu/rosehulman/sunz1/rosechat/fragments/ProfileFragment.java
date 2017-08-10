@@ -37,7 +37,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, G
     private TextView mEmailTxt;
     private TextView mNickNameTxt;
     private TextView mPhoneTxt;
-//    private Bitmap mBitmap;
+    //    private Bitmap mBitmap;
     //    private TableLayout
     private boolean isFirstTime; //TODO: probably don't need this boolean
     private DatabaseReference mDBRef;
@@ -56,41 +56,77 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, G
         dataBaseHandler();
     }
 
-    private void dataBaseHandler() {
+    private void dataBaseHandler() { //TODO: need to be tested.
         Log.d(Constants.TAG_PROFILE, "In DataBaseHandler.");
         mDBRef = FirebaseDatabase.getInstance().getReference().child(Constants.PATH_CONTACT);
-        Query query = mDBRef.orderByChild("uid").equalTo(mCurrentUID);
-        Log.d(Constants.TAG_PROFILE, "Finished the Query just now.");
-        if (query == null) { // is the first time //TODO: ERROR! key problem here.
-            Log.d(Constants.TAG_PROFILE, "the Query is null. first time meets this contact");
-            // TODO: push this contact
-//            isFirstTime = true;
-            HashMap<String, Boolean> friendHashmap = new HashMap<>();
-            final Contact contact = new Contact(mCurrentUID, mCurrentUID, mDefaultPicUrl, friendHashmap, null, null);
-            mDBRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    contact.setKey(dataSnapshot.getKey());
-                    mDBRef.push().setValue(contact);
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    Toast.makeText(getActivity(), R.string.contact_initiate_error, Toast.LENGTH_LONG).show();
-                    Log.d(Constants.TAG_PROFILE, "fail to initiate profile");
-                }
-            });
-        }
-        getProfileData();
+        //TODO: logic is wrong here. I shouldn't wait for user to click profile button to check the existences of a contact.
+        profileHandler();
+//        getProfileData();
     }
 
-    private void getProfileData(){
+    public void profileHandler() {
+        Log.d(Constants.TAG_PROFILE, "In ProfileHandler.");
         Query query = mDBRef.orderByChild("uid").equalTo(mCurrentUID);
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot == null) {
+                    Log.d(Constants.TAG_PROFILE, "dataSnapshot is null.");
+                    HashMap<String, Boolean> friendHashmap = new HashMap<>();
+                    final Contact contact = new Contact(mCurrentUID, mCurrentUID, mDefaultPicUrl, friendHashmap, null, null);
+                    Log.d(Constants.TAG_PROFILE, "contact key is " + dataSnapshot.getKey());
+                    contact.setKey(dataSnapshot.getKey()); //TODO: can it get key if it's null?
+                    Log.d(Constants.TAG_PROFILE, "just pushed a new profile");
+                    mDBRef.push().setValue(contact);
+                }
+                Contact contact = (Contact) dataSnapshot.getValue(); //TODO: check if it gets contact type
+                assert contact != null;
+                //get Profile pic
+                Glide.with(getContext())
+                        .load(contact.getProfilePicUrl())
+                        .into(mProfileImg);
+                //get Text Data
+                mNickNameTxt.setText(contact.getNickName());
+                mEmailTxt.setText(contact.getEmail());
+                mPhoneTxt.setText(contact.getPhoneNumber());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(getActivity(), R.string.contact_initiate_error, Toast.LENGTH_LONG).show();
+                Log.d(Constants.TAG_PROFILE, "fail to initiate profile");
+            }
+        });
+//        if (query == null) { // is the first time //TODO: ERROR! key problem here.
+//            Log.d(Constants.TAG_PROFILE, "the Query is null. first time meets this contact");
+//            // TODO: push this contact
+////            isFirstTime = true;
+//            HashMap<String, Boolean> friendHashmap = new HashMap<>();
+//            final Contact contact = new Contact(mCurrentUID, mCurrentUID, mDefaultPicUrl, friendHashmap, null, null);
+//            mDBRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(DataSnapshot dataSnapshot) {
+//                    contact.setKey(dataSnapshot.getKey());
+//                    mDBRef.push().setValue(contact);
+//                }
+//
+//                @Override
+//                public void onCancelled(DatabaseError databaseError) {
+//                    Toast.makeText(getActivity(), R.string.contact_initiate_error, Toast.LENGTH_LONG).show();
+//                    Log.d(Constants.TAG_PROFILE, "fail to initiate profile");
+//                }
+//            });
+//        }
+    }
+
+    private void getProfileData() {
+        Query query = mDBRef.orderByChild("uid").equalTo(mCurrentUID);
+        query.addValueEventListener(new ValueEventListener() { //TODO: should it be a single value event listener?
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
                 Contact contact = (Contact) dataSnapshot.getValue(); //TODO: check if it gets contact type
                 //get Profile pic
+                assert contact != null;
                 Glide.with(getContext())
                         .load(contact.getProfilePicUrl())
                         .into(mProfileImg);
@@ -106,7 +142,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, G
                 Log.d(Constants.TAG_PROFILE, "Could not get profile error.");
             }
         });
-
     }
 
     private void init() {
