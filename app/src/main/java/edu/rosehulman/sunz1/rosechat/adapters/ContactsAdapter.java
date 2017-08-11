@@ -1,7 +1,6 @@
 package edu.rosehulman.sunz1.rosechat.adapters;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,13 +18,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 
 import edu.rosehulman.sunz1.rosechat.R;
-import edu.rosehulman.sunz1.rosechat.activities.LogInActivity;
-import edu.rosehulman.sunz1.rosechat.activities.SettingsActivity;
 import edu.rosehulman.sunz1.rosechat.fragments.ContactsFragment;
-import edu.rosehulman.sunz1.rosechat.fragments.MessageFragment;
-import edu.rosehulman.sunz1.rosechat.models.Chat;
 import edu.rosehulman.sunz1.rosechat.models.Contact;
-import edu.rosehulman.sunz1.rosechat.models.Message;
+import edu.rosehulman.sunz1.rosechat.utils.SharedPreferencesUtils;
 
 /**
  * Created by agarwaa on 10-Jul-17.
@@ -50,7 +45,8 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
         mContactRef = FirebaseDatabase.getInstance().getReference().child("contacts");
         mUserRef = mContactRef.orderByChild("uid").equalTo(user.getUid()).getRef();
         mContactRef.addChildEventListener(new ContactsChildEventListener());
-        Contact temp = new Contact("Temp", "pictureURL");
+        Contact temp = new Contact(SharedPreferencesUtils.getCurrentUser(mContext),
+                SharedPreferencesUtils.getCurrentUser(mContext), null, null, null, null);
         addContact(temp);
     }
 
@@ -69,7 +65,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
     @Override
     public void onBindViewHolder(ContactsAdapter.ViewHolder holder, int position) {
         Contact contact = mContactList.get(position);
-        holder.mContactName.setText(contact.getName());
+        holder.mContactName.setText(contact.getNickName());
     }
 
     @Override

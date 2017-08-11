@@ -1,25 +1,42 @@
 package edu.rosehulman.sunz1.rosechat.models;
 
+import com.google.firebase.database.Exclude;
+
 import java.util.HashMap;
 
 /**
  * Created by agarwaa on 21-Jul-17.
+ *
  */
 
 public class Contact {
 
+    private String key;
 
-    String name;
-    String profilePicUrl;
-    HashMap<String, Boolean> friends;
-    String uid;
-    int phoneNumber;
-    String email;
+    private String nickName;
+    private String profilePicUrl;
+    private HashMap<String, Boolean> friends;
+    private String uid;
+    private String phoneNumber;
+    private String email;
 
 
-    public Contact(String temp, String pictureURL) {
-        name = temp;
-        profilePicUrl = pictureURL;
+    public Contact(String uid, String nickName, String profilePicUrl, HashMap<String, Boolean> friends, String phoneNumber, String email) {
+        this.nickName = nickName;
+        this.profilePicUrl = profilePicUrl;
+        this.friends = friends;
+        this.uid = uid;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+    }
+
+    @Exclude
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 
     public HashMap<String, Boolean> getFriends() {
@@ -38,11 +55,11 @@ public class Contact {
         this.uid = uid;
     }
 
-    public int getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(int phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
@@ -54,12 +71,12 @@ public class Contact {
         this.email = email;
     }
 
-    public String getName() {
-        return name;
+    public String getNickName() {
+        return nickName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNickName(String name) {
+        this.nickName = name;
     }
 
     public String getProfilePicUrl() {
@@ -69,4 +86,5 @@ public class Contact {
     public void setProfilePicUrl(String profilePicUrl) {
         profilePicUrl = profilePicUrl;
     }
+
 }
