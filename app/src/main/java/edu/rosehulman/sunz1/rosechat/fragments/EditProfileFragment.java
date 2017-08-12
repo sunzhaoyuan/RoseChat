@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
+
 import edu.rosehulman.sunz1.rosechat.R;
 import edu.rosehulman.sunz1.rosechat.utils.Constants;
 
@@ -48,12 +50,15 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         mConfirm.setOnClickListener(this);
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_edit_profile, container, false);
         bindViews(view);
+
+
         return view;
     }
 
@@ -64,6 +69,8 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         mNickNameTxtE = (TextView) view.findViewById(R.id.profile_name_edit);
         mPhoneTxtE = (TextView) view.findViewById(R.id.profile_phone_edit);
     }
+
+
 
     @Override
     public void onClick(View v) {
