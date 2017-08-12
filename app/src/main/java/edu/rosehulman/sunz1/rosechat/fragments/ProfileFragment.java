@@ -24,8 +24,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import java.util.HashMap;
-
 import edu.rosehulman.sunz1.rosechat.R;
 import edu.rosehulman.sunz1.rosechat.models.Contact;
 import edu.rosehulman.sunz1.rosechat.utils.Constants;
@@ -40,7 +38,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private TextView mPhoneTxt;
     //    private Bitmap mBitmap;
     //    private TableLayout
-    private boolean isFirstTime; //TODO: probably don't need this boolean
     private DatabaseReference mDBRef;
     private StorageReference mPPicStorageRef;
     private String mCurrentUID;
@@ -70,29 +67,26 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         Log.d(Constants.TAG_PROFILE, "In ProfileHandler.");
 //        Query query = mDBRef.orderByChild("uid").equalTo(mCurrentUID);
 //        query.addValueEventListener(new ValueEventListener() {
-        mDBRef.addValueEventListener(new ValueEventListener() {
+        mDBRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Contact contact;
                 if (!dataSnapshot.hasChild(mCurrentUID)) { //TODO: check if this works
                     Log.d(Constants.TAG_PROFILE, "dataSnapshot is null.");
-                    HashMap<String, Boolean> friendHashmap = new HashMap<>();
-                    contact = new Contact(mCurrentUID, mCurrentUID,
+                    mFireBaseContact = new Contact(mCurrentUID, mCurrentUID,
                             "https://www.mariowiki.com/images/thumb/9/96/TanookiMario_SMB3.jpg/180px-TanookiMario_SMB3.jpg",
-                            friendHashmap,
                             getString(R.string.profile_sample_phone_number),
-                            getString(R.string.profile_sample_email));
-                    Log.d(Constants.TAG_PROFILE, "contact key is " + dataSnapshot.getKey());
-                    contact.setKey(dataSnapshot.getKey()); //TODO: can it get key if it's null?
+                            mCurrentUID + "@rose-hulman.edu");
+                    Log.d(Constants.TAG_PROFILE, "mFireBaseContact key is " + dataSnapshot.getKey());
+                    mFireBaseContact.setKey(dataSnapshot.getKey()); //TODO: can it get key if it's null?
+                    mDBRef.push().setValue(mFireBaseContact);
                     Log.d(Constants.TAG_PROFILE, "just pushed a new profile");
-                    mDBRef.push().setValue(contact);
                 }
 //                Query query = mDBRef.orderByChild("uid").equalTo(mCurrentUID);
 //                query.addValueEventListener(new ValueEventListener() {
 //                    @Override
 //                    public void onDataChange(DataSnapshot dataSnapshot) {
-//                        Log.d(Constants.TAG_PROFILE, "enter the path for the existed contact");
-//                        mFireBaseContact = dataSnapshot.getValue(Contact.class); //TODO: check if it gets contact type
+//                        Log.d(Constants.TAG_PROFILE, "enter the path for the existed mFireBaseContact");
+//                        mFireBaseContact = dataSnapshot.getValue(Contact.class); //TODO: check if it gets mFireBaseContact type
 //                        assert mFireBaseContact != null;
 //                        //get Profile pic - worked!
 //                        Glide.with(getContext())

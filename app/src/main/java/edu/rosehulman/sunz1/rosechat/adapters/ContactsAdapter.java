@@ -46,7 +46,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
         mUserRef = mContactRef.orderByChild("uid").equalTo(user.getUid()).getRef();
         mContactRef.addChildEventListener(new ContactsChildEventListener());
         Contact temp = new Contact(SharedPreferencesUtils.getCurrentUser(mContext),
-                SharedPreferencesUtils.getCurrentUser(mContext), null, null, null, null);
+                SharedPreferencesUtils.getCurrentUser(mContext), null, null, null);
         addContact(temp);
     }
 

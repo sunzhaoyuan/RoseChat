@@ -30,7 +30,7 @@ public class NewChatAdapter extends RecyclerView.Adapter<NewChatAdapter.ViewHold
         mContactList = new ArrayList<Contact>();
         mSelectedContactsList = new ArrayList<>();
         Contact temp = new Contact(SharedPreferencesUtils.getCurrentUser(mContext),
-                SharedPreferencesUtils.getCurrentUser(mContext), null, null, null, null);
+                SharedPreferencesUtils.getCurrentUser(mContext), null, null, null);
         addContact(temp);
     }
 

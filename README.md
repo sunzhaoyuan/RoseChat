@@ -77,7 +77,7 @@ You can find our UI demo on [Ninja Mock](https://ninjamock.com/s/5FZF2)
 - [ ] Edit my profile (Sun)
     - [ ] Edit texts
     - [x] Choose photos from system Album - need tests
-- [ ] Create an Image Selector (Sun)
+- [x] Create an Image Selector (Sun)
 - [ ] Send Image
 - [ ] Group Chat
 - [ ] Notification in the Settings
