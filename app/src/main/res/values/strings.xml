@@ -64,4 +64,5 @@
     <string name="contact_initiate_error">Cannot initiate current user.</string>
     <string name="select_picture">select picture</string>
     <string name="fail_to_get_intent_data">Failed to get intent data</string>
+    <string name="could_not_get_message">Could not get messages</string>
 </resources>

@@ -7,14 +7,15 @@ import com.google.firebase.database.Exclude;
  */
 
 public class Message {
-    String name;
-    String lastMessage;
-    String profilePicURL;
-    String senderUID;
-    String receiverUID;
-    String key;
+    private String name;
+    private String lastMessage;
+    private String profilePicURL;
+    private String senderUID;
+    private String receiverUID;
 
-    public Message(){
+    private String key;
+
+    public Message() {
 
     }
 
@@ -26,14 +27,13 @@ public class Message {
         receiverUID = newReceiverUID;
     }
 
-    //for test
-    public Message(String key, String newName, String newLastInteraction, String newPictureURL, String newSenderUID, String newReceiverUID) {
-        name = newName;
-        lastMessage = newLastInteraction;
-        profilePicURL = newPictureURL;
-        senderUID = newSenderUID;
-        receiverUID = newReceiverUID;
-        this.key = key;
+    public void setReceiverUID(String receiverUID) {
+        this.receiverUID = receiverUID;
+    }
+
+    public void setSenderUID(String senderUID) {
+
+        this.senderUID = senderUID;
     }
 
     @Exclude
