@@ -27,7 +27,7 @@ import edu.rosehulman.sunz1.rosechat.utils.Constants;
 
 public class ChatFragment extends Fragment implements ChatSystem.View, TextView.OnEditorActionListener {
 
-    public static final String TAG = "chat";
+    public static final String TAG = Constants.TAG_CHAT;
 
     private ProgressDialog mProgressDialog;
     private ChatRecyclerAdapter mChatAdapter;

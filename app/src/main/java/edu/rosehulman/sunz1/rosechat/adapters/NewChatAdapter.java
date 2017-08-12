@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import edu.rosehulman.sunz1.rosechat.R;
 import edu.rosehulman.sunz1.rosechat.activities.NewChatActivity;
 import edu.rosehulman.sunz1.rosechat.models.Contact;
+import edu.rosehulman.sunz1.rosechat.utils.SharedPreferencesUtils;
 
 /**
  * Created by agarwaa on 21-Jul-17.
@@ -28,7 +29,8 @@ public class NewChatAdapter extends RecyclerView.Adapter<NewChatAdapter.ViewHold
         mContext = context;
         mContactList = new ArrayList<Contact>();
         mSelectedContactsList = new ArrayList<>();
-        Contact temp = new Contact("Temp", "pictureURL");
+        Contact temp = new Contact(SharedPreferencesUtils.getCurrentUser(mContext),
+                SharedPreferencesUtils.getCurrentUser(mContext), null, null, null, null);
         addContact(temp);
     }
 
@@ -46,7 +48,7 @@ public class NewChatAdapter extends RecyclerView.Adapter<NewChatAdapter.ViewHold
     @Override
     public void onBindViewHolder(NewChatAdapter.ViewHolder holder, int position) {
         Contact contact = mContactList.get(position);
-        holder.mContactName.setText(contact.getName());
+        holder.mContactName.setText(contact.getNickName());
     }
 
     @Override

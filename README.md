@@ -70,9 +70,14 @@ You can find our UI demo on [Ninja Mock](https://ninjamock.com/s/5FZF2)
  
 ## Sprint 3 Plan
 - [ ] Schedule
-- [ ] Check my profile (Sun) 
-    - [ ] Set up AsyncTask
+- [ ] Check my profile (Sun)
+    - [x] FireBase Storage 
+    - [x] Set up AsyncTask
     - [ ] Create new Contact or get Existed Contact
+    - [ ] Get the Query to work
+- [ ] Edit my profile (Sun)
+    - [ ] Edit texts
+    - [ ] Choose photos from system Album
 - [ ] Send Image
 - [ ] Group Chat
 - [ ] Notification in the Settings
