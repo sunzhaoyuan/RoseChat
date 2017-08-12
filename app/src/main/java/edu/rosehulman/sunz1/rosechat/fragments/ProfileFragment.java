@@ -14,14 +14,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -79,36 +77,38 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 if (!dataSnapshot.hasChild(mCurrentUID)) { //TODO: check if this works
                     Log.d(Constants.TAG_PROFILE, "dataSnapshot is null.");
                     HashMap<String, Boolean> friendHashmap = new HashMap<>();
-                    contact = new Contact(mCurrentUID, mCurrentUID, mDefaultPicUrl, friendHashmap,
-                            getString(R.string.profile_sample_phone_number), getString(R.string.profile_sample_email));
+                    contact = new Contact(mCurrentUID, mCurrentUID,
+                            "https://www.mariowiki.com/images/thumb/9/96/TanookiMario_SMB3.jpg/180px-TanookiMario_SMB3.jpg",
+                            friendHashmap,
+                            getString(R.string.profile_sample_phone_number),
+                            getString(R.string.profile_sample_email));
                     Log.d(Constants.TAG_PROFILE, "contact key is " + dataSnapshot.getKey());
                     contact.setKey(dataSnapshot.getKey()); //TODO: can it get key if it's null?
                     Log.d(Constants.TAG_PROFILE, "just pushed a new profile");
                     mDBRef.push().setValue(contact);
                 }
-                Query query = mDBRef.orderByChild("uid").equalTo(mCurrentUID);
-                query.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        Log.d(Constants.TAG_PROFILE, "enter the path for the existed contact");
-                        mFireBaseContact = dataSnapshot.getValue(Contact.class); //TODO: check if it gets contact type
-                        assert mFireBaseContact != null;
-                        //get Profile pic - worked!
-                        Glide.with(getContext())
-                                .load("https://www.mariowiki.com/images/thumb/9/96/TanookiMario_SMB3.jpg/180px-TanookiMario_SMB3.jpg")
+//                Query query = mDBRef.orderByChild("uid").equalTo(mCurrentUID);
+//                query.addValueEventListener(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(DataSnapshot dataSnapshot) {
+//                        Log.d(Constants.TAG_PROFILE, "enter the path for the existed contact");
+//                        mFireBaseContact = dataSnapshot.getValue(Contact.class); //TODO: check if it gets contact type
+//                        assert mFireBaseContact != null;
+//                        //get Profile pic - worked!
+//                        Glide.with(getContext())
 //                        .load(mFireBaseContact.getProfilePicUrl())
-                                .into(mProfileImg);
-                        //get Text Data
-                        mNickNameTxt.setText(mFireBaseContact.getNickName());
-                        mEmailTxt.setText(mFireBaseContact.getEmail());
-                        mPhoneTxt.setText(mFireBaseContact.getPhoneNumber());
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        Log.d(Constants.TAG_PROFILE, "failed to handle query for the existed profile");
-                    }
-                });
+//                                .into(mProfileImg);
+//                        //get Text Data
+//                        mNickNameTxt.setText(mFireBaseContact.getNickName());
+//                        mEmailTxt.setText(mFireBaseContact.getEmail());
+//                        mPhoneTxt.setText(mFireBaseContact.getPhoneNumber());
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(DatabaseError databaseError) {
+//                        Log.d(Constants.TAG_PROFILE, "failed to handle query for the existed profile");
+//                    }
+//                });
             }
 
             @Override

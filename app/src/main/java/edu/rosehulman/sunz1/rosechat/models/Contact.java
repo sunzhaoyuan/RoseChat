@@ -14,10 +14,10 @@ public class Contact {
 
     private String key;
 
+    private String uid;
     private String nickName;
     private String profilePicUrl;
     private Map<String, Boolean> friends;
-    private String uid;
     private String phoneNumber;
     private String email;
 
@@ -89,7 +89,7 @@ public class Contact {
     }
 
     public void setProfilePicUrl(String profilePicUrl) {
-        profilePicUrl = profilePicUrl;
+        this.profilePicUrl = profilePicUrl;
     }
 
 }
