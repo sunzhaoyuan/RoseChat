@@ -169,18 +169,43 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
             public void onClick(View v) {
                 Boolean wantToCloseDialog = false;
                 if (!mEmail.getText().toString().isEmpty() && !mMessage.getText().toString().isEmpty()) {
-                    if (containsContact(mEmail.getText().toString())) {
-                        Toast.makeText(MainActivity.this, R.string.error_add_contact_existing_contact, Toast.LENGTH_LONG).show();
-                    }//TODO: May want to put a more thorough checks e.g. does the email ID exist?
-                    else {
-                        wantToCloseDialog = true;
-                        Toast.makeText(MainActivity.this, R.string.successful_add_contact, Toast.LENGTH_LONG).show();
-                    }
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    DatabaseReference mFriendsRef = FirebaseDatabase.getInstance().getReference().child("friends/" + user.getUid());
+                    mFriendsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if(dataSnapshot.hasChild(mEmail.getText().toString())){
+                                Toast.makeText(MainActivity.this, R.string.error_add_contact_existing_contact, Toast.LENGTH_LONG).show();
+                            }else {
+                                DatabaseReference mContactRef = FirebaseDatabase.getInstance().getReference().child("contacts");
+                                mContactRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        if (!dataSnapshot.hasChild(mEmail.getText().toString())) {
+                                            Toast.makeText(MainActivity.this, "User doesn't exist", Toast.LENGTH_LONG).show();
+                                        } else {
+                                            dialog.dismiss();
+                                            Toast.makeText(MainActivity.this, R.string.successful_add_contact, Toast.LENGTH_LONG).show();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+
+                                    }
+                                });
+                            }
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });//TODO: May want to put a more thorough checks e.g. does the email ID exist?
                 } else {
                     Toast.makeText(MainActivity.this, R.string.error_add_contact_empty_field, Toast.LENGTH_LONG).show();
                 }
-                if (wantToCloseDialog)
-                    dialog.dismiss();
             }
         });
     }
