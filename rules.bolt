@@ -27,8 +27,7 @@ type Contacts {
     profilePicUrl: String,
     email: String,
     phoneNumber: Number,
-    Schedule: String,
-    Friends: Map<RoseUsername, Boolean>
+    friends: Map<RoseUsername, Boolean>
 }
 
 //

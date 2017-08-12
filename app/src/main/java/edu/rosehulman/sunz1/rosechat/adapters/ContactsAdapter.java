@@ -48,8 +48,6 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
         mFriendsRef.addChildEventListener(new ContactsChildEventListener());
         Log.d(DEBUG_KEY, "laaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
         Log.d(DEBUG_KEY, user.getUid());
-//        Contact temp = new Contact(SharedPreferencesUtils.getCurrentUser(mContext),
-//                SharedPreferencesUtils.getCurrentUser(mContext), null, null, null, null);
         addContact("temp");
     }
 
