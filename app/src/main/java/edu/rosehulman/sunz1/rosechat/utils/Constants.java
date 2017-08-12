@@ -23,6 +23,7 @@ public class Constants {
     public static final String PROF_NICK_NAME = "prof_nick_name";
     public static final String PROF_EMAIL = "prof_email";
     public static final String PROF_PHONE = "prof_phone";
+    public static final String PROF_PROFILE_PIC_URL = "prof_url";
 
     // For the FireBase
     public static final String PATH_CHAT = "chats";

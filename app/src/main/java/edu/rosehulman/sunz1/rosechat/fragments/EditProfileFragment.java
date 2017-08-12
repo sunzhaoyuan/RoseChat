@@ -47,13 +47,15 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
 
     public static EditProfileFragment newInstance(String email,
                                                   String nickName,
-                                                  String phone) {
+                                                  String phone,
+                                                  String profilePicURL) {
 
         Bundle args = new Bundle();
         args.putString(Constants.PROF_EMAIL, email);
         args.putString(Constants.PROF_NICK_NAME, nickName);
         args.putString(Constants.PROF_PHONE, phone);
         //TODO: need to put the profile image, or maybe we can get the image from FireBase again
+        args.putString(Constants.PROF_PROFILE_PIC_URL, profilePicURL);
         EditProfileFragment fragment = new EditProfileFragment();
         fragment.setArguments(args);
         return fragment;
@@ -79,6 +81,9 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
 //        mEmailTxtE.setText(getArguments().getString(Constants.PROF_EMAIL));
 //        mNickNameTxtE.setText(getArguments().getString(Constants.PROF_NICK_NAME));
 //        mPhoneTxtE.setText(getArguments().getString(Constants.PROF_PHONE));
+//        Glide.with(getContext())
+//                .load(getArguments().getString(Constants.PROF_PROFILE_PIC_URL))
+//                .into(mProfileImgE);
     }
 
 

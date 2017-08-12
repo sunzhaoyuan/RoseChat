@@ -47,6 +47,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private StorageReference mPPicStorageRef;
     private String mCurrentUID;
     private String mDefaultPicUrl;
+    private Contact mFireBaseContact;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -69,62 +70,51 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
     public void profileHandler() {
         Log.d(Constants.TAG_PROFILE, "In ProfileHandler.");
-        Query query = mDBRef.orderByChild("uid").equalTo(mCurrentUID);
-        query.addValueEventListener(new ValueEventListener() {
+//        Query query = mDBRef.orderByChild("uid").equalTo(mCurrentUID);
+//        query.addValueEventListener(new ValueEventListener() {
+        mDBRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Contact newContact = null;
-                if (dataSnapshot == null) { //TODO: check
+                Contact contact;
+                if (!dataSnapshot.hasChild(mCurrentUID)) { //TODO: check if this works
                     Log.d(Constants.TAG_PROFILE, "dataSnapshot is null.");
                     HashMap<String, Boolean> friendHashmap = new HashMap<>();
-                    newContact = new Contact(mCurrentUID, mCurrentUID, mDefaultPicUrl, friendHashmap, null, null);
+                    contact = new Contact(mCurrentUID, mCurrentUID, mDefaultPicUrl, friendHashmap,
+                            getString(R.string.profile_sample_phone_number), getString(R.string.profile_sample_email));
                     Log.d(Constants.TAG_PROFILE, "contact key is " + dataSnapshot.getKey());
-                    newContact.setKey(dataSnapshot.getKey()); //TODO: can it get key if it's null?
+                    contact.setKey(dataSnapshot.getKey()); //TODO: can it get key if it's null?
                     Log.d(Constants.TAG_PROFILE, "just pushed a new profile");
-                    mDBRef.push().setValue(newContact);
+                    mDBRef.push().setValue(contact);
                 }
-                Contact contact = (Contact) dataSnapshot.getValue(); //TODO: check if it gets contact type
-                assert contact != null;
-                //get Profile pic
-                Glide.with(getContext())
-                        .load("https://www.mariowiki.com/images/thumb/9/96/TanookiMario_SMB3.jpg/180px-TanookiMario_SMB3.jpg")
-//                        .load(contact.getProfilePicUrl())
-                        .into(mProfileImg);
-                //get Text Data
-//                mNickNameTxt.setText(newContact.getNickName());
-//                mEmailTxt.setText(newContact.getEmail());
-//                mPhoneTxt.setText(newContact.getPhoneNumber());
+                Query query = mDBRef.orderByChild("uid").equalTo(mCurrentUID);
+                query.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Log.d(Constants.TAG_PROFILE, "enter the path for the existed contact");
+                        mFireBaseContact = dataSnapshot.getValue(Contact.class); //TODO: check if it gets contact type
+                        assert mFireBaseContact != null;
+                        //get Profile pic - worked!
+                        Glide.with(getContext())
+                                .load("https://www.mariowiki.com/images/thumb/9/96/TanookiMario_SMB3.jpg/180px-TanookiMario_SMB3.jpg")
+//                        .load(mFireBaseContact.getProfilePicUrl())
+                                .into(mProfileImg);
+                        //get Text Data
+                        mNickNameTxt.setText(mFireBaseContact.getNickName());
+                        mEmailTxt.setText(mFireBaseContact.getEmail());
+                        mPhoneTxt.setText(mFireBaseContact.getPhoneNumber());
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.d(Constants.TAG_PROFILE, "failed to handle query for the existed profile");
+                    }
+                });
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Toast.makeText(getActivity(), R.string.contact_initiate_error, Toast.LENGTH_LONG).show();
                 Log.d(Constants.TAG_PROFILE, "fail to initiate profile");
-            }
-        });
-    }
-
-    private void getProfileData() {
-        Query query = mDBRef.orderByChild("uid").equalTo(mCurrentUID);
-        query.addValueEventListener(new ValueEventListener() { //TODO: should it be a single value event listener?
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Contact contact = (Contact) dataSnapshot.getValue(); //TODO: check if it gets contact type
-                //get Profile pic
-                assert contact != null;
-                Glide.with(getContext())
-                        .load(contact.getProfilePicUrl())
-                        .into(mProfileImg);
-                //get Text Data
-                mNickNameTxt.setText(contact.getNickName());
-                mEmailTxt.setText(contact.getEmail());
-                mPhoneTxt.setText(contact.getPhoneNumber());
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(getContext(), R.string.get_contact_error, Toast.LENGTH_SHORT).show();
-                Log.d(Constants.TAG_PROFILE, "Could not get profile error.");
             }
         });
     }
@@ -167,12 +157,13 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.profile_edit) {
-           
+
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
             Fragment editProfileFragment = EditProfileFragment.newInstance(
                     mEmailTxt.getText().toString(),
                     mNickNameTxt.getText().toString(),
-                    mPhoneTxt.getText().toString()
+                    mPhoneTxt.getText().toString(),
+                    mFireBaseContact.getProfilePicUrl()
             );
             transaction.addToBackStack("edit");
             transaction.replace(R.id.container, editProfileFragment);

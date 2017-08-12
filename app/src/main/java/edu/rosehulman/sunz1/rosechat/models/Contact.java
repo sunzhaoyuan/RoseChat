@@ -3,6 +3,7 @@ package edu.rosehulman.sunz1.rosechat.models;
 import com.google.firebase.database.Exclude;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by agarwaa on 21-Jul-17.
@@ -15,13 +16,17 @@ public class Contact {
 
     private String nickName;
     private String profilePicUrl;
-    private HashMap<String, Boolean> friends;
+    private Map<String, Boolean> friends;
     private String uid;
     private String phoneNumber;
     private String email;
 
+    public Contact(){
 
-    public Contact(String uid, String nickName, String profilePicUrl, HashMap<String, Boolean> friends, String phoneNumber, String email) {
+    }
+
+
+    public Contact(String uid, String nickName, String profilePicUrl, Map<String, Boolean> friends, String phoneNumber, String email) {
         this.nickName = nickName;
         this.profilePicUrl = profilePicUrl;
         this.friends = friends;
@@ -39,7 +44,7 @@ public class Contact {
         this.key = key;
     }
 
-    public HashMap<String, Boolean> getFriends() {
+    public Map<String, Boolean> getFriends() {
         return friends;
     }
 
