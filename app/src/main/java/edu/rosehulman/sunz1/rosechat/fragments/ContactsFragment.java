@@ -1,12 +1,10 @@
 package edu.rosehulman.sunz1.rosechat.fragments;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.telecom.Call;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,7 +55,7 @@ public class ContactsFragment extends Fragment {
 @Override
 public void onAttach(Context context) {
     super.onAttach(context);
-    if (context instanceof MessageFragment.Callback) {
+    if (context instanceof ContactsFragment.Callback) {
         mCallback = (ContactsFragment.Callback) context;
     } else {
         throw new RuntimeException(context.toString()

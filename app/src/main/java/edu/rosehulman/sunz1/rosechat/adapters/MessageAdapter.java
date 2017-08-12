@@ -2,17 +2,26 @@ package edu.rosehulman.sunz1.rosechat.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
 import edu.rosehulman.sunz1.rosechat.R;
 import edu.rosehulman.sunz1.rosechat.activities.ChatActivity;
-import edu.rosehulman.sunz1.rosechat.fragments.MessageFragment;
 import edu.rosehulman.sunz1.rosechat.models.Message;
+import edu.rosehulman.sunz1.rosechat.utils.Constants;
+import edu.rosehulman.sunz1.rosechat.utils.SharedPreferencesUtils;
 
 /**
  * Created by agarwaa on 10-Jul-17.
@@ -21,17 +30,18 @@ import edu.rosehulman.sunz1.rosechat.models.Message;
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
     private Context mContext;
     ArrayList<Message> mMessageList;
-    MessageFragment.Callback mCallback;
-    String senderUID = "sunz1";
-    String receiverUID = "agarwaa";
+//    MessageFragment.Callback mCallback;
+    private DatabaseReference mMessageRef;
+    private String mCurrentUID;
 
 
-    public MessageAdapter(Context context, MessageFragment.Callback callback){
-        mCallback = callback;
+    public MessageAdapter(Context context) {
+//        mCallback = callback;
         mContext = context;
         mMessageList = new ArrayList<>();
-        Message temp = new Message("A", "Temp", "LastInteractionTemp", "pictureURL", senderUID, receiverUID);
-        addChat(temp);
+        mMessageRef = FirebaseDatabase.getInstance().getReference().child(Constants.PATH_MESSAGE);
+        mCurrentUID = SharedPreferencesUtils.getCurrentUser(mContext);
+        getMessage();
     }
 
     @Override
@@ -52,23 +62,23 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         return mMessageList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView mNameTextView;
         private TextView mLastInteraction;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
-            itemView.setOnLongClickListener(new View.OnLongClickListener(){
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
-                public boolean onLongClick(View v){
+                public boolean onLongClick(View v) {
                     messageOptions(getAdapterPosition());
                     return false;
                 }
             });
 
-            itemView.setOnClickListener(new View.OnClickListener(){
-                public void onClick(View v){
+            itemView.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
                     enterChat(getAdapterPosition());
                 }
             });
@@ -80,26 +90,47 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
     }
 
-    public void addChat(Message message){
+    public void addChat(Message message) {
         //TODO: Adds names from firebase
         mMessageList.add(0, message);
         notifyItemInserted(0);
         //   notifyDataSetChanged();
     }
 
-    public void removeChat(int position){
+    private void getMessage() {
+        mMessageRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Log.d(Constants.TAG_MESSAGE, "current senderUid is : " + snapshot.child("senderUid").getValue() +
+                            "\ncurrent receiverUid is : " + snapshot.child("receiverUid").getValue());
+                    if (snapshot.child("senderUid").getValue().equals(mCurrentUID)
+                            || snapshot.child("receiverUid").getValue().equals(mCurrentUID)) {
+                        addChat(snapshot.getValue(Message.class));
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(mContext, R.string.could_not_get_message, Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    public void removeChat(int position) {
         //TODO: Removes name from firebase
         mMessageList.remove(position);
         notifyItemRemoved(position);
     }
+
     private void enterChat(int adapterPosition) {
         //TODO: link ChatFragment here
         Message currentMessage = mMessageList.get(adapterPosition);
         String messageName = currentMessage.getName();
-//        String senderUID = currentMessage.getSenderUID();
         String messageKey = currentMessage.getKey();
         String receiversUID = currentMessage.getReceiverUID();
-        ChatActivity.startActivity(this.mContext, messageName, receiversUID, messageKey);
+        ChatActivity.startActivity(mContext, messageName, receiversUID, messageKey);
     }
 
     private void messageOptions(int adapterPosition) {

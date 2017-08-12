@@ -23,7 +23,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
@@ -32,16 +31,14 @@ import java.util.HashMap;
 import edu.rosehulman.sunz1.rosechat.R;
 import edu.rosehulman.sunz1.rosechat.adapters.NavigationPagerAdapter;
 import edu.rosehulman.sunz1.rosechat.fragments.ContactsFragment;
-import edu.rosehulman.sunz1.rosechat.fragments.EditProfileFragment;
 import edu.rosehulman.sunz1.rosechat.fragments.MessageFragment;
 import edu.rosehulman.sunz1.rosechat.fragments.ProfileFragment;
 import edu.rosehulman.sunz1.rosechat.models.Contact;
-import edu.rosehulman.sunz1.rosechat.models.Message;
 
 //import edu.rosehulman.sunz1.rosechat.activities.NewChatActivity;
 
 public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener,
-        MessageFragment.Callback,
+//        MessageFragment.Callback,
         ContactsFragment.Callback,
         NewChatActivity.Callback {
 
@@ -276,16 +273,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
     @Override
     public void onPageScrollStateChanged(int state) {
-    }
-
-    @Override
-    public void onMessageSelected(Message message) {
-        //TODO:
-//        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-//        ChatFragment fragment = ChatFragment();
-//        ft.addToBackStack("detail");
-//        ft.replace(R.id.fragment_container, fragment);
-//        ft.commit();
     }
 
     @Override

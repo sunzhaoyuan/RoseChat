@@ -49,5 +49,6 @@ public class Constants {
     public static final String TAG_CHAT_COMMUNICATOR = "chatsComm_test";
     public static final String TAG_CHAT = "chat_test";
     public static final String TAG_PROFILE = "profile_test";
+    public static final String TAG_MESSAGE  = "message_test";
 
 }
