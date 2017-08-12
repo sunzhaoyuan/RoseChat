@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -170,16 +169,14 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         if (v.getId() == R.id.profile_edit) {
            
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            EditProfileFragment editProfileFragment = EditProfileFragment.newInstance(mEmailTxt.getText().toString(),
-                    mNickNameTxt.getText().toString(), mPhoneTxt.getText().toString());
-            transaction.addToBackStack("edit");
-            transaction.replace(R.id.container, editProfileFragment);
-            transaction.commit();
             Fragment editProfileFragment = EditProfileFragment.newInstance(
                     mEmailTxt.getText().toString(),
                     mNickNameTxt.getText().toString(),
                     mPhoneTxt.getText().toString()
             );
+            transaction.addToBackStack("edit");
+            transaction.replace(R.id.container, editProfileFragment);
+            transaction.commit();
         }
     }
 
