@@ -16,13 +16,13 @@ After two years in Rose-Hulman, we have noticed one of the biggest problems of g
 Ultimately, the application core function is to allow students/professors to chat amongst themselves. From there we will try to add more features to the application (they can be found in Preliminary Requirements). The long term goal for this application is to make Rose-Hulman suggest teachers and students (especially incoming freshmen, since they are most likely) to download this app so everyone will have this app ready from the start of their Rose career, similar to the laptops that students have to buy; however, this would mean that we need to develop another iteration of this application that is available for IOS users.
 
 ## Preliminary Requirements
-- [ ] Allow users to send messages to each other.
+- [x] Allow users to send messages to each other.
 - [ ] Enable users to send image messages.
 - [ ] Users are able to create groups amongst themselves.
 - [ ] Users can record and send voice messages.
 - [x] Create an authentication system so only people with a [Rose account](http://rose-hulman.edu/admissions-and-aid/contact-admissions.html) can use the app.
-- [ ] Allow multi-language support (especially Mandarin), to take into account the portion of the student body whose native language is not English.
-- [ ] Create a profile page that is editable.
+- [x] Allow multi-language support (especially Mandarin), to take into account the portion of the student body whose native language is not English.
+- [x] Create a profile page that is editable.
     * This profile page will have basic info
     * name
     * Email
@@ -72,12 +72,12 @@ You can find our UI demo on [Ninja Mock](https://ninjamock.com/s/5FZF2)
 - [ ] Schedule
 - [ ] Check my profile (Sun)
     - [x] FireBase Storage 
-    - [x] Set up AsyncTask
-    - [ ] Create new Contact or get Existed Contact
+    - [x] Create new Contact or get Existed Contact
     - [ ] Get the Query to work
 - [ ] Edit my profile (Sun)
     - [ ] Edit texts
-    - [ ] Choose photos from system Album
+    - [x] Choose photos from system Album - need tests
+- [ ] Create an Image Selector (Sun)
 - [ ] Send Image
 - [ ] Group Chat
 - [ ] Notification in the Settings
@@ -90,3 +90,4 @@ RoseChat tries to be as [KISS](https://en.wikipedia.org/wiki/KISS_principle) as 
 
 ## Thanks
 Thanks for [天宇工作室 ittianyu.com](https://github.com/ittianyu/BottomNavigationViewEx)
+Thanks for [hdante](https://stackoverflow.com/users/1797000/hdante)

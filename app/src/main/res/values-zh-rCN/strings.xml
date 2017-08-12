@@ -62,4 +62,5 @@
     <string name="rosefire_login_failed">RoseFire登录失败</string>
     <string name="rosefire_key">ecbd1b2b-516f-4214-a860-0fd423668493</string>
     <string name="settings_feedback_author" translatable="false">- Abu Agarwal and Zhaoyuan Sun</string>
+    <string name="get_contact_error">Could not get contact.</string>
 </resources>

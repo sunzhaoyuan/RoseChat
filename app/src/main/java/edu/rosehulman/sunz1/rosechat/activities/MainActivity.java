@@ -35,7 +35,7 @@ import edu.rosehulman.sunz1.rosechat.models.Message;
 public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener,
         MessageFragment.Callback,
         ContactsFragment.Callback,
-        NewChatActivity.Callback{
+        NewChatActivity.Callback {
 
     final private String DEBUG_KEY = "Debug";
 
@@ -110,6 +110,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
         mFragmentMain = new MessageFragment();
         setTitle(R.id.navigation_message);
+
     }
 
     @Override
