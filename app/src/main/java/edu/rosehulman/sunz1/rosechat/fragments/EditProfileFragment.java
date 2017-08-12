@@ -20,6 +20,8 @@ import com.google.firebase.storage.StorageReference;
 
 import java.io.IOException;
 
+import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
+
 import edu.rosehulman.sunz1.rosechat.R;
 import edu.rosehulman.sunz1.rosechat.activities.MainActivity;
 import edu.rosehulman.sunz1.rosechat.sys.image_selector.UserPicture;
@@ -79,12 +81,15 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
 //        mPhoneTxtE.setText(getArguments().getString(Constants.PROF_PHONE));
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_edit_profile, container, false);
         bindViews(view);
+
+
         return view;
     }
 
@@ -95,6 +100,8 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         mNickNameTxtE = (TextView) view.findViewById(R.id.profile_name_edit);
         mPhoneTxtE = (TextView) view.findViewById(R.id.profile_phone_edit);
     }
+
+
 
     @Override
     public void onClick(View v) {

@@ -17,6 +17,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
+
 import java.util.HashMap;
 
 import edu.rosehulman.sunz1.rosechat.R;
@@ -40,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     private NavigationPagerAdapter mNavigationPagerAdapter;
     private ViewPager mViewPager;
     private Fragment mFragmentMain;
-    //    private BottomNavigationViewEx mNavigation;
+    private BottomNavigationViewEx mNavigation;
     private BottomNavigationView mBottomNavigationView;
 
     private HashMap<Integer, Integer> mTitlesMap = new HashMap<Integer, Integer>() {{
@@ -52,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     }};
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNISListener;
+    private BottomNavigationViewEx.OnNavigationItemSelectedListener mOnNISExListener;
 
     public void clearBackStack() {
         for (int i = 0; i < getSupportFragmentManager().getBackStackEntryCount() + 1; i++) {
@@ -64,8 +67,9 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mBottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
-        mOnNISListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
+//        mBottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+        mNavigation = (BottomNavigationViewEx) findViewById(R.id.bnve);
+        mOnNISExListener = new BottomNavigationViewEx.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
@@ -91,10 +95,10 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                 return true;
             }
         };
-        mBottomNavigationView.setOnNavigationItemSelectedListener(mOnNISListener);
+//        mBottomNavigationView.setOnNavigationItemSelectedListener(mOnNISListener);
 
-//        mNavigation = (BottomNavigationViewEx) findViewById(R.id.bnve);
-//        mNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+        mNavigation.setOnNavigationItemSelectedListener(mOnNISExListener);
 
 
         mNavigationPagerAdapter = new NavigationPagerAdapter(getSupportFragmentManager());
@@ -102,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         setupViewPager(mViewPager);
 
         mViewPager.addOnPageChangeListener(this);
-//        mNavigation.setupWithViewPager(viewPager);
+        mNavigation.setupWithViewPager(mViewPager);
 
         mFragmentMain = new MessageFragment();
         setTitle(R.id.navigation_message);
@@ -120,7 +124,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         int id = item.getItemId();
         switch (id) {
             case R.id.action_new_chat:
-                // TODO: pop up a new activity probably (no bottom navi bar)
                 Intent newChatIntent = new Intent(this, NewChatActivity.class);
                 startActivity(newChatIntent);
                 return true;
@@ -185,7 +188,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         adapter.addFragment(new MessageFragment(), getTitle(R.id.navigation_message));
         adapter.addFragment(new ContactsFragment(), getTitle(R.id.navigation_contact));
         adapter.addFragment(new ProfileFragment(), getTitle(R.id.navigation_profile));
-        adapter.addFragment(new EditProfileFragment(), getTitle(R.id.edit_profile));
+//        adapter.addFragment(new EditProfileFragment(), getTitle(R.id.edit_profile));
         viewPager.setAdapter(adapter);
     }
 
@@ -206,6 +209,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     // ViewPager OnPageChange Listener: BEGINS
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//        mBottomNavigationView.setSelectedItemId(position);
 
     }
 
@@ -213,7 +217,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     public void onPageSelected(int position) {
         if (mViewPager != null) {
             if (position < 3) {
-                mBottomNavigationView.setSelectedItemId(position);
+//                mBottomNavigationView.setSelectedItemId(position);
                 Log.d(DEBUG_KEY, "item id is " + position);
             }
         }
