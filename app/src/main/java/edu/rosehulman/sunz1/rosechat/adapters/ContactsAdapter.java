@@ -2,6 +2,7 @@ package edu.rosehulman.sunz1.rosechat.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,32 +29,31 @@ import edu.rosehulman.sunz1.rosechat.utils.SharedPreferencesUtils;
 
 public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHolder>{
     private Context mContext;
-    ArrayList<Contact> mContactList;
+    ArrayList<String> mContactList;
     ContactsFragment.Callback mCallback;
-    private DatabaseReference mContactRef;
-    DatabaseReference mUserRef;
+    private DatabaseReference mFriendsRef;
     FirebaseAuth mAuth;
     FirebaseUser user;
+    final private String DEBUG_KEY = "Debug";
+
 
 
     public ContactsAdapter(Context context, ContactsFragment.Callback callback){
         mCallback = callback;
         mContext = context;
-        mContactList = new ArrayList<Contact>();
+        mContactList = new ArrayList<String>();
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
-        mContactRef = FirebaseDatabase.getInstance().getReference().child("contacts");
-        mUserRef = mContactRef.orderByChild("uid").equalTo(user.getUid()).getRef();
-        mContactRef.addChildEventListener(new ContactsChildEventListener());
-        Contact temp = new Contact(SharedPreferencesUtils.getCurrentUser(mContext),
-                SharedPreferencesUtils.getCurrentUser(mContext), null, null, null);
-        addContact(temp);
+        mFriendsRef = FirebaseDatabase.getInstance().getReference().child("friends/" + user.getUid());
+        mFriendsRef.addChildEventListener(new ContactsChildEventListener());
+        Log.d(DEBUG_KEY, "laaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        Log.d(DEBUG_KEY, user.getUid());
+        addContact("temp");
     }
 
 
-    private void addContact(Contact contact) {
-        mContactList.add(0, contact);
-        notifyItemInserted(0);
+    private void addContact(String contact) {
+        mFriendsRef.child(contact).setValue(true);
     }
 
     @Override
@@ -64,8 +64,8 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(ContactsAdapter.ViewHolder holder, int position) {
-        Contact contact = mContactList.get(position);
-        holder.mContactName.setText(contact.getNickName());
+        String contact = mContactList.get(position);
+        holder.mContactName.setText(contact);
     }
 
     @Override
@@ -112,17 +112,30 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
 
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            if(dataSnapshot.getValue().equals(true)) {
+                String contactName = dataSnapshot.getKey();
+                mContactList.add(0, contactName);
+                notifyDataSetChanged();
+            }
 
         }
 
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
+            if(dataSnapshot.getValue().equals(true)) {
+                String contactName = dataSnapshot.getKey();
+                mContactList.add(0, contactName);
+                notifyDataSetChanged();
+            }else{
+                mContactList.remove(dataSnapshot.getKey());
+                notifyDataSetChanged();
+            }
         }
 
         @Override
         public void onChildRemoved(DataSnapshot dataSnapshot) {
-
+            mContactList.remove(dataSnapshot.getKey());
+            notifyDataSetChanged();
         }
 
         @Override
