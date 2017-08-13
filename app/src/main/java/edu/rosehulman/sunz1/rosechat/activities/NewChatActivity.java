@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -24,6 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 import edu.rosehulman.sunz1.rosechat.R;
 import edu.rosehulman.sunz1.rosechat.adapters.NewChatAdapter;
 import edu.rosehulman.sunz1.rosechat.models.Contact;
+import edu.rosehulman.sunz1.rosechat.utils.Constants;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -37,6 +39,7 @@ public class NewChatActivity extends AppCompatActivity {
     private NewChatAdapter mAdapter;
     private RecyclerView mRecyclerView;
     final private String DEBUG_KEY = "Debug";
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
     public NewChatActivity() {
         // Required empty public constructor
@@ -61,12 +64,25 @@ public class NewChatActivity extends AppCompatActivity {
             public void onClick(View v) {
                 int size = mAdapter.selectedContacts().size();
                 Log.d(DEBUG_KEY, "" + size);
-                if(size > 0){
+                if(size == 1){
                     DatabaseReference mMessagesRef = FirebaseDatabase.getInstance().getReference().child("messages");
                     mMessagesRef.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            
+                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                Log.d(DEBUG_KEY, mAdapter.selectedContacts().get(0));
+                                if ((snapshot.child("senderUid").getValue().equals(user.getUid())
+                                        || snapshot.child("receiverUid").getValue().equals(user.getUid()))
+                                        && (snapshot.child("senderUid").getValue().equals(mAdapter.selectedContacts().get(0))
+                                        || snapshot.child("receiverUid").getValue().equals(mAdapter.selectedContacts().get(0)))) {
+
+                                    Toast.makeText(NewChatActivity.this, "Chat already exists", Toast.LENGTH_LONG);
+                                    break;
+                                }else{
+                                    Toast.makeText(NewChatActivity.this, "Chat created", Toast.LENGTH_LONG);
+                                    //TODO What will happen if the chat does not exist yet
+                                }
+                            }
                         }
 
                         @Override
@@ -75,8 +91,10 @@ public class NewChatActivity extends AppCompatActivity {
                         }
                     });
                     finish();
-                }else{
+                }else if(size == 0){
                     Toast.makeText(NewChatActivity.this ,"Please choose at least one contact", Toast.LENGTH_LONG ).show();
+                }else{
+                    Toast.makeText(NewChatActivity.this ,"Group chat not supported right now", Toast.LENGTH_LONG ).show();
                 }
             }
         });
