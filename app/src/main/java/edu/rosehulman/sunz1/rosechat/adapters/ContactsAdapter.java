@@ -104,7 +104,8 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
     }
 
     private void deleteContact(int adapterPosition) {
-        mFriendsRef.child(mContactList.get(adapterPosition)).removeValue();
+        Log.d(DEBUG_KEY, "user selected" + mFriendsRef.child(mContactList.get(adapterPosition)).getKey());
+        mFriendsRef.child(mContactList.get(adapterPosition)).setValue(false);
     }
 
     private class ContactsChildEventListener implements ChildEventListener {

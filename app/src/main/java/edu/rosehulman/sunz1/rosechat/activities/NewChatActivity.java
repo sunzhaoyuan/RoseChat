@@ -2,6 +2,7 @@ package edu.rosehulman.sunz1.rosechat.activities;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -43,6 +44,7 @@ public class NewChatActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
 
         mAdapter = new NewChatAdapter(this, mCallback);
+        FloatingActionButton addFAB = (FloatingActionButton) findViewById(R.id.newChat_fab);
 
         recyclerView.setAdapter(mAdapter);
     }

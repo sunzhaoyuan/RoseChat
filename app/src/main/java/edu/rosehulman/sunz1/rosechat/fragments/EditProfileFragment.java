@@ -44,6 +44,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
     private DatabaseReference mDBRef;
     private StorageReference mPPicStorageRef;
     private String mCurrentUID;
+    BottomNavigationViewEx bottomNavigationViewEx;
 
     public static EditProfileFragment newInstance(String email,
                                                   String nickName,
@@ -93,7 +94,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
 
         View view = inflater.inflate(R.layout.fragment_edit_profile, container, false);
         bindViews(view);
-
+//        bottomNavigationViewEx.setVisibility(View.GONE);
 
         return view;
     }
@@ -104,6 +105,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         mEmailTxtE = (TextView) view.findViewById(R.id.profile_email_edit);
         mNickNameTxtE = (TextView) view.findViewById(R.id.profile_name_edit);
         mPhoneTxtE = (TextView) view.findViewById(R.id.profile_phone_edit);
+//        bottomNavigationViewEx = (BottomNavigationViewEx) getActivity().findViewById(R.id.bnve);
     }
 
 
@@ -113,6 +115,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         switch (v.getId()) {
             case R.id.profile_confirm_edit:
                 confirmChanges();
+//                bottomNavigationViewEx.setVisibility(View.VISIBLE);
                 // TODO: switch back to profileFragment class
                 break;
             case R.id.profile_image_edit:

@@ -1,9 +1,12 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="edu.rosehulman.sunz1.rosechat.activities.NewChatActivity"
     android:background="@color/colorAccent">
+
+
 
 <android.support.v7.widget.RecyclerView
     android:layout_width="match_parent"
@@ -12,4 +15,14 @@
 
 </android.support.v7.widget.RecyclerView>
 
-</FrameLayout>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/newChat_fab"
+        android:layout_width="30sp"
+        android:layout_height="30sp"
+        android:layout_alignBottom="@id/newChat_recyclerView"
+        android:layout_alignParentEnd="true"
+        android:visibility="visible"
+        app:backgroundTint="@color/blue_grey_900"
+        app:srcCompat="@android:drawable/ic_input_add" />
+
+</RelativeLayout>

@@ -167,7 +167,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                 Boolean wantToCloseDialog = false;
                 if (!mEmail.getText().toString().isEmpty() && !mMessage.getText().toString().isEmpty()) {
                     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                    DatabaseReference mFriendsRef = FirebaseDatabase.getInstance().getReference().child("friends/" + user.getUid());
+                    final DatabaseReference mFriendsRef = FirebaseDatabase.getInstance().getReference().child("friends/" + user.getUid());
                     mFriendsRef.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -181,6 +181,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                                         if (!dataSnapshot.hasChild(mEmail.getText().toString())) {
                                             Toast.makeText(MainActivity.this, "User doesn't exist", Toast.LENGTH_LONG).show();
                                         } else {
+                                            mFriendsRef.child(mEmail.getText().toString()).setValue(true);
                                             dialog.dismiss();
                                             Toast.makeText(MainActivity.this, R.string.successful_add_contact, Toast.LENGTH_LONG).show();
                                         }
