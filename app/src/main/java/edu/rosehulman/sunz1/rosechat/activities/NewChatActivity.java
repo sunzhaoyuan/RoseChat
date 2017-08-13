@@ -15,6 +15,11 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import edu.rosehulman.sunz1.rosechat.R;
 import edu.rosehulman.sunz1.rosechat.adapters.NewChatAdapter;
@@ -39,6 +44,7 @@ public class NewChatActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_chat);
 
@@ -56,6 +62,18 @@ public class NewChatActivity extends AppCompatActivity {
                 int size = mAdapter.selectedContacts().size();
                 Log.d(DEBUG_KEY, "" + size);
                 if(size > 0){
+                    DatabaseReference mMessagesRef = FirebaseDatabase.getInstance().getReference().child("messages");
+                    mMessagesRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
                     finish();
                 }else{
                     Toast.makeText(NewChatActivity.this ,"Please choose at least one contact", Toast.LENGTH_LONG ).show();
