@@ -34,7 +34,6 @@ public class NewChatAdapter extends RecyclerView.Adapter<NewChatAdapter.ViewHold
     NewChatActivity.Callback mCallback;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     DatabaseReference mFriendsRef;
-    FloatingActionButton addFAB;
 
     public NewChatAdapter(Context context, NewChatActivity.Callback callback){
 
@@ -50,6 +49,8 @@ public class NewChatAdapter extends RecyclerView.Adapter<NewChatAdapter.ViewHold
         mContactList.add(0, contact);
     }
 
+    public ArrayList<String> selectedContacts(){return mSelectedContactsList;}
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.new_chat_view, parent, false);
@@ -60,7 +61,6 @@ public class NewChatAdapter extends RecyclerView.Adapter<NewChatAdapter.ViewHold
     public void onBindViewHolder(NewChatAdapter.ViewHolder holder, int position) {
         String contact = mContactList.get(position);
         holder.mContactName.setText(contact);
-        addFAB = holder.mAddFAB;
     }
 
     @Override
@@ -71,7 +71,6 @@ public class NewChatAdapter extends RecyclerView.Adapter<NewChatAdapter.ViewHold
 
         TextView mContactName;
         CheckBox mSelected;
-        FloatingActionButton mAddFAB;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -88,7 +87,6 @@ public class NewChatAdapter extends RecyclerView.Adapter<NewChatAdapter.ViewHold
                 }
             });
 
-            mAddFAB = (FloatingActionButton) itemView.findViewById(R.id.newChat_fab);
             mContactName = (TextView) itemView.findViewById(R.id.newChat_name);
             mSelected = (CheckBox) itemView.findViewById(R.id.newChat_checkBox);
         }
@@ -98,15 +96,10 @@ public class NewChatAdapter extends RecyclerView.Adapter<NewChatAdapter.ViewHold
         String subject = mContactList.get(adapterPosition);
         if(mSelectedContactsList.contains(subject)){
             mSelectedContactsList.remove(subject);
-            if(mSelectedContactsList.size()< 1 ){
-                addFAB.setVisibility(View.INVISIBLE);
-            }
         }else{
             mSelectedContactsList.add(subject);
-            if(mSelectedContactsList.size() > 0){
-                addFAB.setVisibility(View.VISIBLE);
-            }
         }
+        notifyDataSetChanged();
 
     }
 

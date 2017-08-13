@@ -7,10 +7,12 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -29,6 +31,7 @@ public class NewChatActivity extends AppCompatActivity {
     private Callback mCallback;
     private NewChatAdapter mAdapter;
     private RecyclerView mRecyclerView;
+    final private String DEBUG_KEY = "Debug";
 
     public NewChatActivity() {
         // Required empty public constructor
@@ -45,9 +48,22 @@ public class NewChatActivity extends AppCompatActivity {
 
         mAdapter = new NewChatAdapter(this, mCallback);
         FloatingActionButton addFAB = (FloatingActionButton) findViewById(R.id.newChat_fab);
-
         recyclerView.setAdapter(mAdapter);
+
+        addFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int size = mAdapter.selectedContacts().size();
+                Log.d(DEBUG_KEY, "" + size);
+                if(size > 0){
+                    finish();
+                }else{
+                    Toast.makeText(NewChatActivity.this ,"Please choose at least one contact", Toast.LENGTH_LONG ).show();
+                }
+            }
+        });
     }
+
 
     @Override
     protected void onStart() {
