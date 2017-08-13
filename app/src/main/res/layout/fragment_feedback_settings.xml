@@ -30,7 +30,7 @@
         android:layout_height="80dp" />
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/feedback_edit_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"

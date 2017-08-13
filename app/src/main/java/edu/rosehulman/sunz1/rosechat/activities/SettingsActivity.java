@@ -28,7 +28,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     private Button mButtonFeedback;
     private Button mButtonDeleteAccount;
     public static boolean NOTIFICATIONS = true;
-    private boolean feedbackPressed = false;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
 //    private OnLogoutListener mLogoutListener;
@@ -99,15 +98,13 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             case R.id.button_settings_feedback:
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 FeedbackSettingsFragment fragment = new FeedbackSettingsFragment();
-                if(!feedbackPressed) {
-                    transaction.addToBackStack("settings");
+                if(this.getSupportFragmentManager().getBackStackEntryCount() == 0) {
+                    transaction.addToBackStack("feedback");
                     transaction.add(R.id.settings_container, fragment);
                     transaction.commit();
-                    feedbackPressed = true;
                 }else{
-                    getSupportFragmentManager().popBackStack("settings", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    getSupportFragmentManager().popBackStack("feedback", FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     transaction.commit();
-                    feedbackPressed = false;
                 }
                 return;
         }
