@@ -38,6 +38,7 @@ import edu.rosehulman.sunz1.rosechat.fragments.ContactsFragment;
 import edu.rosehulman.sunz1.rosechat.fragments.MessageFragment;
 import edu.rosehulman.sunz1.rosechat.fragments.ProfileFragment;
 import edu.rosehulman.sunz1.rosechat.models.Contact;
+import edu.rosehulman.sunz1.rosechat.models.Invitation;
 import edu.rosehulman.sunz1.rosechat.utils.Constants;
 import edu.rosehulman.sunz1.rosechat.utils.SharedPreferencesUtils;
 
@@ -182,6 +183,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         int id = item.getItemId();
         switch (id) {
             case R.id.action_new_chat:
+                setTitle("New Chat");
                 Intent newChatIntent = new Intent(this, NewChatActivity.class);
                 startActivity(newChatIntent);
                 return true;
@@ -192,6 +194,11 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                 setTitle(id);
                 Intent intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);
+                return true;
+            case R.id.action_invitations:
+                setTitle("Invitations");
+                Intent invitationIntent = new Intent(this, InvitationActivity.class);
+                startActivity(invitationIntent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -227,9 +234,25 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                             if(dataSnapshot.hasChild(mEmail.getText().toString()) && dataSnapshot.child(mEmail.getText().toString()).getValue().equals(true)){
                                 Toast.makeText(MainActivity.this, R.string.error_add_contact_existing_contact, Toast.LENGTH_LONG).show();
                             }else if(dataSnapshot.hasChild(mEmail.getText().toString()) && dataSnapshot.child(mEmail.getText().toString()).getValue().equals(false)){
-                                sendInvite(mEmail.getText().toString(), mMessage.getText().toString(), user.getUid());
-                                dialog.dismiss();
-                                Toast.makeText(MainActivity.this, R.string.successful_add_contact, Toast.LENGTH_LONG).show();
+                                DatabaseReference mUserInvitationRef = FirebaseDatabase.getInstance().getReference().child("invitations/" + user.getUid());
+                                mUserInvitationRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        if(dataSnapshot.hasChild(mEmail.getText().toString())){
+                                            dialog.dismiss();
+                                            Toast.makeText(MainActivity.this, "Invite already sent", Toast.LENGTH_LONG).show();
+                                        }else{
+                                            sendInvite(mEmail.getText().toString(), mMessage.getText().toString(), user.getUid());
+                                            dialog.dismiss();
+                                            Toast.makeText(MainActivity.this, R.string.successful_add_contact, Toast.LENGTH_LONG).show();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+
+                                    }
+                                });
                             }else {
                                 DatabaseReference mContactRef = FirebaseDatabase.getInstance().getReference().child("contacts");
                                 mContactRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -238,9 +261,25 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                                         if (!dataSnapshot.hasChild(mEmail.getText().toString())) {
                                             Toast.makeText(MainActivity.this, "User doesn't exist", Toast.LENGTH_LONG).show();
                                         } else {
-                                            sendInvite(mEmail.getText().toString(), mMessage.getText().toString(), user.getUid());
-                                            dialog.dismiss();
-                                            Toast.makeText(MainActivity.this, R.string.successful_add_contact, Toast.LENGTH_LONG).show();
+                                            DatabaseReference mUserInvitationRef = FirebaseDatabase.getInstance().getReference().child("invitations/" + user.getUid());
+                                            mUserInvitationRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                                    if(dataSnapshot.hasChild(mEmail.getText().toString())){
+                                                        dialog.dismiss();
+                                                        Toast.makeText(MainActivity.this, "Invite already sent", Toast.LENGTH_LONG).show();
+                                                    }else{
+                                                        sendInvite(mEmail.getText().toString(), mMessage.getText().toString(), user.getUid());
+                                                        dialog.dismiss();
+                                                        Toast.makeText(MainActivity.this, R.string.successful_add_contact, Toast.LENGTH_LONG).show();
+                                                    }
+                                                }
+
+                                                @Override
+                                                public void onCancelled(DatabaseError databaseError) {
+
+                                                }
+                                            });
                                         }
                                     }
 
@@ -273,6 +312,12 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         DatabaseReference mFriendInvitationRef = FirebaseDatabase.getInstance().getReference().child("invitations/" + mEmail + "/" + user);
         mFriendInvitationRef.child("message").setValue(mMessage);
         mFriendInvitationRef.child("status").setValue("Waiting");
+    }
+
+    private boolean inviteAlreadySentCheck(final String mEmail, String user){
+
+
+        return false;
     }
 
     private void setupViewPager(ViewPager viewPager) {

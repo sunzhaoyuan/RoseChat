@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -30,12 +32,17 @@ public class InvitationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_invitation);
 
-        RecyclerView recyclerView = (RecyclerView)findViewById(R.id.newChat_recyclerView);
+        RecyclerView recyclerView = (RecyclerView)findViewById(R.id.invitation_recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
 
         mAdapter = new InvitationAdapter(this, mCallback);
         recyclerView.setAdapter(mAdapter);
+
+//        if(mAdapter.getItemCount() == 0){
+//            TextView noInvitations = (TextView) findViewById(R.id.invitation_no_pending_invitations);
+//            noInvitations.setVisibility(View.VISIBLE);
+//        }
     }
 
     @Override

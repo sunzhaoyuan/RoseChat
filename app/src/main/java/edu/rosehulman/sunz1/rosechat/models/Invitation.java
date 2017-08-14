@@ -7,52 +7,37 @@ import com.google.firebase.database.Exclude;
  */
 
 public class Invitation {
-    private String key;
 
-    String senderUID;
-    String receiverUID;
-    Contact contact;
-    String text;
+    String mName;
+    String mMessage;
+    String mStatus;
 
-    @Exclude
-    public String getKey() {
-        return key;
+    public Invitation(){
+
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public String getmName() {
+        return mName;
     }
 
-    public String getSenderUID() {
-        return senderUID;
+    public void setmName(String mName) {
+        this.mName = mName;
     }
 
-    public void setSenderUID(String senderUID) {
-        this.senderUID = senderUID;
+    public String getmMessage() {
+        return mMessage;
     }
 
-    public String getReceiverUID() {
-        return receiverUID;
+    public void setmMessage(String mMessage) {
+        this.mMessage = mMessage;
     }
 
-    public void setReceiverUID(String receiverUID) {
-        this.receiverUID = receiverUID;
+    public String getmStatus() {
+        return mStatus;
     }
 
-    public Contact getContact() {
-        return contact;
-    }
-
-    public void setContact(Contact contact) {
-        this.contact = contact;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
+    public void setmStatus(String mStatus) {
+        this.mStatus = mStatus;
     }
 
 

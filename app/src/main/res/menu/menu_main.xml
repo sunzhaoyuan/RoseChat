@@ -22,5 +22,10 @@
         android:orderInCategory="30"
         android:title="@string/action_settings"
         app:showAsAction="never"/>
+    <item
+        android:id="@+id/action_invitations"
+        android:orderInCategory="40"
+        android:title="Invitations"
+        app:showAsAction="never"/>
 
 </menu>

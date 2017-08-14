@@ -15,11 +15,14 @@
         android:id="@+id/add_contact_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/lbl_add_contact"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="26dp"
+        android:layout_marginTop="29dp"
         android:ems="10"
-        android:inputType="textEmailAddress" />
+        android:inputType="textEmailAddress"
+        android:layout_marginLeft="42dp"
+        android:layout_marginStart="42dp"
+        android:layout_below="@+id/lbl_add_contact"
+        android:layout_toRightOf="@+id/textView3"
+        android:layout_toEndOf="@+id/textView3" />
 
     <TextView
         android:id="@+id/textView2"
@@ -47,7 +50,7 @@
         android:id="@+id/add_contact_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="27dp"
         android:ems="10"
         android:inputType="textMultiLine"
         android:layout_below="@+id/add_contact_email"

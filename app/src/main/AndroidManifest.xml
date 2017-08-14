@@ -18,6 +18,7 @@
         <activity android:name=".activities.LogInActivity" />
         <activity android:name=".activities.SettingsActivity" />
         <activity android:name=".activities.NewChatActivity" />
+        <activity android:name=".activities.InvitationActivity"/>
         <activity android:name=".activities.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
