@@ -61,10 +61,10 @@ You can find our UI demo on [Ninja Mock](https://ninjamock.com/s/5FZF2)
 - [x] Log in with RoseFire (Sun)
 - [x] Log out (Sun)
 - [ ] Check others' profiles (Sun)
-- [ ] Connect UI completely (Abu) 
-    - [ ] Set up ViewPager (the issue #5)
-    - [ ] Issue #15
-    - [ ] Issue #17
+- [x] Connect UI completely (Abu) 
+    - [x] Set up ViewPager (the issue #5)
+    - [x] Issue #15
+    - [x] Issue #17
 - [ ] Notification system (Abu) (Update: could be tested - Sun)
 - [x] Delete account (Abu) (Update: Not part of the orignal sprint plan)
  
