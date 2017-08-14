@@ -71,6 +71,8 @@ public class NewChatActivity extends AppCompatActivity {
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                                 Log.d(DEBUG_KEY, mAdapter.selectedContacts().get(0));
+                                Log.d(DEBUG_KEY, "current senderUid is : " + snapshot.child("senderUid").getValue() +
+                                        "\ncurrent receiverUid is : " + snapshot.child("receiverUid").getValue());
                                 if ((snapshot.child("senderUid").getValue().equals(user.getUid())
                                         || snapshot.child("receiverUid").getValue().equals(user.getUid()))
                                         && (snapshot.child("senderUid").getValue().equals(mAdapter.selectedContacts().get(0))
