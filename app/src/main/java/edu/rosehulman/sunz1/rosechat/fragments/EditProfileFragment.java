@@ -95,7 +95,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
 
         View view = inflater.inflate(R.layout.fragment_edit_profile, container, false);
         bindViews(view);
-//        bottomNavigationViewEx.setVisibility(View.GONE);
+        bottomNavigationViewEx.setVisibility(View.GONE);
 
         return view;
     }
@@ -106,7 +106,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         mEmailTxtE = (TextView) view.findViewById(R.id.profile_email_edit);
         mNickNameTxtE = (TextView) view.findViewById(R.id.profile_name_edit);
         mPhoneTxtE = (TextView) view.findViewById(R.id.profile_phone_edit);
-//        bottomNavigationViewEx = (BottomNavigationViewEx) getActivity().findViewById(R.id.bnve);
+        bottomNavigationViewEx = (BottomNavigationViewEx) getActivity().findViewById(R.id.bnve);
     }
 
 
@@ -116,7 +116,6 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         switch (v.getId()) {
             case R.id.profile_confirm_edit:
                 confirmChanges();
-//                bottomNavigationViewEx.setVisibility(View.VISIBLE);
                 // TODO: switch back to profileFragment class
                 getActivity().getSupportFragmentManager().popBackStack();
                 break;
@@ -160,5 +159,13 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
             Toast.makeText(getContext(), R.string.fail_to_get_intent_data, Toast.LENGTH_LONG).show();
             Log.d(MainActivity.class.getSimpleName(), "Failed to get intent data, result code is " + resultCode);
         }
+    }
+
+    @Override
+    public void onDestroyView(){
+        super.onDestroyView();
+        bottomNavigationViewEx.setVisibility(View.VISIBLE);
+
+
     }
 }
