@@ -124,8 +124,8 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         setTitle(R.id.navigation_message);
 
         setupProfileHandler();
-
     }
+
 
     /**
      * it only creates a contact if there is no contact for this user existed
