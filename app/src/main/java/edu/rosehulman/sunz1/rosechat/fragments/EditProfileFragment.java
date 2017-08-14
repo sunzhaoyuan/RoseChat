@@ -13,14 +13,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 import java.io.IOException;
-
-import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 import edu.rosehulman.sunz1.rosechat.R;
 import edu.rosehulman.sunz1.rosechat.activities.MainActivity;
@@ -57,6 +57,8 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         args.putString(Constants.PROF_PHONE, phone);
         //TODO: need to put the profile image, or maybe we can get the image from FireBase again
         args.putString(Constants.PROF_PROFILE_PIC_URL, profilePicURL);
+        Log.d(Constants.TAG_PROFILE, "\nnewInstance is CALLED\nEMAIL: " + email +
+        "\nNICK_NAME: " + nickName + "\nPHONE: " + phone + "\nPROFILE_PIC: " + profilePicURL);
         EditProfileFragment fragment = new EditProfileFragment();
         fragment.setArguments(args);
         return fragment;
@@ -75,18 +77,17 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
     private void init() {
         mConfirm.setOnClickListener(this);
         mProfileImgE.setOnClickListener(this);
-        mDBRef = FirebaseDatabase.getInstance().getReference().child(Constants.PATH_CONTACT); //there should be exactly one contact match this UID
-        mPPicStorageRef = FirebaseStorage.getInstance().getReference();
+        mDBRef = FirebaseDatabase.getInstance().getReference().child(Constants.PATH_CONTACT);
+        mPPicStorageRef = FirebaseStorage.getInstance().getReference().child(Constants.PATH_PROFILE_PIC);
         mCurrentUID = SharedPreferencesUtils.getCurrentUser(getContext());
 
-//        mEmailTxtE.setText(getArguments().getString(Constants.PROF_EMAIL));
-//        mNickNameTxtE.setText(getArguments().getString(Constants.PROF_NICK_NAME));
-//        mPhoneTxtE.setText(getArguments().getString(Constants.PROF_PHONE));
-//        Glide.with(getContext())
-//                .load(getArguments().getString(Constants.PROF_PROFILE_PIC_URL))
-//                .into(mProfileImgE);
+        mEmailTxtE.setText(getArguments().getString(Constants.PROF_EMAIL));
+        mNickNameTxtE.setText(getArguments().getString(Constants.PROF_NICK_NAME));
+        mPhoneTxtE.setText(getArguments().getString(Constants.PROF_PHONE));
+        Glide.with(getContext())
+                .load(getArguments().getString(Constants.PROF_PROFILE_PIC_URL))
+                .into(mProfileImgE);
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

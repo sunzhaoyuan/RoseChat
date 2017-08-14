@@ -70,24 +70,22 @@ You can find our UI demo on [Ninja Mock](https://ninjamock.com/s/5FZF2)
  
 ## Sprint 3 Plan
 - [ ] Schedule
-- [ ] Check my profile (Sun)
-    - [x] FireBase Storage 
-    - [x] Create new Contact or get Existed Contact
-    - [ ] Get the Query to work
+- [x] Check my profile (Sun)
 - [ ] Edit my profile (Sun)
-    - [ ] Edit texts
+    - [x] Edit texts
     - [x] Choose photos from system Album - need tests
+    - [ ] Upload fields to firebase
 - [x] Create an Image Selector (Sun)
 - [ ] Send Image
 - [ ] Group Chat
 - [ ] Notification in the Settings
-- [ ] Get Contacts from FireBase
-- [ ] Get Messages from Firebase
-- [ ] Get Feedbacks from Users
+- [x] Get Contacts from FireBase (Abu)
+- [x] Get Messages from Firebase (Sun)
+- [x] Get Feedbacks from Users (Abu)
 
 ## Also
 RoseChat tries to be as [KISS](https://en.wikipedia.org/wiki/KISS_principle) as possible
 
 ## Thanks
-Thanks for [天宇工作室 ittianyu.com](https://github.com/ittianyu/BottomNavigationViewEx)
-Thanks for [hdante](https://stackoverflow.com/users/1797000/hdante)
+- Thanks for [天宇工作室 ittianyu.com](https://github.com/ittianyu/BottomNavigationViewEx)
+- Thanks for [hdante](https://stackoverflow.com/users/1797000/hdante)

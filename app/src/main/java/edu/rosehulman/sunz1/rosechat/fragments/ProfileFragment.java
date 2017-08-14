@@ -18,8 +18,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import edu.rosehulman.sunz1.rosechat.R;
 import edu.rosehulman.sunz1.rosechat.models.Contact;
@@ -35,8 +33,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private TextView mPhoneTxt;
     //    private Bitmap mBitmap;
     //    private TableLayout
-    private DatabaseReference mDBRef;
-    private StorageReference mPPicStorageRef;
     private String mCurrentUID;
     private Contact mFireBaseContact;
 
@@ -48,36 +44,43 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         init();
-        dataBaseHandler();
-    }
-
-    private void dataBaseHandler() { //TODO: need to be tested.
-        Log.d(Constants.TAG_PROFILE, "In DataBaseHandler.");
-        mDBRef = FirebaseDatabase.getInstance().getReference().child(Constants.PATH_CONTACT);
         profileHandler();
     }
 
+    /**
+     * this method gets profile from FireBase and set every fields correctly.
+     */
     public void profileHandler() {
         Log.d(Constants.TAG_PROFILE, "In ProfileHandler.");
+        DatabaseReference mDBRef = FirebaseDatabase.getInstance().getReference().child(Constants.PATH_CONTACT);
         Query query = mDBRef.orderByChild("uid").equalTo(mCurrentUID);
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.d(Constants.TAG_PROFILE, "this snapshot is" + dataSnapshot.toString());
                 Log.d(Constants.TAG_PROFILE, "about to sync profile data");
-                mFireBaseContact = dataSnapshot.getValue(Contact.class); //TODO: check if it gets mFireBaseContact type
+                mFireBaseContact = dataSnapshot.getChildren().iterator().next().getValue(Contact.class); //this works cuz there will be only one matches
                 assert mFireBaseContact != null;
                 //get Profile pic - worked!
                 Glide.with(getContext())
                         .load(mFireBaseContact.getProfilePicUrl())
                         .into(mProfileImg);
-                Log.d(Constants.TAG_PROFILE, "set profile pic -DONE");
+                Log.d(Constants.TAG_PROFILE, "profile pic url is\n" +
+                        mFireBaseContact.getProfilePicUrl() +
+                        "\nset profile pic -DONE");
                 //get Text Data
                 mNickNameTxt.setText(mFireBaseContact.getNickName());
-                Log.d(Constants.TAG_PROFILE, "set NickName -DONE");
+                Log.d(Constants.TAG_PROFILE, "nick name is\n" +
+                        mFireBaseContact.getNickName()+
+                        "\nset NickName -DONE");
                 mEmailTxt.setText(mFireBaseContact.getEmail());
-                Log.d(Constants.TAG_PROFILE, "set email -DONE");
+                Log.d(Constants.TAG_PROFILE, "email is\n" +
+                        mFireBaseContact.getEmail() +
+                        "\nset email -DONE");
                 mPhoneTxt.setText(mFireBaseContact.getPhoneNumber());
-                Log.d(Constants.TAG_PROFILE, "set phone number -DONE");
+                Log.d(Constants.TAG_PROFILE, "phone number is\n" +
+                        mFireBaseContact.getPhoneNumber() +
+                        "\nset phone number -DONE");
             }
 
             @Override
@@ -89,8 +92,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
     private void init() {
         mEdit.setOnClickListener(this);
-        mDBRef = FirebaseDatabase.getInstance().getReference().child(Constants.PATH_CONTACT);
-        mPPicStorageRef = FirebaseStorage.getInstance().getReference().child(Constants.PATH_PROFILE_PIC);
         mCurrentUID = SharedPreferencesUtils.getCurrentUser(getContext());
     }
 
