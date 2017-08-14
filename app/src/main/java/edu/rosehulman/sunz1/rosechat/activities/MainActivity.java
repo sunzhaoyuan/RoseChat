@@ -17,8 +17,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -149,17 +147,22 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                             currentUID + "@rose-hulman.edu");
                     DatabaseReference newProfRef = FirebaseDatabase.getInstance().getReference().child(Constants.PATH_CONTACT + "/" + currentUID);
 //                    mContact.setKey(dataSnapshot.getKey());
-                    newProfRef.push().setValue(mContact).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.d(Constants.TAG_PROFILE, "PUSH CONTACT FAILED\n" + e.toString());
-                        }
-                    }).addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            Log.d(Constants.TAG_PROFILE, "PUSH CONTACT SUCCESS");
-                        }
-                    });
+                    newProfRef.child("email").setValue(mContact.getEmail());
+                    newProfRef.child("phoneNumber").setValue(mContact.getPhoneNumber());
+                    newProfRef.child("nickName").setValue(mContact.getNickName());
+                    newProfRef.child("profilePicUrl").setValue(mContact.getProfilePicUrl());
+                    newProfRef.child("uid").setValue(currentUID);
+//                    newProfRef.push().setValue(mContact).addOnFailureListener(new OnFailureListener() {
+//                        @Override
+//                        public void onFailure(@NonNull Exception e) {
+//                            Log.d(Constants.TAG_PROFILE, "PUSH CONTACT FAILED\n" + e.toString());
+//                        }
+//                    }).addOnSuccessListener(new OnSuccessListener<Void>() {
+//                        @Override
+//                        public void onSuccess(Void aVoid) {
+//                            Log.d(Constants.TAG_PROFILE, "PUSH CONTACT SUCCESS");
+//                        }
+//                    });
                 }
             }
 
