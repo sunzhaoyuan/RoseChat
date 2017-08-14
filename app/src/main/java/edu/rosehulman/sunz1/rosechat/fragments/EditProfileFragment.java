@@ -1,8 +1,10 @@
 package edu.rosehulman.sunz1.rosechat.fragments;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -14,16 +16,24 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 import edu.rosehulman.sunz1.rosechat.R;
 import edu.rosehulman.sunz1.rosechat.activities.MainActivity;
+import edu.rosehulman.sunz1.rosechat.models.Contact;
 import edu.rosehulman.sunz1.rosechat.sys.image_selector.UserPicture;
 import edu.rosehulman.sunz1.rosechat.utils.Constants;
 import edu.rosehulman.sunz1.rosechat.utils.SharedPreferencesUtils;
@@ -40,9 +50,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
     private TextView mEmailTxtE;
     private TextView mNickNameTxtE;
     private TextView mPhoneTxtE;
-
-    private DatabaseReference mDBRef;
-    private StorageReference mPPicStorageRef;
+    private Contact mNewContact;
     private String mCurrentUID;
     BottomNavigationViewEx bottomNavigationViewEx;
 
@@ -55,10 +63,9 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         args.putString(Constants.PROF_EMAIL, email);
         args.putString(Constants.PROF_NICK_NAME, nickName);
         args.putString(Constants.PROF_PHONE, phone);
-        //TODO: need to put the profile image, or maybe we can get the image from FireBase again
         args.putString(Constants.PROF_PROFILE_PIC_URL, profilePicURL);
         Log.d(Constants.TAG_PROFILE, "\nnewInstance is CALLED\nEMAIL: " + email +
-        "\nNICK_NAME: " + nickName + "\nPHONE: " + phone + "\nPROFILE_PIC: " + profilePicURL);
+                "\nNICK_NAME: " + nickName + "\nPHONE: " + phone + "\nPROFILE_PIC: " + profilePicURL);
         EditProfileFragment fragment = new EditProfileFragment();
         fragment.setArguments(args);
         return fragment;
@@ -77,8 +84,6 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
     private void init() {
         mConfirm.setOnClickListener(this);
         mProfileImgE.setOnClickListener(this);
-        mDBRef = FirebaseDatabase.getInstance().getReference().child(Constants.PATH_CONTACT);
-        mPPicStorageRef = FirebaseStorage.getInstance().getReference().child(Constants.PATH_PROFILE_PIC);
         mCurrentUID = SharedPreferencesUtils.getCurrentUser(getContext());
 
         mEmailTxtE.setText(getArguments().getString(Constants.PROF_EMAIL));
@@ -110,7 +115,6 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
     }
 
 
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -128,8 +132,56 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
     }
 
     private void confirmChanges() {
-        // TODO: write the txt from those EditTxts
-        // TODO: update them onto FireBase
+        final DatabaseReference profileRef = FirebaseDatabase.getInstance().getReference().child(Constants.PATH_CONTACT);
+        StorageReference profilePicStorageRef = FirebaseStorage.getInstance().getReference()
+                .child(Constants.PATH_PROFILE_PIC + "/" + mCurrentUID);
+        // TODO: write the txt from those EditTxts 
+        String nickNameNew = mNickNameTxtE.getText().toString();
+        String phoneNew = mPhoneTxtE.getText().toString();
+        String emailNew = mEmailTxtE.getText().toString();
+        mNewContact = new Contact(mCurrentUID, nickNameNew, null, phoneNew, emailNew);
+        // TODO: upload imageView
+        mProfileImgE.setDrawingCacheEnabled(true);
+        mProfileImgE.buildDrawingCache();
+        Bitmap bitmap = mProfileImgE.getDrawingCache();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+
+        UploadTask uploadTask = profilePicStorageRef.putBytes(data);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getContext(), getString(R.string.upload_profile_pic_failed), Toast.LENGTH_LONG).show();
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                mNewContact.setProfilePicUrl(downloadUrl.getPath());
+            }
+        });
+        Log.d(Constants.TAG_PROFILE, "new profile set up DONE\n" + mNewContact.toString());
+        // TODO: upload txtViews
+        profileRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Log.d(Constants.TAG_PROFILE, "SETTING UP NEW PROFILE\nLOOPING THROUGH CHILDREN:\n" + snapshot.getValue());
+                    if (snapshot.child("uid").getValue().equals(mCurrentUID)) {
+                        profileRef.child(snapshot.getKey()).setValue(mNewContact);
+                        Log.d(Constants.TAG_PROFILE, "JUST UPDATE THE DATA ON TABLE\n" +
+                                profileRef.child(snapshot.getKey()).toString());
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(getContext(), "Cannot update profile\nerror: " +
+                        databaseError.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     private void singleImgSelection() {
@@ -162,7 +214,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
     }
 
     @Override
-    public void onDestroyView(){
+    public void onDestroyView() {
         super.onDestroyView();
         bottomNavigationViewEx.setVisibility(View.VISIBLE);
 

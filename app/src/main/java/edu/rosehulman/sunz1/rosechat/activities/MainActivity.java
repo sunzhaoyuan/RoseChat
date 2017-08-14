@@ -26,8 +26,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 import java.util.HashMap;
@@ -38,7 +36,6 @@ import edu.rosehulman.sunz1.rosechat.fragments.ContactsFragment;
 import edu.rosehulman.sunz1.rosechat.fragments.MessageFragment;
 import edu.rosehulman.sunz1.rosechat.fragments.ProfileFragment;
 import edu.rosehulman.sunz1.rosechat.models.Contact;
-import edu.rosehulman.sunz1.rosechat.models.Invitation;
 import edu.rosehulman.sunz1.rosechat.utils.Constants;
 import edu.rosehulman.sunz1.rosechat.utils.SharedPreferencesUtils;
 
@@ -146,11 +143,10 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                     }
                 }
                 if (i == 0) {
-                    StorageReference defaultPicRef = FirebaseStorage.getInstance().getReference().child("profile_pics/default.png");
                     mContact = new Contact(currentUID, currentUID,
                             "https://firebasestorage.googleapis.com/v0/b/rosechat-64ae9.appspot.com/o/profile_pics%2Fdefault.png?alt=media&token=2cc54fe8-da2f-49f9-ab18-0ef0d2e8fea6",
                             getString(R.string.profile_sample_phone_number),
-                            getString(R.string.profile_sample_email));
+                            currentUID + "@rose-hulman.edu");
                     mContact.setKey(dataSnapshot.getKey());
                     profRef.push().setValue(mContact).addOnFailureListener(new OnFailureListener() {
                         @Override
@@ -172,6 +168,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
             }
         });
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -231,17 +228,17 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                     mFriendsRef.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            if(dataSnapshot.hasChild(mEmail.getText().toString()) && dataSnapshot.child(mEmail.getText().toString()).getValue().equals(true)){
+                            if (dataSnapshot.hasChild(mEmail.getText().toString()) && dataSnapshot.child(mEmail.getText().toString()).getValue().equals(true)) {
                                 Toast.makeText(MainActivity.this, R.string.error_add_contact_existing_contact, Toast.LENGTH_LONG).show();
-                            }else if(dataSnapshot.hasChild(mEmail.getText().toString()) && dataSnapshot.child(mEmail.getText().toString()).getValue().equals(false)){
+                            } else if (dataSnapshot.hasChild(mEmail.getText().toString()) && dataSnapshot.child(mEmail.getText().toString()).getValue().equals(false)) {
                                 DatabaseReference mUserInvitationRef = FirebaseDatabase.getInstance().getReference().child("invitations/" + user.getUid());
                                 mUserInvitationRef.addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
-                                        if(dataSnapshot.hasChild(mEmail.getText().toString())){
+                                        if (dataSnapshot.hasChild(mEmail.getText().toString())) {
                                             dialog.dismiss();
                                             Toast.makeText(MainActivity.this, "Invite already sent", Toast.LENGTH_LONG).show();
-                                        }else{
+                                        } else {
                                             sendInvite(mEmail.getText().toString(), mMessage.getText().toString(), user.getUid());
                                             dialog.dismiss();
                                             Toast.makeText(MainActivity.this, R.string.successful_add_contact, Toast.LENGTH_LONG).show();
@@ -253,7 +250,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
                                     }
                                 });
-                            }else {
+                            } else {
                                 DatabaseReference mContactRef = FirebaseDatabase.getInstance().getReference().child("contacts");
                                 mContactRef.addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
@@ -265,10 +262,10 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                                             mUserInvitationRef.addListenerForSingleValueEvent(new ValueEventListener() {
                                                 @Override
                                                 public void onDataChange(DataSnapshot dataSnapshot) {
-                                                    if(dataSnapshot.hasChild(mEmail.getText().toString())){
+                                                    if (dataSnapshot.hasChild(mEmail.getText().toString())) {
                                                         dialog.dismiss();
                                                         Toast.makeText(MainActivity.this, "Invite already sent", Toast.LENGTH_LONG).show();
-                                                    }else{
+                                                    } else {
                                                         sendInvite(mEmail.getText().toString(), mMessage.getText().toString(), user.getUid());
                                                         dialog.dismiss();
                                                         Toast.makeText(MainActivity.this, R.string.successful_add_contact, Toast.LENGTH_LONG).show();
@@ -314,7 +311,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         mFriendInvitationRef.child("status").setValue("Waiting");
     }
 
-    private boolean inviteAlreadySentCheck(final String mEmail, String user){
+    private boolean inviteAlreadySentCheck(final String mEmail, String user) {
 
 
         return false;
