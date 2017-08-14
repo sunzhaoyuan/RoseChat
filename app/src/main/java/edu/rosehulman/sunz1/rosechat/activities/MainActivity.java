@@ -147,8 +147,9 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                             "https://firebasestorage.googleapis.com/v0/b/rosechat-64ae9.appspot.com/o/profile_pics%2Fdefault.png?alt=media&token=2cc54fe8-da2f-49f9-ab18-0ef0d2e8fea6",
                             getString(R.string.profile_sample_phone_number),
                             currentUID + "@rose-hulman.edu");
-                    mContact.setKey(dataSnapshot.getKey());
-                    profRef.push().setValue(mContact).addOnFailureListener(new OnFailureListener() {
+                    DatabaseReference newProfRef = FirebaseDatabase.getInstance().getReference().child(Constants.PATH_CONTACT + "/" + currentUID);
+//                    mContact.setKey(dataSnapshot.getKey());
+                    newProfRef.push().setValue(mContact).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             Log.d(Constants.TAG_PROFILE, "PUSH CONTACT FAILED\n" + e.toString());
