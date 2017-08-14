@@ -29,9 +29,8 @@ public class Constants {
     public static final String PATH_CHAT = "chats";
     public static final String PATH_CONTACT = "contacts";
     public static final String PATH_MESSAGE = "messages";
+    public static final String PATH_PROFILE_PIC = "profile_pics";
     public static final String PATH_INVITATION = "invitations";
-    public static final String PATH_PROFILE_PIC = "profile_pics/";
-    public static final String PATH_PP_DEFAULT = PATH_PROFILE_PIC + "default";
 
     // For the SharedPreferences
     public static final String PREFS = "PREFS";

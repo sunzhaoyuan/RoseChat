@@ -135,7 +135,15 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String currentUID = SharedPreferencesUtils.getCurrentUser(getApplicationContext());
-                if (!dataSnapshot.hasChild(currentUID)) {
+//                if (!dataSnapshot.child) {
+                int i = 0;
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Log.d(Constants.TAG_PROFILE, "CURRENT UID : " + snapshot.child("uid").getValue());
+                    if (snapshot.child("uid").getValue().equals(currentUID)) {
+                        i++;
+                    }
+                }
+                if (i == 0) {
                     StorageReference defaultPicRef = FirebaseStorage.getInstance().getReference().child("profile_pics/default.png");
                     mContact = new Contact(currentUID, currentUID,
                             "https://firebasestorage.googleapis.com/v0/b/rosechat-64ae9.appspot.com/o/profile_pics%2Fdefault.png?alt=media&token=2cc54fe8-da2f-49f9-ab18-0ef0d2e8fea6",
