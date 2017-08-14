@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -119,11 +118,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
                 confirmChanges();
 //                bottomNavigationViewEx.setVisibility(View.VISIBLE);
                 // TODO: switch back to profileFragment class
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                Fragment profileFragment = edu.rosehulman.sunz1.rosechat.fragments.ProfileFragment.newInstance();
-                transaction.addToBackStack("view_profile");
-                transaction.replace(R.id.container, profileFragment);
-                transaction.commit();
+                getActivity().getSupportFragmentManager().popBackStack();
                 break;
             case R.id.profile_image_edit:
                 singleImgSelection();
