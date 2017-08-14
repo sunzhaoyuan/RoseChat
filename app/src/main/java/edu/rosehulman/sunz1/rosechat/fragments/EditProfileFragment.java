@@ -16,8 +16,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -132,37 +134,50 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
     }
 
     private void confirmChanges() {
-        final DatabaseReference profileRef = FirebaseDatabase.getInstance().getReference().child(Constants.PATH_CONTACT);
         StorageReference profilePicStorageRef = FirebaseStorage.getInstance().getReference()
                 .child(Constants.PATH_PROFILE_PIC + "/" + mCurrentUID);
         // TODO: write the txt from those EditTxts 
-        String nickNameNew = mNickNameTxtE.getText().toString();
-        String phoneNew = mPhoneTxtE.getText().toString();
-        String emailNew = mEmailTxtE.getText().toString();
-        mNewContact = new Contact(mCurrentUID, nickNameNew, null, phoneNew, emailNew);
+        final String nickNameNew = mNickNameTxtE.getText().toString();
+        final String phoneNew = mPhoneTxtE.getText().toString();
+        final String emailNew = mEmailTxtE.getText().toString();
         // TODO: upload imageView
         mProfileImgE.setDrawingCacheEnabled(true);
         mProfileImgE.buildDrawingCache();
+        mProfileImgE.toString();
         Bitmap bitmap = mProfileImgE.getDrawingCache();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();
 
         UploadTask uploadTask = profilePicStorageRef.putBytes(data);
-        uploadTask.addOnFailureListener(new OnFailureListener() {
+        Log.d(Constants.TAG_PROFILE, "JUST UPLOAD PIC TO STORAGE");
+        StorageReference newProfilePicUrl = FirebaseStorage.getInstance()
+                .getReferenceFromUrl("gs://rosechat-64ae9.appspot.com/profile_pics/" + mCurrentUID);
+        newProfilePicUrl.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                String downloadUri = uri.toString();
+                Log.d(Constants.TAG_PROFILE, "GET PROFILE PIC URL SUCCESS :\n" + downloadUri);
+                mNewContact = new Contact(mCurrentUID, nickNameNew, downloadUri, phoneNew, emailNew);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getContext(), getString(R.string.upload_profile_pic_failed), Toast.LENGTH_LONG).show();
+                Log.d(Constants.TAG_PROFILE, "GET PROFILE PIC URL FAILED :\n" + e.toString());
             }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
             @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                mNewContact.setProfilePicUrl(downloadUrl.getPath());
+            public void onComplete(@NonNull Task<Uri> task) {
+                if (task.isSuccessful()) {
+                    Log.d(Constants.TAG_PROFILE, "GET PROFILE PIC URL COMPLETE");
+                    uploadAllToFirebase();
+                }
             }
         });
-        Log.d(Constants.TAG_PROFILE, "new profile set up DONE\n" + mNewContact.toString());
-        // TODO: upload txtViews
+    }
+
+    private void uploadAllToFirebase() {
+        final DatabaseReference profileRef = FirebaseDatabase.getInstance().getReference().child(Constants.PATH_CONTACT);
         profileRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
