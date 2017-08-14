@@ -12,14 +12,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -65,53 +66,29 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
     public void profileHandler() {
         Log.d(Constants.TAG_PROFILE, "In ProfileHandler.");
-//        Query query = mDBRef.orderByChild("uid").equalTo(mCurrentUID);
-//        query.addValueEventListener(new ValueEventListener() {
-        mDBRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (!dataSnapshot.hasChild(mCurrentUID)) { //TODO: check if this works
-                    Log.d(Constants.TAG_PROFILE, "dataSnapshot is null.");
-                    mFireBaseContact = new Contact(mCurrentUID, mCurrentUID,
-                            "https://www.mariowiki.com/images/thumb/9/96/TanookiMario_SMB3.jpg/180px-TanookiMario_SMB3.jpg",
-                            getString(R.string.profile_sample_phone_number),
-                            mCurrentUID + "@rose-hulman.edu");
-                    Log.d(Constants.TAG_PROFILE, "mFireBaseContact key is " + dataSnapshot.getKey());
-                    mFireBaseContact.setKey(dataSnapshot.getKey()); //TODO: can it get key if it's null?
-                    mDBRef.push().setValue(mFireBaseContact);
-                    Log.d(Constants.TAG_PROFILE, "just pushed a new profile");
-                }
-//                Query query = mDBRef.orderByChild("uid").equalTo(mCurrentUID);
-//                query.addValueEventListener(new ValueEventListener() {
-//                    @Override
-//                    public void onDataChange(DataSnapshot dataSnapshot) {
-//                        Log.d(Constants.TAG_PROFILE, "enter the path for the existed mFireBaseContact");
-//                        mFireBaseContact = dataSnapshot.getValue(Contact.class); //TODO: check if it gets mFireBaseContact type
-//                        assert mFireBaseContact != null;
-//                        //get Profile pic - worked!
-//                        Glide.with(getContext())
-//                        .load(mFireBaseContact.getProfilePicUrl())
-//                                .into(mProfileImg);
-//                        //get Text Data
-//                        mNickNameTxt.setText(mFireBaseContact.getNickName());
-//                        mEmailTxt.setText(mFireBaseContact.getEmail());
-//                        mPhoneTxt.setText(mFireBaseContact.getPhoneNumber());
-//                    }
-//
-//                    @Override
-//                    public void onCancelled(DatabaseError databaseError) {
-//                        Log.d(Constants.TAG_PROFILE, "failed to handle query for the existed profile");
-//                    }
-//                });
-            }
+                Query query = mDBRef.orderByChild("uid").equalTo(mCurrentUID);
+                query.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Log.d(Constants.TAG_PROFILE, "enter the path for the existed mFireBaseContact");
+                        mFireBaseContact = dataSnapshot.getValue(Contact.class); //TODO: check if it gets mFireBaseContact type
+                        assert mFireBaseContact != null;
+                        //get Profile pic - worked!
+                        Glide.with(getContext())
+                        .load(mFireBaseContact.getProfilePicUrl())
+                                .into(mProfileImg);
+                        //get Text Data
+                        mNickNameTxt.setText(mFireBaseContact.getNickName());
+                        mEmailTxt.setText(mFireBaseContact.getEmail());
+                        mPhoneTxt.setText(mFireBaseContact.getPhoneNumber());
+                    }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(getActivity(), R.string.contact_initiate_error, Toast.LENGTH_LONG).show();
-                Log.d(Constants.TAG_PROFILE, "fail to initiate profile");
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.d(Constants.TAG_PROFILE, "failed to handle query for the existed profile");
+                    }
+                });
             }
-        });
-    }
 
     private void init() {
         mEdit.setOnClickListener(this);

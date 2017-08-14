@@ -47,6 +47,22 @@ public class Contact {
         this.uid = uid;
     }
 
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+    public String getProfilePicUrl() {
+        return profilePicUrl;
+    }
+
+    public void setProfilePicUrl(String profilePicUrl) {
+        this.profilePicUrl = profilePicUrl;
+    }
+
     public String getPhoneNumber() {
         return phoneNumber;
     }
@@ -63,20 +79,15 @@ public class Contact {
         this.email = email;
     }
 
-    public String getNickName() {
-        return nickName;
+    @Override
+    public String toString() {
+        return "Contact{" +
+                "key='" + key + '\'' +
+                ", uid='" + uid + '\'' +
+                ", nickName='" + nickName + '\'' +
+                ", profilePicUrl='" + profilePicUrl + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", email='" + email + '\'' +
+                '}';
     }
-
-    public void setNickName(String name) {
-        this.nickName = name;
-    }
-
-    public String getProfilePicUrl() {
-        return profilePicUrl;
-    }
-
-    public void setProfilePicUrl(String profilePicUrl) {
-        this.profilePicUrl = profilePicUrl;
-    }
-
 }

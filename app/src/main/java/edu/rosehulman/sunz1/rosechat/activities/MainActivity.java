@@ -17,6 +17,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -24,6 +26,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 import java.util.HashMap;
@@ -34,6 +38,8 @@ import edu.rosehulman.sunz1.rosechat.fragments.ContactsFragment;
 import edu.rosehulman.sunz1.rosechat.fragments.MessageFragment;
 import edu.rosehulman.sunz1.rosechat.fragments.ProfileFragment;
 import edu.rosehulman.sunz1.rosechat.models.Contact;
+import edu.rosehulman.sunz1.rosechat.utils.Constants;
+import edu.rosehulman.sunz1.rosechat.utils.SharedPreferencesUtils;
 
 //import edu.rosehulman.sunz1.rosechat.activities.NewChatActivity;
 
@@ -49,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     private Fragment mFragmentMain;
     private BottomNavigationViewEx mNavigation;
     private BottomNavigationView mBottomNavigationView;
+    private Contact mContact;
 
     private HashMap<Integer, Integer> mTitlesMap = new HashMap<Integer, Integer>() {{
         put(R.id.navigation_message, R.string.navi_message);
@@ -116,6 +123,44 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         mFragmentMain = new MessageFragment();
         setTitle(R.id.navigation_message);
 
+        setupProfileHandler();
+    }
+
+    /**
+     * it only creates a contact if there is no contact for this user existed
+     */
+    private void setupProfileHandler() {
+        final DatabaseReference profRef = FirebaseDatabase.getInstance().getReference().child(Constants.PATH_CONTACT);
+        profRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String currentUID = SharedPreferencesUtils.getCurrentUser(getApplicationContext());
+                if (!dataSnapshot.hasChild(currentUID)) {
+                    StorageReference defaultPicRef = FirebaseStorage.getInstance().getReference().child("profile_pics/default.png");
+                    mContact = new Contact(currentUID, currentUID,
+                            "https://firebasestorage.googleapis.com/v0/b/rosechat-64ae9.appspot.com/o/profile_pics%2Fdefault.png?alt=media&token=2cc54fe8-da2f-49f9-ab18-0ef0d2e8fea6",
+                            getString(R.string.profile_sample_phone_number),
+                            getString(R.string.profile_sample_email));
+                    mContact.setKey(dataSnapshot.getKey());
+                    profRef.push().setValue(mContact).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.d(Constants.TAG_PROFILE, "PUSH CONTACT FAILED\n" + e.toString());
+                        }
+                    }).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d(Constants.TAG_PROFILE, "PUSH CONTACT SUCCESS");
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.d(Constants.TAG_PROFILE, "PROFILE REFERENCE ERROR\n" + databaseError.getMessage());
+            }
+        });
     }
 
     @Override
@@ -171,9 +216,9 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                     mFriendsRef.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            if(dataSnapshot.hasChild(mEmail.getText().toString())){
+                            if (dataSnapshot.hasChild(mEmail.getText().toString())) {
                                 Toast.makeText(MainActivity.this, R.string.error_add_contact_existing_contact, Toast.LENGTH_LONG).show();
-                            }else {
+                            } else {
                                 DatabaseReference mContactRef = FirebaseDatabase.getInstance().getReference().child("contacts");
                                 mContactRef.addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
@@ -218,7 +263,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         mFriendsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.hasChild(email)){
+                if (dataSnapshot.hasChild(email)) {
 
                 }
 

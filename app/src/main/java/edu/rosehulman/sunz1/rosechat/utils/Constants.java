@@ -33,12 +33,6 @@ public class Constants {
     public static final String PATH_PROFILE_PIC = "profile_pics/";
     public static final String PATH_PP_DEFAULT = PATH_PROFILE_PIC + "default";
 
-    // For the ViewPager Set Up - TODO: not in use ?
-    public static final int VIEW_PAGER_MESSAGE = 0;
-    public static final int VIEW_PAGER_CONTACT = 1;
-    public static final int VIEW_PAGER_PROFILE_VIEW = 2;
-    public static final int VIEW_PAGER_PROFILE_EDIT = 4; //TODO: it should be 3. See line-196 in MainActivity.
-
     // For the SharedPreferences
     public static final String PREFS = "PREFS";
     public static final String UID_KEY = "UID_KEY";
