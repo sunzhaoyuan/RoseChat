@@ -60,7 +60,7 @@ You can find our UI demo on [Ninja Mock](https://ninjamock.com/s/5FZF2)
 - [ ] Invitation, add contacts (Abu)
 - [x] Log in with RoseFire (Sun)
 - [x] Log out (Sun)
-- [ ] Check others' profiles (Sun)
+- [x] Check others' profiles (Sun)
 - [x] Connect UI completely (Abu) 
     - [x] Set up ViewPager (the issue #5)
     - [x] Issue #15
@@ -74,7 +74,8 @@ You can find our UI demo on [Ninja Mock](https://ninjamock.com/s/5FZF2)
 - [ ] Edit my profile (Sun)
     - [x] Edit texts
     - [x] Choose photos from system Album - need tests
-    - [ ] Upload fields to firebase
+    - [x] Upload fields to firebase
+    - [ ] small bugs
 - [x] Create an Image Selector (Sun)
 - [ ] Send Image
 - [ ] Group Chat

@@ -1,7 +1,9 @@
 package edu.rosehulman.sunz1.rosechat.fragments;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -18,6 +20,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
+
+import java.util.Objects;
 
 import edu.rosehulman.sunz1.rosechat.R;
 import edu.rosehulman.sunz1.rosechat.models.Contact;
@@ -34,6 +39,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     //    private TableLayout
     private String mCurrentUID;
     private Contact mFireBaseContact;
+    private BottomNavigationViewEx bottomNavigationViewEx;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -102,12 +108,16 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         mCurrentUID = getArguments().getString(Constants.PROF_NEW_UID);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         bindViews(view);
+        if (!Objects.equals(getArguments().getString(Constants.PROF_NEW_UID), mCurrentUID)){
+            bottomNavigationViewEx.setVisibility(View.GONE);
+        }
         return view;
     }
 
@@ -117,6 +127,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         mEmailTxt = (TextView) view.findViewById(R.id.profile_email);
         mNickNameTxt = (TextView) view.findViewById(R.id.profile_name);
         mPhoneTxt = (TextView) view.findViewById(R.id.profile_phone);
+        bottomNavigationViewEx = (BottomNavigationViewEx) getActivity().findViewById(R.id.bnve);
     }
 
     @Override
@@ -140,5 +151,11 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     public void onStop() {
         super.onStop();
         // TODO: stop listeners?
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        bottomNavigationViewEx.setVisibility(View.VISIBLE);
     }
 }

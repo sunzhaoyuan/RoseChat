@@ -232,7 +232,5 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
     public void onDestroyView() {
         super.onDestroyView();
         bottomNavigationViewEx.setVisibility(View.VISIBLE);
-
-
     }
 }
