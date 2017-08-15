@@ -39,7 +39,6 @@ public class Constants {
 
     // For TAGs
     public static final String TAG = MainActivity.class.getName();
-    public static final String TAG_ASYNC = "async_test";
     public static final String TAG_CHAT_COMMUNICATOR = "chatsComm_test";
     public static final String TAG_CHAT = "chat_test";
     public static final String TAG_PROFILE = "profile_test";

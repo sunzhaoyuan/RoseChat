@@ -35,7 +35,7 @@ type Contacts {
 //
 type Messages {
     name: NickName,
-    lastMessage: String,
+    lastInteraction: String,
     senderUID: RoseUsername,
     receiverUID: RoseUsername
 }

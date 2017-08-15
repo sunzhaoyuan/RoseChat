@@ -111,4 +111,17 @@ public class Chat {
     public void setSender(String sender) {
         this.sender = sender;
     }
+
+    @Override
+    public String toString() {
+        return "Chat{" +
+                "sender='" + sender + '\'' +
+                ", receiver='" + receiver + '\'' +
+                ", senderUid='" + senderUid + '\'' +
+                ", receiverUid='" + receiverUid + '\'' +
+                ", text='" + text + '\'' +
+                ", timeStamp=" + timeStamp +
+                ", messageKey='" + messageKey + '\'' +
+                '}';
+    }
 }

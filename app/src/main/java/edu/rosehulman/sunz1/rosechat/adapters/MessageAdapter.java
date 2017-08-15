@@ -30,7 +30,7 @@ import edu.rosehulman.sunz1.rosechat.utils.SharedPreferencesUtils;
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
     private Context mContext;
     ArrayList<Message> mMessageList;
-//    MessageFragment.Callback mCallback;
+    //    MessageFragment.Callback mCallback;
     private DatabaseReference mMessageRef;
     private String mCurrentUID;
 
@@ -54,7 +54,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     public void onBindViewHolder(MessageAdapter.ViewHolder holder, int position) {
         Message message = mMessageList.get(position);
         holder.mNameTextView.setText(message.getName());
-        holder.mLastInteraction.setText(message.getLastMessage());
+        holder.mLastInteraction.setText(message.getLastInteraction());
     }
 
     @Override
@@ -104,9 +104,12 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Log.d(Constants.TAG_MESSAGE, "current senderUid is : " + snapshot.child("senderUid").getValue() +
                             "\ncurrent receiverUid is : " + snapshot.child("receiverUid").getValue());
-                    if (snapshot.child("senderUid").getValue().equals(mCurrentUID)
-                            || snapshot.child("receiverUid").getValue().equals(mCurrentUID)) {
-                        addChat(snapshot.getValue(Message.class));
+                    if (snapshot.child("senderUID").getValue().equals(mCurrentUID)
+                            || snapshot.child("receiverUID").getValue().equals(mCurrentUID)) {
+                        Message currentMessage = snapshot.getValue(Message.class);
+                        currentMessage.setKey(snapshot.getKey());
+                        Log.d(Constants.TAG_CHAT, "IN MessageAdapter onDataChange\nmessageKey: " + currentMessage.getKey());
+                        addChat(currentMessage);
                     }
                 }
             }
@@ -130,6 +133,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         String messageName = currentMessage.getName();
         String messageKey = currentMessage.getKey();
         String receiversUID = currentMessage.getReceiverUID();
+        Log.d(Constants.TAG_CHAT, "IN MESSAGE_ADAPTER\nmessageKey: " + messageKey);
         ChatActivity.startActivity(mContext, messageName, receiversUID, messageKey);
     }
 

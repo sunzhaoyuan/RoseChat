@@ -8,8 +8,8 @@ import com.google.firebase.database.Exclude;
 
 public class Message {
     private String name;
-    private String lastMessage;
-    private String profilePicURL;
+    private String lastInteraction;
+    private String pictureURL;
     private String senderUID;
     private String receiverUID;
 
@@ -19,12 +19,12 @@ public class Message {
 
     }
 
-    public Message(String newName, String newLastInteraction, String newPictureURL, String newSenderUID, String newReceiverUID) {
-        name = newName;
-        lastMessage = newLastInteraction;
-        profilePicURL = newPictureURL;
-        senderUID = newSenderUID;
-        receiverUID = newReceiverUID;
+    public Message(String name, String lastInteraction, String pictureURL, String senderUID, String receiverUID) {
+        this.name = name;
+        this.lastInteraction = lastInteraction;
+        this.pictureURL = pictureURL;
+        this.senderUID = senderUID;
+        this.receiverUID = receiverUID;
     }
 
     public void setReceiverUID(String receiverUID) {
@@ -53,20 +53,20 @@ public class Message {
         this.name = name;
     }
 
-    public String getLastMessage() {
-        return lastMessage;
+    public String getLastInteraction() {
+        return lastInteraction;
     }
 
-    public void setLastMessage(String lastMessage) {
-        this.lastMessage = lastMessage;
+    public void setLastInteraction(String lastInteraction) {
+        this.lastInteraction = lastInteraction;
     }
 
-    public String getProfilePicURL() {
-        return profilePicURL;
+    public String getPictureURL() {
+        return pictureURL;
     }
 
-    public void setProfilePicURL(String profilePicURL) {
-        this.profilePicURL = profilePicURL;
+    public void setPictureURL(String pictureURL) {
+        this.pictureURL = pictureURL;
     }
 
     public String getSenderUID() {
@@ -75,5 +75,16 @@ public class Message {
 
     public String getReceiverUID() {
         return receiverUID;
+    }
+
+    @Override
+    public String toString() {
+        return "Message{" +
+                "name='" + name + '\'' +
+                ", lastInteraction='" + lastInteraction + '\'' +
+                ", pictureURL='" + pictureURL + '\'' +
+                ", senderUID='" + senderUID + '\'' +
+                ", receiverUID='" + receiverUID + '\'' +
+                '}';
     }
 }

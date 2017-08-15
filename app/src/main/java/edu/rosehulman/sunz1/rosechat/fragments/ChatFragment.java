@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +25,7 @@ import edu.rosehulman.sunz1.rosechat.models.Chat;
 import edu.rosehulman.sunz1.rosechat.sys.chat.ChatPresenter;
 import edu.rosehulman.sunz1.rosechat.sys.chat.ChatSystem;
 import edu.rosehulman.sunz1.rosechat.utils.Constants;
+import edu.rosehulman.sunz1.rosechat.utils.SharedPreferencesUtils;
 
 public class ChatFragment extends Fragment implements ChatSystem.View, TextView.OnEditorActionListener {
 
@@ -81,7 +83,8 @@ public class ChatFragment extends Fragment implements ChatSystem.View, TextView.
         mEditTextChat.setOnEditorActionListener(this);
 
         mChatPresenter = new ChatPresenter(this);
-        mChatPresenter.getMessage(FirebaseAuth.getInstance().getCurrentUser().getUid(),
+        Log.d(Constants.TAG_CHAT, "IN CHAT FRAGMENT\nmessageKey: " + getArguments().getString(Constants.ARG_MESSAGE_KEY));
+        mChatPresenter.getMessage(SharedPreferencesUtils.getCurrentUser(getContext()),
                 getArguments().getString(Constants.ARG_RECEIVER_UID),
                 getArguments().getString(Constants.ARG_MESSAGE_KEY));
     }
