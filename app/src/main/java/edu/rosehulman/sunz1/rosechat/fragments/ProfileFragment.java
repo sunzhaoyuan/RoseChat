@@ -22,7 +22,6 @@ import com.google.firebase.database.ValueEventListener;
 import edu.rosehulman.sunz1.rosechat.R;
 import edu.rosehulman.sunz1.rosechat.models.Contact;
 import edu.rosehulman.sunz1.rosechat.utils.Constants;
-import edu.rosehulman.sunz1.rosechat.utils.SharedPreferencesUtils;
 
 public class ProfileFragment extends Fragment implements View.OnClickListener {
 
@@ -40,10 +39,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         // Required empty public constructor
     }
 
-    public static ProfileFragment newInstance() {
-
+    public static ProfileFragment newInstance(String UID) {
         Bundle args = new Bundle();
-
+        args.putString(Constants.PROF_NEW_UID, UID);
         ProfileFragment fragment = new ProfileFragment();
         fragment.setArguments(args);
         return fragment;
@@ -80,7 +78,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 //get Text Data
                 mNickNameTxt.setText(mFireBaseContact.getNickName());
                 Log.d(Constants.TAG_PROFILE, "nick name is\n" +
-                        mFireBaseContact.getNickName()+
+                        mFireBaseContact.getNickName() +
                         "\nset NickName -DONE");
                 mEmailTxt.setText(mFireBaseContact.getEmail());
                 Log.d(Constants.TAG_PROFILE, "email is\n" +
@@ -101,7 +99,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
     private void init() {
         mEdit.setOnClickListener(this);
-        mCurrentUID = SharedPreferencesUtils.getCurrentUser(getContext());
+        mCurrentUID = getArguments().getString(Constants.PROF_NEW_UID);
     }
 
     @Override

@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     final private String DEBUG_KEY = "Debug";
 
     private NavigationPagerAdapter mNavigationPagerAdapter;
-    private ViewPager mViewPager;
+    public static ViewPager mViewPager;
     private Fragment mFragmentMain;
     private BottomNavigationViewEx mNavigation;
     private BottomNavigationView mBottomNavigationView;
@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                         break;
                     case R.id.navigation_profile:
                         Log.d(DEBUG_KEY, "profile pressed");
-                        mFragmentMain = new ProfileFragment();
+                        mFragmentMain = ProfileFragment.newInstance(SharedPreferencesUtils.getCurrentUser(getApplicationContext()));
                         mViewPager.setCurrentItem(2);
                         break;
                 }
@@ -321,12 +321,11 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         return false;
     }
 
-    private void setupViewPager(ViewPager viewPager) {
+    public void setupViewPager(ViewPager viewPager) {
         NavigationPagerAdapter adapter = new NavigationPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new MessageFragment(), getTitle(R.id.navigation_message));
         adapter.addFragment(new ContactsFragment(), getTitle(R.id.navigation_contact));
-        adapter.addFragment(new ProfileFragment(), getTitle(R.id.navigation_profile));
-//        adapter.addFragment(new EditProfileFragment(), getTitle(R.id.edit_profile));
+        adapter.addFragment(ProfileFragment.newInstance(SharedPreferencesUtils.getCurrentUser(getApplicationContext())), getTitle(R.id.navigation_profile));
         viewPager.setAdapter(adapter);
     }
 

@@ -1,6 +1,9 @@
 package edu.rosehulman.sunz1.rosechat.adapters;
 
 import android.content.Context;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,8 +23,7 @@ import java.util.ArrayList;
 
 import edu.rosehulman.sunz1.rosechat.R;
 import edu.rosehulman.sunz1.rosechat.fragments.ContactsFragment;
-import edu.rosehulman.sunz1.rosechat.models.Contact;
-import edu.rosehulman.sunz1.rosechat.utils.SharedPreferencesUtils;
+import edu.rosehulman.sunz1.rosechat.fragments.ProfileFragment;
 
 /**
  * Created by agarwaa on 10-Jul-17.
@@ -101,6 +103,12 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
 
     private void enterProfile(int adapterPosition) {
         //TODO:
+        String currentUID = mContactList.get(adapterPosition);
+        FragmentTransaction transaction = ((AppCompatActivity)mContext).getSupportFragmentManager().beginTransaction();
+        Fragment profileFragment = ProfileFragment.newInstance(currentUID);
+        transaction.addToBackStack("view_profile");
+        transaction.replace(R.id.container, profileFragment);
+        transaction.commit();
     }
 
     private void deleteContact(int adapterPosition) {
