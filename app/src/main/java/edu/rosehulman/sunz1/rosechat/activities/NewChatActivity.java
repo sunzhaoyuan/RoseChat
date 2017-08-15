@@ -73,14 +73,18 @@ public class NewChatActivity extends AppCompatActivity {
                                 Log.d(DEBUG_KEY, mAdapter.selectedContacts().get(0));
                                 Log.d(DEBUG_KEY, "current senderUid is : " + snapshot.child("senderUid").getValue() +
                                         "\ncurrent receiverUid is : " + snapshot.child("receiverUid").getValue());
-                                if ((snapshot.child("senderUid").getValue().equals(user.getUid())
-                                        || snapshot.child("receiverUid").getValue().equals(user.getUid()))
-                                        && (snapshot.child("senderUid").getValue().equals(mAdapter.selectedContacts().get(0))
-                                        || snapshot.child("receiverUid").getValue().equals(mAdapter.selectedContacts().get(0)))) {
-
-                                    Toast.makeText(NewChatActivity.this, "Chat already exists", Toast.LENGTH_LONG);
-                                    break;
-                                }else{
+                                if(snapshot.child("senderUid").getValue().equals(user.getUid())){
+                                    if(snapshot.child("receiverUid").getValue().equals(mAdapter.selectedContacts().get(0))){
+                                        Toast.makeText(NewChatActivity.this, "Chat already exists", Toast.LENGTH_LONG);
+                                        break;
+                                    }
+                                }else if(snapshot.child("receiverUid").getValue().equals(user.getUid())){
+                                    if((snapshot.child("senderUid").getValue().equals(mAdapter.selectedContacts().get(0)))){
+                                        Toast.makeText(NewChatActivity.this, "Chat already exists", Toast.LENGTH_LONG);
+                                        break;
+                                    }
+                                }
+                                else{
                                     Toast.makeText(NewChatActivity.this, "Chat created", Toast.LENGTH_LONG);
                                     //TODO What will happen if the chat does not exist yet
                                 }

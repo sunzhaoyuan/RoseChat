@@ -130,6 +130,8 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
                 mContactList.remove(dataSnapshot.getKey());
                 notifyDataSetChanged();
             }
+            DatabaseReference mOtherFriendRef = FirebaseDatabase.getInstance().getReference().child("friends/" + dataSnapshot.getKey());
+            mOtherFriendRef.child(user.getUid()).setValue(false);
         }
 
         @Override

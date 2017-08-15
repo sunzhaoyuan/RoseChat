@@ -1,6 +1,7 @@
 package edu.rosehulman.sunz1.rosechat.adapters;
 
 import android.content.Context;
+import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -99,7 +100,7 @@ public class InvitationAdapter extends RecyclerView.Adapter<InvitationAdapter.Vi
                     mFriendsRef = FirebaseDatabase.getInstance().getReference().child("friends/"+confirmInvite.getmName());
                     mFriendsRef.child(user.getUid()).setValue(true);
 
-                    mInvitationList.remove(getAdapterPosition());
+//                    mInvitationList.remove(getAdapterPosition());
                     notifyDataSetChanged();
 
                     mInvitationRef = FirebaseDatabase.getInstance().getReference().child("invitations/"+user.getUid());
@@ -115,7 +116,7 @@ public class InvitationAdapter extends RecyclerView.Adapter<InvitationAdapter.Vi
                     mInvitationRef = FirebaseDatabase.getInstance().getReference().child("invitations/"+confirmInvite.getmName());
                     mInvitationRef.child(user.getUid()).removeValue();
 
-                    mInvitationList.remove(getAdapterPosition());
+//                    mInvitationList.remove(getAdapterPosition());
                     notifyDataSetChanged();
 
                     mInvitationRef = FirebaseDatabase.getInstance().getReference().child("invitations/"+user.getUid());
@@ -127,13 +128,20 @@ public class InvitationAdapter extends RecyclerView.Adapter<InvitationAdapter.Vi
 
     private class InvitationChildEventListener implements ChildEventListener {
         @Override
-        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-            Invitation invite = new Invitation();
-            invite.setmName(dataSnapshot.getKey().toString());
-            invite.setmMessage("Message: " + dataSnapshot.child("message").getValue().toString());
-            invite.setmStatus(dataSnapshot.child("status").getValue().toString());
-            mInvitationList.add(0, invite);
-            notifyDataSetChanged();
+        public void onChildAdded(final DataSnapshot dataSnapshot, String s) {
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    // Do something after 5s = 5000ms
+                    Invitation invite = new Invitation();
+                    invite.setmName(dataSnapshot.getKey().toString());
+                    invite.setmMessage("Message: " + dataSnapshot.child("message").getValue().toString());
+                    invite.setmStatus(dataSnapshot.child("status").getValue().toString());
+                    mInvitationList.add(0, invite);
+                    notifyDataSetChanged();
+                }
+            }, 250);
         }
 
         @Override
@@ -142,8 +150,22 @@ public class InvitationAdapter extends RecyclerView.Adapter<InvitationAdapter.Vi
         }
 
         @Override
-        public void onChildRemoved(DataSnapshot dataSnapshot) {
-
+        public void onChildRemoved(final DataSnapshot dataSnapshot) {
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    // Do something after 5s = 5000ms
+                    String key = dataSnapshot.getKey();
+                    for(Invitation mq: mInvitationList){
+                        if(mq.getmName().equals(key)){
+                            mInvitationList.remove(mq);
+                            notifyDataSetChanged();
+                            return;
+                        }
+                    }
+                }
+            }, 250);
         }
 
         @Override
