@@ -12,474 +12,71 @@
         <ImageView
             android:id="@+id/profile_image_edit"
             style="@style/ProfileBorder"
-            android:layout_width="150sp"
-            android:layout_height="150dp"
-            android:paddingLeft="15dp"
+            android:layout_width="200sp"
+            android:layout_height="200dp"
             android:paddingTop="15dp"
-            android:src="@drawable/rose_logo" />
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/rose_logo"
+            android:cropToPadding="true"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_alignBottom="@+id/profile_image_edit"
+            android:text="Click to edit"
+            android:textAllCaps="true"
+            android:textStyle="bold"/>
 
         <EditText
             android:id="@+id/profile_name_edit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/profile_image_edit"
-            android:paddingLeft="10dp"
+            android:layout_below="@+id/profile_image_edit"
+            android:layout_centerHorizontal="true"
+            android:paddingTop="@dimen/padding_big"
             android:text="@string/profile_sample_name"
             android:textSize="30sp"
             android:textStyle="bold" />
 
         <EditText
             android:id="@+id/profile_email_edit"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/profile_name_edit"
-            android:layout_toRightOf="@+id/profile_image_edit"
-            android:paddingLeft="10dp"
+            android:layout_centerHorizontal="true"
+            android:paddingTop="@dimen/padding_small"
             android:text="@string/profile_sample_email"
-            android:textSize="13sp" />
+            android:textSize="15sp" />
 
         <EditText
             android:id="@+id/profile_phone_edit"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/profile_email_edit"
-            android:layout_toEndOf="@id/profile_image_edit"
-            android:layout_toRightOf="@+id/profile_image_edit"
-            android:paddingLeft="10dp"
-            android:paddingStart="10dp"
+            android:layout_centerHorizontal="true"
+            android:paddingTop="@dimen/padding_small"
             android:text="@string/profile_sample_phone_number"
-            android:textSize="14sp" />
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/profile_confirm_edit"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/profile_phone_edit"
-            android:layout_toRightOf="@id/profile_image_edit"
-            android:paddingLeft="10dp"
+            android:layout_centerHorizontal="true"
+            android:paddingTop="@dimen/padding_small"
             android:text="@string/profile_confirm"
             android:textAlignment="textStart"
             android:textColor="#57a0d4"
-            android:textSize="14sp" />
+            android:textSize="15sp" />
 
         <View
-            android:layout_width="70sp"
+            android:layout_width="60sp"
             android:layout_height="3sp"
-            android:layout_alignLeft="@+id/profile_confirm_edit"
             android:layout_below="@+id/profile_confirm_edit"
-            android:background="#57a0d4" />
-
-
-        <TableLayout
-            android:id="@+id/profile_schedule_edit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/profile_image_edit"
             android:layout_centerHorizontal="true"
-            android:paddingTop="20dp">
-
-            <TableRow
-                style="@style/ProfileBorder"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp">
-
-                <TextView
-                    android:id="@+id/profile_schedule_Sun_0"
-                    android:layout_width="50dp"
-                    android:layout_height="20dp"
-                    android:padding="2dp"
-                    android:text="@string/sunday"
-                    android:textAlignment="center"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/profile_schedule_Mon_0"
-                    android:layout_width="50dp"
-                    android:layout_height="20dp"
-                    android:padding="2dp"
-                    android:text="@string/monday"
-                    android:textAlignment="center"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/profile_schedule_Tue_0"
-                    android:layout_width="50dp"
-                    android:layout_height="20dp"
-                    android:padding="2dp"
-                    android:text="@string/tuesday"
-                    android:textAlignment="center"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/profile_schedule_Wed_0"
-                    android:layout_width="50dp"
-                    android:layout_height="20dp"
-                    android:padding="2dp"
-                    android:text="@string/wednesday"
-                    android:textAlignment="center"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/profile_schedule_Thur_0"
-                    android:layout_width="50dp"
-                    android:layout_height="20dp"
-                    android:padding="2dp"
-                    android:text="@string/thursday"
-                    android:textAlignment="center"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/profile_schedule_Fri_0"
-                    android:layout_width="50dp"
-                    android:layout_height="20dp"
-                    android:padding="2dp"
-                    android:text="@string/friday"
-                    android:textAlignment="center"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/profile_schedule_Sat_0"
-                    android:layout_width="50dp"
-                    android:layout_height="20dp"
-                    android:padding="2dp"
-                    android:text="@string/saturday"
-                    android:textAlignment="center"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp">
-
-                <TextView
-                    android:id="@+id/profile_schedule_Sun_1"
-                    android:layout_width="50dp"
-                    android:layout_height="40dp"
-                    android:padding="2dp"
-                    android:text="@string/profile_schedule_class"
-                    android:textAlignment="center"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/profile_schedule_Mon_1"
-                    android:layout_width="50dp"
-                    android:layout_height="40dp"
-                    android:padding="2dp"
-                    android:textAlignment="center"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/profile_schedule_Tue_1"
-                    android:layout_width="50dp"
-                    android:layout_height="40dp"
-                    android:padding="2dp"
-                    android:text="@string/profile_schedule_class"
-                    android:textAlignment="center"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/profile_schedule_Wed_1"
-                    android:layout_width="50dp"
-                    android:layout_height="40dp"
-                    android:padding="2dp"
-                    android:textAlignment="center"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/profile_schedule_Thur_1"
-                    android:layout_width="50dp"
-                    android:layout_height="40dp"
-                    android:padding="2dp"
-                    android:textAlignment="center"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/profile_schedule_Fri_1"
-                    android:layout_width="50dp"
-                    android:layout_height="40dp"
-                    android:padding="2dp"
-                    android:textAlignment="center"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/profile_schedule_Sat_1"
-                    android:layout_width="50dp"
-                    android:layout_height="40dp"
-                    android:padding="2dp"
-                    android:textAlignment="center"
-                    android:textSize="15sp" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp">
-
-                <TextView
-                    android:id="@+id/profile_schedule_Sun_2"
-                    android:layout_width="50dp"
-                    android:layout_height="40dp"
-                    android:padding="2dp"
-                    android:text="@string/profile_schedule_class"
-                    android:textAlignment="center"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/profile_schedule_Mon_2"
-                    android:layout_width="50dp"
-                    android:layout_height="40dp"
-                    android:padding="2dp"
-                    android:text="@string/profile_schedule_meeting"
-                    android:textAlignment="center"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/profile_schedule_Tue_2"
-                    android:layout_width="50dp"
-                    android:layout_height="40dp"
-                    android:padding="2dp"
-                    android:text="@string/profile_schedule_class"
-                    android:textAlignment="center"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/profile_schedule_Wed_2"
-                    android:layout_width="50dp"
-                    android:layout_height="40dp"
-                    android:padding="2dp"
-                    android:text="@string/profile_schedule_class"
-                    android:textAlignment="center"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/profile_schedule_Thur_2"
-                    android:layout_width="50dp"
-                    android:layout_height="40dp"
-                    android:padding="2dp"
-                    android:textAlignment="center"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/profile_schedule_Fri_2"
-                    android:layout_width="50dp"
-                    android:layout_height="40dp"
-                    android:padding="2dp"
-                    android:textAlignment="center"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/profile_schedule_Sat_2"
-                    android:layout_width="50dp"
-                    android:layout_height="40dp"
-                    android:padding="2dp"
-                    android:textAlignment="center"
-                    android:textSize="15sp" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp">
-
-                <TextView
-                    android:id="@+id/profile_schedule_Sun_3"
-                    android:layout_width="50dp"
-                    android:layout_height="40dp"
-                    android:padding="2dp"
-                    android:textAlignment="center"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/profile_schedule_Mon_3"
-                    android:layout_width="50dp"
-                    android:layout_height="40dp"
-                    android:padding="2dp"
-                    android:text="@string/profile_schedule_meeting"
-                    android:textAlignment="center"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/profile_schedule_Tue_3"
-                    android:layout_width="50dp"
-                    android:layout_height="40dp"
-                    android:padding="2dp"
-                    android:text="@string/profile_schedule_class"
-                    android:textAlignment="center"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/profile_schedule_Wed_3"
-                    android:layout_width="50dp"
-                    android:layout_height="40dp"
-                    android:padding="2dp"
-                    android:textAlignment="center"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/profile_schedule_Thur_3"
-                    android:layout_width="50dp"
-                    android:layout_height="40dp"
-                    android:padding="2dp"
-                    android:textAlignment="center"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/profile_schedule_Fri_3"
-                    android:layout_width="50dp"
-                    android:layout_height="40dp"
-                    android:padding="2dp"
-                    android:text="@string/profile_schedule_outdoor"
-                    android:textAlignment="center"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/profile_schedule_Sat_3"
-                    android:layout_width="50dp"
-                    android:layout_height="40dp"
-                    android:padding="2dp"
-                    android:text="@string/profile_schedule_game"
-                    android:textAlignment="center"
-                    android:textSize="15sp" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp">
-
-                <TextView
-                    android:id="@+id/profile_schedule_Sun_4"
-                    android:layout_width="50dp"
-                    android:layout_height="40dp"
-                    android:padding="2dp"
-                    android:textAlignment="center"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/profile_schedule_Mon_4"
-                    android:layout_width="50dp"
-                    android:layout_height="40dp"
-                    android:padding="2dp"
-                    android:textAlignment="center"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/profile_schedule_Tue_4"
-                    android:layout_width="50dp"
-                    android:layout_height="40dp"
-                    android:padding="2dp"
-                    android:textAlignment="center"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/profile_schedule_Wed_4"
-                    android:layout_width="50dp"
-                    android:layout_height="40dp"
-                    android:padding="2dp"
-                    android:text="@string/profile_schedule_sleeping"
-                    android:textAlignment="center"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/profile_schedule_Thur_4"
-                    android:layout_width="50dp"
-                    android:layout_height="40dp"
-                    android:padding="2dp"
-                    android:textAlignment="center"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/profile_schedule_Fri_4"
-                    android:layout_width="50dp"
-                    android:layout_height="40dp"
-                    android:padding="2dp"
-                    android:text="@string/profile_schedule_with_friends"
-                    android:textAlignment="center"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/profile_schedule_Sat_4"
-                    android:layout_width="50dp"
-                    android:layout_height="40dp"
-                    android:padding="2dp"
-                    android:textAlignment="center"
-                    android:textSize="15sp" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp">
-
-                <TextView
-                    android:id="@+id/profile_schedule_Sun_5"
-                    android:layout_width="50dp"
-                    android:layout_height="40dp"
-                    android:padding="2dp"
-                    android:textAlignment="center"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/profile_schedule_Mon_5"
-                    android:layout_width="50dp"
-                    android:layout_height="40dp"
-                    android:padding="2dp"
-                    android:textAlignment="center"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/profile_schedule_Tue_5"
-                    android:layout_width="50dp"
-                    android:layout_height="40dp"
-                    android:padding="2dp"
-                    android:textAlignment="center"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/profile_schedule_Wed_5"
-                    android:layout_width="50dp"
-                    android:layout_height="40dp"
-                    android:padding="2dp"
-                    android:text="@string/profile_schedule_sleeping"
-                    android:textAlignment="center"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/profile_schedule_Thur_5"
-                    android:layout_width="50dp"
-                    android:layout_height="40dp"
-                    android:padding="2dp"
-                    android:textAlignment="center"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/profile_schedule_Fri_5"
-                    android:layout_width="50dp"
-                    android:layout_height="40dp"
-                    android:padding="2dp"
-                    android:textAlignment="center"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/profile_schedule_Sat_5"
-                    android:layout_width="50dp"
-                    android:layout_height="40dp"
-                    android:padding="2dp"
-                    android:text="@string/profile_schedule_working"
-                    android:textAlignment="center"
-                    android:textSize="15sp" />
-            </TableRow>
-
-        </TableLayout>
+            android:background="#57a0d4" />
 
     </RelativeLayout>
 
