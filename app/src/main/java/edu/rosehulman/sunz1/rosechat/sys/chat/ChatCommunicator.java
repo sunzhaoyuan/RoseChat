@@ -87,7 +87,7 @@ public class ChatCommunicator implements ChatSystem.Communicator {
 
         Log.d(Constants.TAG_CHAT, "IN CHAT COMMUNICATOR\n" + "sender ID: " + senderUid + "\nreceiver ID: " + receiverUid + "\nmessageKey: " + messageKey);
         Query query = mChatReference.orderByChild(Constants.ARG_MESSAGE_KEY).equalTo(messageKey);
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+        query.addValueEventListener(new ValueEventListener() {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
