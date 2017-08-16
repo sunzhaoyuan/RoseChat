@@ -25,6 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 import edu.rosehulman.sunz1.rosechat.R;
 import edu.rosehulman.sunz1.rosechat.adapters.NewChatAdapter;
 import edu.rosehulman.sunz1.rosechat.models.Contact;
+import edu.rosehulman.sunz1.rosechat.models.Message;
 import edu.rosehulman.sunz1.rosechat.utils.Constants;
 
 /**
@@ -65,29 +66,38 @@ public class NewChatActivity extends AppCompatActivity {
                 int size = mAdapter.selectedContacts().size();
                 Log.d(DEBUG_KEY, "" + size);
                 if(size == 1){
-                    DatabaseReference mMessagesRef = FirebaseDatabase.getInstance().getReference().child("messages");
+                    final DatabaseReference mMessagesRef = FirebaseDatabase.getInstance().getReference().child("messages");
                     mMessagesRef.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
+                            boolean containsChat = false;
                             for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                                 Log.d(DEBUG_KEY, mAdapter.selectedContacts().get(0));
-                                Log.d(DEBUG_KEY, "current senderUid is : " + snapshot.child("senderUid").getValue() +
-                                        "\ncurrent receiverUid is : " + snapshot.child("receiverUid").getValue());
-                                if(snapshot.child("senderUid").getValue().equals(user.getUid())){
-                                    if(snapshot.child("receiverUid").getValue().equals(mAdapter.selectedContacts().get(0))){
-                                        Toast.makeText(NewChatActivity.this, "Chat already exists", Toast.LENGTH_LONG);
+                                Log.d(DEBUG_KEY, "current senderUid is : " + snapshot.child("senderUID").getValue() +
+                                        "\ncurrent receiverUid is : " + snapshot.child("receiverUID").getValue());
+                                if(snapshot.child("senderUID").getValue().equals(user.getUid())){
+                                    if(snapshot.child("receiverUID").getValue().equals(mAdapter.selectedContacts().get(0))){
+                                        Toast.makeText(NewChatActivity.this, "Chat already exists", Toast.LENGTH_LONG).show();
+                                        Log.d(DEBUG_KEY, "I am inside error SENDER UID");
+                                        containsChat = true;
                                         break;
                                     }
-                                }else if(snapshot.child("receiverUid").getValue().equals(user.getUid())){
-                                    if((snapshot.child("senderUid").getValue().equals(mAdapter.selectedContacts().get(0)))){
-                                        Toast.makeText(NewChatActivity.this, "Chat already exists", Toast.LENGTH_LONG);
+                                }else if(snapshot.child("receiverUID").getValue().equals(user.getUid())){
+                                    if((snapshot.child("senderUID").getValue().equals(mAdapter.selectedContacts().get(0)))){
+                                        Log.d(DEBUG_KEY, "I am inside error RECEOVER UID");
+                                        Toast.makeText(NewChatActivity.this, "Chat already exists", Toast.LENGTH_LONG).show();
+                                        containsChat = true;
                                         break;
                                     }
                                 }
-                                else{
-                                    Toast.makeText(NewChatActivity.this, "Chat created", Toast.LENGTH_LONG);
-                                    //TODO What will happen if the chat does not exist yet
-                                }
+                            }
+                            if(!containsChat){
+                                Toast.makeText(NewChatActivity.this, "Chat created", Toast.LENGTH_LONG).show();
+                                //TODO What will happen if the chat does not exist yet
+                                DatabaseReference mFriendRef = FirebaseDatabase.getInstance().getReference().child("contacts/" + mAdapter.selectedContacts().get(0));
+                                Message message = new Message(mAdapter.selectedContacts().get(0) ," ", mFriendRef.child("profilePicUrl").toString(),user.getUid(), mAdapter.selectedContacts().get(0));
+                                mMessagesRef.push().setValue(message);
+                                finish();
                             }
                         }
 
@@ -96,7 +106,6 @@ public class NewChatActivity extends AppCompatActivity {
 
                         }
                     });
-                    finish();
                 }else if(size == 0){
                     Toast.makeText(NewChatActivity.this ,"Please choose at least one contact", Toast.LENGTH_LONG ).show();
                 }else{
