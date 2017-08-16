@@ -3,6 +3,7 @@ package edu.rosehulman.sunz1.rosechat.fragments;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
@@ -13,7 +14,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -90,6 +93,16 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                         Log.d(Constants.TAG_PROFILE, "profile pic url is\n" +
                                 profilePicURL +
                                 "\nset profile pic -DONE");
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Picasso.with(getContext())
+                                .load(mFireBaseContact.getProfilePicUrl())
+                                .into(mProfileImg);
+                        Log.d(Constants.TAG_PROFILE, "Doesn't have custom profile yet.");
+                        Toast.makeText(getContext(), getString(R.string.default_picture) + "\n" +
+                                getString(R.string.customize_profile), Toast.LENGTH_LONG).show();
                     }
                 });
                 //get Text Data
