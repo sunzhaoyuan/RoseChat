@@ -134,6 +134,7 @@ public class InvitationAdapter extends RecyclerView.Adapter<InvitationAdapter.Vi
                 @Override
                 public void run() {
                     // Do something after 5s = 5000ms
+                    Log.d(DEBUG_KEY, dataSnapshot.toString());
                     Invitation invite = new Invitation();
                     invite.setmName(dataSnapshot.getKey().toString());
                     invite.setmMessage("Message: " + dataSnapshot.child("message").getValue().toString());
