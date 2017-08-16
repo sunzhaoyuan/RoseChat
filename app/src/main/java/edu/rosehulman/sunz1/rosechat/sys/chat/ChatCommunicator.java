@@ -51,7 +51,7 @@ public class ChatCommunicator implements ChatSystem.Communicator {
                 chat.setKey(dataSnapshot.getKey());
                 Log.d(Constants.TAG_CHAT, "getMessage Fired");
 //                getMessageFromUser(chat.getSenderUid(), chat.getReceiverUid(), chat.getMessageKey());
-                getMessageForSending();
+//                getMessageForSending();
 //                sendPushNotificationToReceiver(); //TODO: waiting for the test
                 mOnSendMessageListener.onSendMessageSuccess();
             }

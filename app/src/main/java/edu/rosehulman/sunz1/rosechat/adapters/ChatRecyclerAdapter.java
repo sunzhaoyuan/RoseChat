@@ -86,6 +86,15 @@ public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
+    public boolean contains(long chatTime) {
+        for (int i = 0; i < mChats.size(); i++){
+            if (mChats.get(i).getTimeStamp().equals(chatTime)){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void add(Chat chat) {
         mChats.add(chat);
         Log.d(Constants.TAG_CHAT_ADAPTER, "A new Chat has just been ADDED: \nsenderID: " +
