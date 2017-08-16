@@ -24,6 +24,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 import java.util.HashMap;
@@ -141,10 +142,12 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                     }
                 }
                 if (i == 0) {
+                    String fcmToken = FirebaseInstanceId.getInstance().getToken();
                     mContact = new Contact(currentUID, currentUID,
                             "https://firebasestorage.googleapis.com/v0/b/rosechat-64ae9.appspot.com/o/profile_pics%2Fdefault.png?alt=media&token=2cc54fe8-da2f-49f9-ab18-0ef0d2e8fea6",
                             getString(R.string.profile_sample_phone_number),
-                            currentUID + "@rose-hulman.edu");
+                            currentUID + "@rose-hulman.edu",
+                            fcmToken);
                     DatabaseReference newProfRef = FirebaseDatabase.getInstance().getReference().child(Constants.PATH_CONTACT + "/" + currentUID);
 //                    mContact.setKey(dataSnapshot.getKey());
                     newProfRef.child("email").setValue(mContact.getEmail());
@@ -152,17 +155,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                     newProfRef.child("nickName").setValue(mContact.getNickName());
                     newProfRef.child("profilePicUrl").setValue(mContact.getProfilePicUrl());
                     newProfRef.child("uid").setValue(currentUID);
-//                    newProfRef.push().setValue(mContact).addOnFailureListener(new OnFailureListener() {
-//                        @Override
-//                        public void onFailure(@NonNull Exception e) {
-//                            Log.d(Constants.TAG_PROFILE, "PUSH CONTACT FAILED\n" + e.toString());
-//                        }
-//                    }).addOnSuccessListener(new OnSuccessListener<Void>() {
-//                        @Override
-//                        public void onSuccess(Void aVoid) {
-//                            Log.d(Constants.TAG_PROFILE, "PUSH CONTACT SUCCESS");
-//                        }
-//                    });
+                    newProfRef.child("fireBaseToken").setValue(mContact.getFireBaseToken());
                 }
             }
 

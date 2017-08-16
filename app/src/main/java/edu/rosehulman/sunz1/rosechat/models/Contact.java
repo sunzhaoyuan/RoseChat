@@ -16,18 +16,20 @@ public class Contact {
     private String profilePicUrl;
     private String phoneNumber;
     private String email;
+    private String fireBaseToken;
 
     public Contact(){
 
     }
 
 
-    public Contact(String uid, String nickName, String profilePicUrl, String phoneNumber, String email) {
+    public Contact(String uid, String nickName, String profilePicUrl, String phoneNumber, String email, String fireBaseToken) {
         this.nickName = nickName;
         this.profilePicUrl = profilePicUrl;
         this.uid = uid;
         this.phoneNumber = phoneNumber;
         this.email = email;
+        this.fireBaseToken = fireBaseToken;
     }
 
     @Exclude
@@ -37,6 +39,14 @@ public class Contact {
 
     public void setKey(String key) {
         this.key = key;
+    }
+
+    public String getFireBaseToken() {
+        return fireBaseToken;
+    }
+
+    public void setFireBaseToken(String fireBaseToken) {
+        this.fireBaseToken = fireBaseToken;
     }
 
     public String getUid() {
@@ -88,6 +98,7 @@ public class Contact {
                 ", profilePicUrl='" + profilePicUrl + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", email='" + email + '\'' +
+                ", fireBaseToken='" + fireBaseToken + '\'' +
                 '}';
     }
 }

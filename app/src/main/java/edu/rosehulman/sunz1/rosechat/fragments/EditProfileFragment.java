@@ -48,9 +48,10 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
     private TextView mEmailTxtE;
     private TextView mNickNameTxtE;
     private TextView mPhoneTxtE;
-//    private Contact mNewContact;
+    //    private Contact mNewContact;
     private String mCurrentUID;
     private String mProfilePicURL;
+    private String mToken;
     private BottomNavigationViewEx bottomNavigationViewEx;
 
     public static EditProfileFragment newInstance(String email,
@@ -95,6 +96,20 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
                 Picasso.with(getContext())
                         .load(mProfilePicURL)
                         .into(mProfileImgE);
+            }
+        });
+        // TODO: get Token from firebase
+        DatabaseReference token = FirebaseDatabase.getInstance().getReference().child(Constants.PATH_CONTACT)
+                .child(mCurrentUID).child("fireBaseToken");
+        token.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                mToken = dataSnapshot.getValue().toString();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
             }
         });
     }
@@ -148,7 +163,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         handler.postAtTime(new Runnable() {
             @Override
             public void run() {
-                Contact newContact = new Contact(mCurrentUID, nickNameNew, mProfilePicURL, phoneNew, emailNew);
+                Contact newContact = new Contact(mCurrentUID, nickNameNew, mProfilePicURL, phoneNew, emailNew, mToken);
                 uploadAllToFirebase(newContact);
             }
         }, 100); // 1000ms = 1s
