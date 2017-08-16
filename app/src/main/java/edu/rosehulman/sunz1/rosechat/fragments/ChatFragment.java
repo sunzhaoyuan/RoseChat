@@ -139,8 +139,11 @@ public class ChatFragment extends Fragment implements ChatSystem.View, TextView.
             mChatAdapter = new ChatRecyclerAdapter(getContext(), new ArrayList<Chat>());
             mRecyclerViewChat.setAdapter(mChatAdapter);
         }
-        mChatAdapter.add(chat);
-        mRecyclerViewChat.smoothScrollToPosition(mChatAdapter.getItemCount());
+//        if (!mChatAdapter.contains(chat)) {
+//            Log.d(Constants.TAG_CHAT, "It does not contains chat: " + chat.toString());
+            mChatAdapter.add(chat);
+            mRecyclerViewChat.smoothScrollToPosition(mChatAdapter.getItemCount());
+//        }
     }
 
     @Override

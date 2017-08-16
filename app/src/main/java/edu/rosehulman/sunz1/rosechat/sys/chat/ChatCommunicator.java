@@ -11,6 +11,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import edu.rosehulman.sunz1.rosechat.R;
@@ -46,9 +47,11 @@ public class ChatCommunicator implements ChatSystem.Communicator {
         mChatReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                chat.setKey(dataSnapshot.getKey());
                 mChatReference.push().setValue(chat);
-                getMessageFromUser(chat.getSenderUid(), chat.getReceiverUid(), chat.getMessageKey());
+                chat.setKey(dataSnapshot.getKey());
+                Log.d(Constants.TAG_CHAT, "getMessage Fired");
+//                getMessageFromUser(chat.getSenderUid(), chat.getReceiverUid(), chat.getMessageKey());
+                getMessageForSending();
 //                sendPushNotificationToReceiver(); //TODO: waiting for the test
                 mOnSendMessageListener.onSendMessageSuccess();
             }
@@ -60,20 +63,38 @@ public class ChatCommunicator implements ChatSystem.Communicator {
         });
     }
 
+    private void getMessageForSending() {
+        mChatReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Chat chat  = new Chat();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    chat = snapshot.getValue(Chat.class);
+                    Log.d(Constants.TAG_CHAT, "current chat is: " + chat.toString());
+                }
+                mOnGetMessagesListener.onGetMessagesSuccess(chat);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     @Override
     public void getMessageFromUser(final String senderUid, String receiverUid, final String messageKey) { //TODO: receiverUid should be a ArrayList - Sprint 3
 
-        Log.d(Constants.TAG_CHAT, "sender ID: " + senderUid + "\nreceiver ID: " + receiverUid + "\nmessageKey: " + messageKey);
-        mChatReference.addValueEventListener(new ValueEventListener() {
+//        Log.d(Constants.TAG_CHAT, "sender ID: " + senderUid + "\nreceiver ID: " + receiverUid + "\nmessageKey: " + messageKey);
+        Query query = mChatReference.orderByChild(Constants.ARG_MESSAGE_KEY).equalTo(messageKey);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    Log.d(Constants.TAG_CHAT, "LOOPING THROUGH: " + snapshot.getKey());
-                    if (snapshot.child("messageKey").getValue().equals(messageKey)){
-                        Chat chat = dataSnapshot.child(snapshot.getKey()).getValue(Chat.class);
-                        Log.d(Constants.TAG_CHAT, chat.toString());
-                        mOnGetMessagesListener.onGetMessagesSuccess(chat);
-                    }
+                Log.d(Constants.TAG_CHAT, "This dataSnapshot is " + dataSnapshot.getValue().toString());
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Chat chat = snapshot.getValue(Chat.class);
+                    mOnGetMessagesListener.onGetMessagesSuccess(chat);
                 }
             }
 
@@ -82,36 +103,6 @@ public class ChatCommunicator implements ChatSystem.Communicator {
                 mOnGetMessagesListener.onGetMessagesFailure("unable to get message " + databaseError.getMessage());
             }
         });
-//        Query query = mChatReference.orderByChild(Constants.ARG_MESSAGE_KEY).equalTo(messageKey);
-//        Log.d(Constants.TAG_CHAT, "query: " + query.toString());
-//
-//        query.addChildEventListener(new ChildEventListener() {
-//            @Override
-//            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-//                Chat chat = dataSnapshot.getValue(Chat.class);
-//                mOnGetMessagesListener.onGetMessagesSuccess(chat);
-//            }
-//
-//            @Override
-//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-//
-//            }
-//
-//            @Override
-//            public void onChildRemoved(DataSnapshot dataSnapshot) {
-//                //TODO: Sprint 3 ??
-//            }
-//
-//            @Override
-//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//                mOnGetMessagesListener.onGetMessagesFailure("unable to get message " + databaseError.getMessage());
-//            }
-//        });
     }
 
     private void sendPushNotificationToReceiver(String sender, String message, Context context) {

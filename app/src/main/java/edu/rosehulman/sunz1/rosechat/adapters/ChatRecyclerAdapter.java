@@ -78,9 +78,16 @@ public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
+    public boolean contains(Chat chat) {
+        return mChats.contains(chat);
+    }
+
     public void add(Chat chat) {
         mChats.add(chat);
-        notifyItemInserted(mChats.size() - 1);
+//        for (Chat mChat : mChats) {
+//            Log.d(Constants.TAG_CHAT, "mChats has: " + mChat.toString());
+//        }
+        notifyDataSetChanged();
     }
 
     private void configureMyChatViewHolder(MyChatViewHolder myChatViewHolder, int position) {
