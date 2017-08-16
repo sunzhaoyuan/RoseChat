@@ -1,4 +1,4 @@
-package edu.rosehulman.sunz1.rosechat;
+package edu.rosehulman.sunz1.rosechat.sys.fcm;
 
 import android.util.Log;
 

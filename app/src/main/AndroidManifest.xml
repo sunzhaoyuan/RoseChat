@@ -28,13 +28,13 @@
         </activity>
         <activity android:name=".activities.ChatActivity" />
         <service
-            android:name=".MyFirebaseMessagingService">
+            android:name=".sys.fcm.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>
         </service>
         <service
-            android:name=".FirebaseIDService">
+            android:name=".sys.fcm.FirebaseIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
             </intent-filter>
