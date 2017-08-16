@@ -102,8 +102,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Log.d(Constants.TAG_MESSAGE, "current senderUid is : " + snapshot.child("senderUid").getValue() +
-                            "\ncurrent receiverUid is : " + snapshot.child("receiverUid").getValue());
+                    Log.d(Constants.TAG_MESSAGE, "current senderUid is : " + snapshot.child("senderUID").getValue() +
+                            "\ncurrent receiverUid is : " + snapshot.child("receiverUID").getValue());
                     if (snapshot.child("senderUID").getValue().equals(mCurrentUID)
                             || snapshot.child("receiverUID").getValue().equals(mCurrentUID)) {
                         Message currentMessage = snapshot.getValue(Message.class);
