@@ -145,7 +145,7 @@ public class InvitationAdapter extends RecyclerView.Adapter<InvitationAdapter.Vi
                     mInvitationList.add(0, invite);
                     notifyDataSetChanged();
                 }
-            }, 1000);
+            }, 10000);
         }
 
         @Override

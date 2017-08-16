@@ -14,34 +14,26 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
-            <ImageView
-                android:id="@+id/message_profile_pic"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/padding_small"
-                android:layout_centerVertical="true"
-                app:srcCompat="@mipmap/ic_navi_profile" />
 
             <TextView
                 android:id="@+id/message_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingTop="10dp"
                 android:paddingLeft="@dimen/padding_small"
-                android:layout_toRightOf="@id/message_profile_pic"
+                android:paddingTop="10dp"
                 android:text="Temp_name"
                 android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/message_last_interaction"
                 android:layout_width="wrap_content"
-                android:paddingLeft="@dimen/padding_small"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/message_name"
+                android:paddingLeft="@dimen/padding_small"
                 android:paddingTop="3dp"
-                android:layout_toRightOf="@id/message_profile_pic"
                 android:text="last_message_interaction"
                 android:textSize="12sp" />
+
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 </LinearLayout>

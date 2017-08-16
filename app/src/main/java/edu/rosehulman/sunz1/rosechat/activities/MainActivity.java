@@ -332,6 +332,10 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         getSupportActionBar().setTitle(title);
     }
 
+    public void setTitle(String title){
+        getSupportActionBar().setTitle(title);
+    }
+
     private String getTitle(Integer itemID) {
         return getString(this.mTitlesMap.get(itemID));
     }

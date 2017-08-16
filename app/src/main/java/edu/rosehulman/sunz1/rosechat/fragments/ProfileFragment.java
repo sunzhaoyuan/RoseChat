@@ -29,6 +29,7 @@ import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.squareup.picasso.Picasso;
 
 import edu.rosehulman.sunz1.rosechat.R;
+import edu.rosehulman.sunz1.rosechat.activities.MainActivity;
 import edu.rosehulman.sunz1.rosechat.models.Contact;
 import edu.rosehulman.sunz1.rosechat.utils.Constants;
 import edu.rosehulman.sunz1.rosechat.utils.SharedPreferencesUtils;
@@ -126,6 +127,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private void init() {
         mEdit.setOnClickListener(this);
         mCurrentUID = getArguments().getString(Constants.PROF_NEW_UID);
+        ((MainActivity)getActivity()).setTitle(mCurrentUID);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -139,6 +141,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             Log.d(Constants.TAG_PROFILE, "Current user: " + SharedPreferencesUtils.getCurrentUser(getContext())
                     + "\nmCurrentUID: " + mCurrentUID);
             bottomNavigationViewEx.setVisibility(View.GONE);
+            mEdit.setVisibility(View.GONE);
         }
         return view;
     }

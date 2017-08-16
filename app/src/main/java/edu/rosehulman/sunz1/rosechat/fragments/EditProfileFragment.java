@@ -112,6 +112,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
 
             }
         });
+        ((MainActivity)getActivity()).setTitle(mCurrentUID);
     }
 
     @Override

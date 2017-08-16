@@ -21,9 +21,7 @@ import edu.rosehulman.sunz1.rosechat.utils.SharedPreferencesUtils;
 
 public class SettingsActivity extends AppCompatActivity implements View.OnClickListener{
 
-    private Button mButtonProfile;
     private Button mButtonLanguage;
-    private Button mButtonNotification;
     private Button mButtonLogOut;
     private Button mButtonFeedback;
     private Button mButtonDeleteAccount;
@@ -41,13 +39,11 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         mButtonFeedback= (Button) findViewById(R.id.button_settings_feedback);
         mButtonLanguage = (Button) findViewById(R.id.button_settings_Language);
         mButtonLogOut= (Button) findViewById(R.id.button_settings_logOut);
-        mButtonNotification= (Button) findViewById(R.id.button_settings_notification);
 
         mButtonDeleteAccount.setOnClickListener(this);
         mButtonFeedback.setOnClickListener(this);
         mButtonLanguage.setOnClickListener(this);
         mButtonLogOut.setOnClickListener(this);
-        mButtonNotification.setOnClickListener(this);
 
         mAuth = FirebaseAuth.getInstance();
         initializeListener();
@@ -92,9 +88,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             case R.id.button_settings_deleteAccount:
                 deleteAccountConfirmationDialog();
                 return;
-            case R.id.button_settings_notification:
-                notificationDialog();
-                return;
             case R.id.button_settings_feedback:
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 FeedbackSettingsFragment fragment = new FeedbackSettingsFragment();
@@ -110,23 +103,23 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         }
 
     }
-
-    private void notificationDialog() {
-        AlertDialog.Builder mBuilder = new AlertDialog.Builder(this);
-        mBuilder.setTitle("Notifications");
-        mBuilder.setMessage("Would you like to turn notifications on or off?");
-        mBuilder.setPositiveButton("On", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {NOTIFICATIONS =true;}
-        });
-
-        mBuilder.setNegativeButton("Off", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {NOTIFICATIONS = false;}
-        });
-        AlertDialog dialog = mBuilder.create();
-        dialog.show();
-    }
+//
+//    private void notificationDialog() {
+//        AlertDialog.Builder mBuilder = new AlertDialog.Builder(this);
+//        mBuilder.setTitle("Notifications");
+//        mBuilder.setMessage("Would you like to turn notifications on or off?");
+//        mBuilder.setPositiveButton("On", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {NOTIFICATIONS =true;}
+//        });
+//
+//        mBuilder.setNegativeButton("Off", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {NOTIFICATIONS = false;}
+//        });
+//        AlertDialog dialog = mBuilder.create();
+//        dialog.show();
+//    }
 
     private void logOutConfirmationDialog() {
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(this);

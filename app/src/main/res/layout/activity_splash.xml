@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/splash_image"
         android:layout_centerHorizontal="true"
-        android:text="RoseChat Alpha Stage"
+        android:text="@string/welcome_to_rosechat"
         android:textSize="20sp"/>
 
 </RelativeLayout>
