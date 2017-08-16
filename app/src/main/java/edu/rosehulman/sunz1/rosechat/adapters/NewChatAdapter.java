@@ -2,11 +2,13 @@ package edu.rosehulman.sunz1.rosechat.adapters;
 import android.content.Context;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -15,12 +17,14 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
 import edu.rosehulman.sunz1.rosechat.R;
 import edu.rosehulman.sunz1.rosechat.activities.NewChatActivity;
 import edu.rosehulman.sunz1.rosechat.models.Contact;
+import edu.rosehulman.sunz1.rosechat.models.Message;
 import edu.rosehulman.sunz1.rosechat.utils.SharedPreferencesUtils;
 
 /**
@@ -34,22 +38,20 @@ public class NewChatAdapter extends RecyclerView.Adapter<NewChatAdapter.ViewHold
     NewChatActivity.Callback mCallback;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     DatabaseReference mFriendsRef;
+    final private String DEBUG_KEY = "NewChatDebug ";
 
     public NewChatAdapter(Context context, NewChatActivity.Callback callback){
 
         mCallback = callback;
         mContext = context;
         mContactList = new ArrayList<String>();
-        mSelectedContactsList = new ArrayList<>();
         mFriendsRef = FirebaseDatabase.getInstance().getReference().child("friends/"+user.getUid());
         mFriendsRef.addChildEventListener(new FriendsChildEventListener());
     }
 
     private void addContact(String contact) {
-        mContactList.add(0, contact);
+        mSelectedContactsList.add(0, contact);
     }
-
-    public ArrayList<String> selectedContacts(){return mSelectedContactsList;}
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -70,7 +72,6 @@ public class NewChatAdapter extends RecyclerView.Adapter<NewChatAdapter.ViewHold
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         TextView mContactName;
-        CheckBox mSelected;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -78,29 +79,54 @@ public class NewChatAdapter extends RecyclerView.Adapter<NewChatAdapter.ViewHold
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    select(getAdapterPosition());
-                    if(mSelected.isChecked()){
-                        mSelected.setChecked(false);
-                    }else{
-                        mSelected.setChecked(true);
-                    }
+                    final String contactToMessage = mContactList.get(getAdapterPosition());
+                    Log.d(DEBUG_KEY, contactToMessage);
+
+                    final DatabaseReference mMessagesRef = FirebaseDatabase.getInstance().getReference().child("messages");
+                    mMessagesRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            boolean containsChat = false;
+                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                Log.d(DEBUG_KEY, contactToMessage);
+                                Log.d(DEBUG_KEY, "current senderUid is : " + snapshot.child("senderUID").getValue() +
+                                        "\ncurrent receiverUid is : " + snapshot.child("receiverUID").getValue());
+                                if(snapshot.child("senderUID").getValue().equals(user.getUid())){
+                                    if(snapshot.child("receiverUID").getValue().equals(contactToMessage)){
+                                        Toast.makeText(mContext, "Chat already exists", Toast.LENGTH_LONG).show();
+                                        Log.d(DEBUG_KEY, "I am inside error SENDER UID");
+                                        containsChat = true;
+                                        break;
+                                    }
+                                }else if(snapshot.child("receiverUID").getValue().equals(user.getUid())){
+                                    if((snapshot.child("senderUID").getValue().equals(contactToMessage))){
+                                        Log.d(DEBUG_KEY, "I am inside error RECEOVER UID");
+                                        Toast.makeText(mContext, "Chat already exists", Toast.LENGTH_LONG).show();
+                                        containsChat = true;
+                                        break;
+                                    }
+                                }
+                            }
+                            if(!containsChat){
+                                Toast.makeText(mContext, "Chat created", Toast.LENGTH_LONG).show();
+                                //TODO What will happen if the chat does not exist yet
+                                DatabaseReference mFriendRef = FirebaseDatabase.getInstance().getReference().child("contacts/" + contactToMessage);
+                                Message message = new Message(contactToMessage ,"Start chatting now!", mFriendRef.child("profilePicUrl").toString(),user.getUid(), contactToMessage);
+                                mMessagesRef.push().setValue(message);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
                 }
             });
 
             mContactName = (TextView) itemView.findViewById(R.id.newChat_name);
-            mSelected = (CheckBox) itemView.findViewById(R.id.newChat_checkBox);
         }
-    }
-
-    private void select(int adapterPosition) {
-        String subject = mContactList.get(adapterPosition);
-        if(mSelectedContactsList.contains(subject)){
-            mSelectedContactsList.remove(subject);
-        }else{
-            mSelectedContactsList.add(subject);
-        }
-        notifyDataSetChanged();
-
     }
 
 

@@ -1,6 +1,5 @@
 package edu.rosehulman.sunz1.rosechat.activities;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -8,10 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,7 +22,6 @@ import edu.rosehulman.sunz1.rosechat.R;
 import edu.rosehulman.sunz1.rosechat.adapters.NewChatAdapter;
 import edu.rosehulman.sunz1.rosechat.models.Contact;
 import edu.rosehulman.sunz1.rosechat.models.Message;
-import edu.rosehulman.sunz1.rosechat.utils.Constants;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -57,62 +52,8 @@ public class NewChatActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
 
         mAdapter = new NewChatAdapter(this, mCallback);
-        FloatingActionButton addFAB = (FloatingActionButton) findViewById(R.id.newChat_fab);
         recyclerView.setAdapter(mAdapter);
 
-        addFAB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int size = mAdapter.selectedContacts().size();
-                Log.d(DEBUG_KEY, "" + size);
-                if(size == 1){
-                    final DatabaseReference mMessagesRef = FirebaseDatabase.getInstance().getReference().child("messages");
-                    mMessagesRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            boolean containsChat = false;
-                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                                Log.d(DEBUG_KEY, mAdapter.selectedContacts().get(0));
-                                Log.d(DEBUG_KEY, "current senderUid is : " + snapshot.child("senderUID").getValue() +
-                                        "\ncurrent receiverUid is : " + snapshot.child("receiverUID").getValue());
-                                if(snapshot.child("senderUID").getValue().equals(user.getUid())){
-                                    if(snapshot.child("receiverUID").getValue().equals(mAdapter.selectedContacts().get(0))){
-                                        Toast.makeText(NewChatActivity.this, "Chat already exists", Toast.LENGTH_LONG).show();
-                                        Log.d(DEBUG_KEY, "I am inside error SENDER UID");
-                                        containsChat = true;
-                                        break;
-                                    }
-                                }else if(snapshot.child("receiverUID").getValue().equals(user.getUid())){
-                                    if((snapshot.child("senderUID").getValue().equals(mAdapter.selectedContacts().get(0)))){
-                                        Log.d(DEBUG_KEY, "I am inside error RECEOVER UID");
-                                        Toast.makeText(NewChatActivity.this, "Chat already exists", Toast.LENGTH_LONG).show();
-                                        containsChat = true;
-                                        break;
-                                    }
-                                }
-                            }
-                            if(!containsChat){
-                                Toast.makeText(NewChatActivity.this, "Chat created", Toast.LENGTH_LONG).show();
-                                //TODO What will happen if the chat does not exist yet
-                                DatabaseReference mFriendRef = FirebaseDatabase.getInstance().getReference().child("contacts/" + mAdapter.selectedContacts().get(0));
-                                Message message = new Message(mAdapter.selectedContacts().get(0) ," ", mFriendRef.child("profilePicUrl").toString(),user.getUid(), mAdapter.selectedContacts().get(0));
-                                mMessagesRef.push().setValue(message);
-                                finish();
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
-                }else if(size == 0){
-                    Toast.makeText(NewChatActivity.this ,"Please choose at least one contact", Toast.LENGTH_LONG ).show();
-                }else{
-                    Toast.makeText(NewChatActivity.this ,"Group chat not supported right now", Toast.LENGTH_LONG ).show();
-                }
-            }
-        });
     }
 
 
