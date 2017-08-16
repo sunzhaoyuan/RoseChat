@@ -16,12 +16,13 @@ public class ChatActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
 
-    public static void startActivity(Context context, String messageName, String receiverUID, String messageKey) {
+    public static void startActivity(Context context, String messageName, String senderUID, String receiverUID, String messageKey) {
         Intent intent = new Intent(context, ChatActivity.class);
         intent.putExtra(Constants.ARG_MESSAGE_NAME, messageName);
         intent.putExtra(Constants.ARG_RECEIVER_UID, receiverUID);
         intent.putExtra(Constants.ARG_MESSAGE_KEY, messageKey);
-        Log.d(Constants.TAG_CHAT, "receiver_uid: " + receiverUID);
+        intent.putExtra(Constants.ARG_SENDER_UID, senderUID);
+        Log.d(Constants.TAG_CHAT, "IN CHAT ACTIVITY\n Receiver UID: " + receiverUID);
 //        intent.putExtra(Constants.ARG_FIREBASE_TOKEN, firebaseToken);
         context.startActivity(intent);
     }
@@ -39,9 +40,10 @@ public class ChatActivity extends AppCompatActivity {
 //        mToolbar.setTitle(getIntent().getExtras().getString(Constants.ARG_RECEIVER));
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        Log.d(Constants.TAG_CHAT, "IN CHAT ACTIVITY\nmessageKey: " + getIntent().getExtras().getString(Constants.ARG_MESSAGE_KEY));
+//        Log.d(Constants.TAG_CHAT, "IN CHAT ACTIVITY\nmessageKey: " + getIntent().getExtras().getString(Constants.ARG_MESSAGE_KEY));
         fragmentTransaction.replace(R.id.frame_layout_chat_container,
                 ChatFragment.newInstance(getIntent().getExtras().getString(Constants.ARG_MESSAGE_NAME),
+                        getIntent().getExtras().getString(Constants.ARG_SENDER_UID),
                         getIntent().getExtras().getString(Constants.ARG_RECEIVER_UID),
                         getIntent().getExtras().getString(Constants.ARG_MESSAGE_KEY)),
                 ChatFragment.class.getSimpleName());

@@ -11,7 +11,7 @@
     android:paddingTop="@dimen/padding_min">
 
     <TextView
-        android:id="@+id/chat_profile_pic_other"
+        android:id="@+id/chat_profile_pic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/user_profile_pic_chat_bg"
@@ -27,7 +27,7 @@
         android:layout_height="wrap_content" />
 
     <TextView
-        android:id="@+id/chat_text_other"
+        android:id="@+id/chat_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/margin_max"

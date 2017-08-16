@@ -18,6 +18,7 @@ public class Constants {
     public static final String ARG_FIREBASE_TOKEN = "firebase_token";
     public static final String ARG_MESSAGE = "message";
     public static final String ARG_MESSAGE_KEY = "messageKey";
+    public static final String ARG_SENDER_UID = "sender_uid";
 
     // For the Profile Feature
     public static final String PROF_NICK_NAME = "prof_nick_name";
@@ -43,5 +44,6 @@ public class Constants {
     public static final String TAG_CHAT = "chat_test";
     public static final String TAG_PROFILE = "profile_test";
     public static final String TAG_MESSAGE  = "message_test";
+    public static final String TAG_CHAT_ADAPTER = "chatAdapter_test";
 
 }

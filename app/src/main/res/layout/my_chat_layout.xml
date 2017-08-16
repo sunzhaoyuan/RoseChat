@@ -11,7 +11,7 @@
     android:paddingTop="@dimen/padding_small">
 
     <TextView
-        android:id="@+id/chat_profile_pic_me"
+        android:id="@+id/chat_profile_pic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
@@ -25,11 +25,11 @@
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/chat_text_me"
+        android:id="@+id/chat_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_max"
-        android:layout_toStartOf="@+id/chat_profile_pic_me"
+        android:layout_toStartOf="@+id/chat_profile_pic"
         android:background="@drawable/chat_rounded_rect_bg"
         android:padding="@dimen/padding_min"
         android:text="@string/chat_me_blank"

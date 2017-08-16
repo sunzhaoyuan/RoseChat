@@ -67,8 +67,8 @@ public class ChatCommunicator implements ChatSystem.Communicator {
         mChatReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Chat chat  = new Chat();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                Chat chat = new Chat();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     chat = snapshot.getValue(Chat.class);
                     Log.d(Constants.TAG_CHAT, "current chat is: " + chat.toString());
                 }
@@ -77,7 +77,7 @@ public class ChatCommunicator implements ChatSystem.Communicator {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                mOnGetMessagesListener.onGetMessagesFailure("unable to get Latest message " + databaseError.getMessage());
             }
         });
     }
@@ -85,15 +85,16 @@ public class ChatCommunicator implements ChatSystem.Communicator {
     @Override
     public void getMessageFromUser(final String senderUid, String receiverUid, final String messageKey) { //TODO: receiverUid should be a ArrayList - Sprint 3
 
-//        Log.d(Constants.TAG_CHAT, "sender ID: " + senderUid + "\nreceiver ID: " + receiverUid + "\nmessageKey: " + messageKey);
+        Log.d(Constants.TAG_CHAT, "IN CHAT COMMUNICATOR\n" + "sender ID: " + senderUid + "\nreceiver ID: " + receiverUid + "\nmessageKey: " + messageKey);
         Query query = mChatReference.orderByChild(Constants.ARG_MESSAGE_KEY).equalTo(messageKey);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.d(Constants.TAG_CHAT, "This dataSnapshot is " + dataSnapshot.getValue().toString());
+//                Log.d(Constants.TAG_CHAT, "This dataSnapshot is " + dataSnapshot.getValue().toString() + "\n");
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Chat chat = snapshot.getValue(Chat.class);
+                    Log.d(Constants.TAG_CHAT, chat.toString());
                     mOnGetMessagesListener.onGetMessagesSuccess(chat);
                 }
             }

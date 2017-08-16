@@ -53,7 +53,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     @Override
     public void onBindViewHolder(MessageAdapter.ViewHolder holder, int position) {
         Message message = mMessageList.get(position);
-        holder.mNameTextView.setText(message.getName());
+        holder.mNameTextView.setText(message.getSenderUID().equals(mCurrentUID) ? message.getReceiverUID() : message.getSenderUID());
         holder.mLastInteraction.setText(message.getLastInteraction());
     }
 
@@ -133,8 +133,9 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         String messageName = currentMessage.getName();
         String messageKey = currentMessage.getKey();
         String receiversUID = currentMessage.getReceiverUID();
-        Log.d(Constants.TAG_CHAT, "IN MESSAGE_ADAPTER\nmessageKey: " + messageKey);
-        ChatActivity.startActivity(mContext, messageName, receiversUID, messageKey);
+        String senderUID = currentMessage.getSenderUID();
+        Log.d(Constants.TAG_CHAT, "IN MESSAGE_ADAPTER\nreceiverUID: " + receiversUID);
+        ChatActivity.startActivity(mContext, messageName, senderUID, receiversUID, messageKey);
     }
 
     private void messageOptions(int adapterPosition) {

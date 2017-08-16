@@ -15,8 +15,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
-
 import java.util.ArrayList;
 
 import edu.rosehulman.sunz1.rosechat.R;
@@ -37,16 +35,19 @@ public class ChatFragment extends Fragment implements ChatSystem.View, TextView.
     private RecyclerView mRecyclerViewChat;
     private EditText mEditTextChat;
 
+    private String mCurrentUID;
 
     public ChatFragment() {
         // Required empty public constructor
     }
 
     public static ChatFragment newInstance(String messageName,
+                                           String senderUid,
                                            String receiverUid,
                                            String messageKey) {
 
         Bundle args = new Bundle();
+        args.putString(Constants.ARG_SENDER_UID, senderUid);
         args.putString(Constants.ARG_MESSAGE_NAME, messageName);
         args.putString(Constants.ARG_RECEIVER_UID, receiverUid);
         args.putString(Constants.ARG_MESSAGE_KEY, messageKey);
@@ -75,6 +76,7 @@ public class ChatFragment extends Fragment implements ChatSystem.View, TextView.
     }
 
     private void init() {
+        mCurrentUID = SharedPreferencesUtils.getCurrentUser(getContext());
         mProgressDialog = new ProgressDialog(getActivity());
         mProgressDialog.setTitle(getString(R.string.loading));
         mProgressDialog.setMessage(getString(R.string.please_wait));
@@ -84,8 +86,9 @@ public class ChatFragment extends Fragment implements ChatSystem.View, TextView.
 
         mChatPresenter = new ChatPresenter(this);
         Log.d(Constants.TAG_CHAT, "IN CHAT FRAGMENT\nmessageKey: " + getArguments().getString(Constants.ARG_MESSAGE_KEY));
-        mChatPresenter.getMessage(SharedPreferencesUtils.getCurrentUser(getContext()),
-                getArguments().getString(Constants.ARG_RECEIVER_UID),
+        String receiverUID = getArguments().getString(Constants.ARG_RECEIVER_UID);
+        mChatPresenter.getMessage(mCurrentUID,
+                receiverUID.equals(mCurrentUID) ? getArguments().getString(Constants.ARG_SENDER_UID) : receiverUID,
                 getArguments().getString(Constants.ARG_MESSAGE_KEY));
     }
 
@@ -113,12 +116,14 @@ public class ChatFragment extends Fragment implements ChatSystem.View, TextView.
 
     private void sendMessage() {
         String text = mEditTextChat.getText().toString();
-        String receiver = getArguments().getString(Constants.ARG_MESSAGE_NAME);
         String receiverUid = getArguments().getString(Constants.ARG_RECEIVER_UID);
-        String sender = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
-        String senderUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        String senderUid = getArguments().getString(Constants.ARG_SENDER_UID);
         String messageKey = getArguments().getString(Constants.ARG_MESSAGE_KEY);
-        Chat chat = new Chat(messageKey, sender, receiver, senderUid, receiverUid, text, System.currentTimeMillis());
+
+        receiverUid = receiverUid.equals(mCurrentUID) ? senderUid : receiverUid;
+        String receiver = receiverUid;
+
+        Chat chat = new Chat(messageKey, mCurrentUID, receiver, mCurrentUID, receiverUid, text, System.currentTimeMillis());
         mChatPresenter.sendMessage(getActivity().getApplicationContext(), chat);
     }
 
@@ -139,11 +144,8 @@ public class ChatFragment extends Fragment implements ChatSystem.View, TextView.
             mChatAdapter = new ChatRecyclerAdapter(getContext(), new ArrayList<Chat>());
             mRecyclerViewChat.setAdapter(mChatAdapter);
         }
-//        if (!mChatAdapter.contains(chat)) {
-//            Log.d(Constants.TAG_CHAT, "It does not contains chat: " + chat.toString());
-            mChatAdapter.add(chat);
-            mRecyclerViewChat.smoothScrollToPosition(mChatAdapter.getItemCount());
-//        }
+        mChatAdapter.add(chat);
+        mRecyclerViewChat.smoothScrollToPosition(mChatAdapter.getItemCount());
     }
 
     @Override
