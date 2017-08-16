@@ -136,13 +136,16 @@ public class InvitationAdapter extends RecyclerView.Adapter<InvitationAdapter.Vi
                     // Do something after 5s = 5000ms
                     Log.d(DEBUG_KEY, dataSnapshot.toString());
                     Invitation invite = new Invitation();
+                    Log.d(DEBUG_KEY, dataSnapshot.getKey().toString());
                     invite.setmName(dataSnapshot.getKey().toString());
+                    Log.d(DEBUG_KEY, dataSnapshot.child("message").getValue().toString());
                     invite.setmMessage("Message: " + dataSnapshot.child("message").getValue().toString());
+                    Log.d(DEBUG_KEY, dataSnapshot.child("status").getValue().toString());
                     invite.setmStatus(dataSnapshot.child("status").getValue().toString());
                     mInvitationList.add(0, invite);
                     notifyDataSetChanged();
                 }
-            }, 250);
+            }, 1000);
         }
 
         @Override
