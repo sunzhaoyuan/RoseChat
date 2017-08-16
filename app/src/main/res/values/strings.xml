@@ -66,7 +66,4 @@
     <string name="fail_to_get_intent_data">Failed to get intent data</string>
     <string name="could_not_get_message">Could not get messages</string>
     <string name="upload_profile_pic_failed">upload profile image failed</string>
-    <string name="firest_time_profile">Hi! This is your first time creating your own profile.</string>
-    <string name="customize_profile">You could edit your default by clicking edit button.</string>
-    <string name="default_picture">Hi! Your profile picture is still the default picture.</string>
 </resources>

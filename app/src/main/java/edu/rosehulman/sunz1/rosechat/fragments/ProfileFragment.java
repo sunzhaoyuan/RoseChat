@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -29,11 +28,10 @@ import com.google.firebase.storage.StorageReference;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.squareup.picasso.Picasso;
 
-import java.util.Objects;
-
 import edu.rosehulman.sunz1.rosechat.R;
 import edu.rosehulman.sunz1.rosechat.models.Contact;
 import edu.rosehulman.sunz1.rosechat.utils.Constants;
+import edu.rosehulman.sunz1.rosechat.utils.SharedPreferencesUtils;
 
 public class ProfileFragment extends Fragment implements View.OnClickListener {
 
@@ -101,8 +99,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                                 .load(mFireBaseContact.getProfilePicUrl())
                                 .into(mProfileImg);
                         Log.d(Constants.TAG_PROFILE, "Doesn't have custom profile yet.");
-                        Toast.makeText(getContext(), getString(R.string.default_picture) + "\n" +
-                                getString(R.string.customize_profile), Toast.LENGTH_LONG).show();
                     }
                 });
                 //get Text Data
@@ -139,7 +135,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         bindViews(view);
-        if (!Objects.equals(getArguments().getString(Constants.PROF_NEW_UID), mCurrentUID)) {
+        if (!SharedPreferencesUtils.getCurrentUser(getContext()).equals(getArguments().getString(Constants.PROF_NEW_UID))) {
+            Log.d(Constants.TAG_PROFILE, "Current user: " + SharedPreferencesUtils.getCurrentUser(getContext())
+                    + "\nmCurrentUID: " + mCurrentUID);
             bottomNavigationViewEx.setVisibility(View.GONE);
         }
         return view;

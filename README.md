@@ -71,11 +71,7 @@ You can find our UI demo on [Ninja Mock](https://ninjamock.com/s/5FZF2)
 ## Sprint 3 Plan
 - [ ] Schedule
 - [x] Check my profile (Sun)
-- [ ] Edit my profile (Sun)
-    - [x] Edit texts
-    - [x] Choose photos from system Album - need tests
-    - [x] Upload fields to firebase
-    - [ ] small bugs
+- [x] Edit my profile (Sun)
 - [x] Create an Image Selector (Sun)
 - [ ] Send Image
 - [ ] Group Chat
@@ -88,5 +84,6 @@ You can find our UI demo on [Ninja Mock](https://ninjamock.com/s/5FZF2)
 RoseChat tries to be as [KISS](https://en.wikipedia.org/wiki/KISS_principle) as possible
 
 ## Thanks
-- Thanks for [天宇工作室 ittianyu.com](https://github.com/ittianyu/BottomNavigationViewEx)
-- Thanks for [hdante](https://stackoverflow.com/users/1797000/hdante)
+- Thanks to [天宇工作室 ittianyu.com](https://github.com/ittianyu/BottomNavigationViewEx)
+- Thanks to [hdante](https://stackoverflow.com/users/1797000/hdante)
+- Thanks to [Picasso by Square](https://square.github.io/picasso/)

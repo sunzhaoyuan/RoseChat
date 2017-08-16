@@ -21,7 +21,7 @@ import edu.rosehulman.sunz1.rosechat.models.Contact;
 // * to handle interaction events.
 // */
 public class ContactsFragment extends Fragment {
-//
+    //
 //    private OnFragmentInteractionListener mListener;
 //
     Callback mCallback;
@@ -36,7 +36,7 @@ public class ContactsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        RecyclerView view = (RecyclerView)inflater.inflate(R.layout.fragment_contacts, container, false);
+        RecyclerView view = (RecyclerView) inflater.inflate(R.layout.fragment_contacts, container, false);
 //        mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         final LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         view.setLayoutManager(mLayoutManager);
@@ -44,7 +44,8 @@ public class ContactsFragment extends Fragment {
         view.setAdapter(mAdapter);
         return view;
     }
-//
+
+    //
 //    // TODO: Rename method, update argument and hook method into UI event
 //    public void onButtonPressed(Uri uri) {
 //        if (mListener != null) {
@@ -52,16 +53,16 @@ public class ContactsFragment extends Fragment {
 //        }
 //    }
 //
-@Override
-public void onAttach(Context context) {
-    super.onAttach(context);
-    if (context instanceof ContactsFragment.Callback) {
-        mCallback = (ContactsFragment.Callback) context;
-    } else {
-        throw new RuntimeException(context.toString()
-                + " must implement Callback");
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof ContactsFragment.Callback) {
+            mCallback = (ContactsFragment.Callback) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement Callback");
+        }
     }
-}
 
     @Override
     public void onDetach() {
