@@ -11,9 +11,9 @@
 * [Thanks](https://github.com/sunzhaoyuan/RoseChatApp#thanks)
 
 ## Summary
-After two years in Rose-Hulman, we have noticed one of the biggest problems of group activities and projects is declaring a good means of communication. Some students do not want a Facebook account so they cannot access Facebook messenger, and some students do not want to download GroupMe or WhatsApp because of each application's shortcomings. By creating RoseChat, we hope to establish a means of communication for all Rose-Hulman students that is easy to access (on the phone), memory efficient (only useful features), and private. Additionally, in order to make sure all users are able to use this, it is critical that the this chat is inclusive of people who do not speak English natively.     
+After two years in Rose-Hulman, we have noticed one of the biggest problems of group activities and projects is declaring a good means of communication. Some students do not want a Facebook account so they cannot access Facebook messenger, and some students do not want to download GroupMe or WhatsApp because of each application's shortcomings. By creating RoseChat, we hope to establish a means of communication for all Rose-Hulman students that is easy to access (on the phone), memory efficient (only useful features), and private. Additionally, in order to make sure all users are able to use this, it is critical that this chat is inclusive of people who do not speak English natively.     
  
-Ultimately, the application core function is to allow students/professors to chat amongst themselves. From there we will try to add more features to the application (they can be found in Preliminary Requirements). The long term goal for this application is to make Rose-Hulman suggest teachers and students (especially incoming freshmen, since they are most likely) to download this app so everyone will have this app ready from the start of their Rose career, similar to the laptops that students have to buy; however, this would mean that we need to develop another iteration of this application that is available for IOS users.
+Ultimately, the application core function is to allow students/professors to chat amongst themselves. From there we will try to add more features to the application (they can be found in Preliminary Requirements). The long term goal for this application is to make Rose-Hulman suggest teachers and students (especially incoming freshmen, since they are most likely) to download this app so everyone will have this app ready from the start of their Rose career.
 
 ## Preliminary Requirements
 - [x] Allow users to send messages to each other.
@@ -29,7 +29,7 @@ Ultimately, the application core function is to allow students/professors to cha
     * Schedule (should have an option to hide)
     * Office hours/office location (for teachers)
 - [ ] Allow students to voice call.
-- [ ] \(Potentially\) have a translation dictionary avaliable.
+- [ ] Have a translation dictionary avaliable.
 
 ## Screen Mock
 You can find our UI demo on [Ninja Mock](https://ninjamock.com/s/5FZF2) 
@@ -56,26 +56,21 @@ You can find our UI demo on [Ninja Mock](https://ninjamock.com/s/5FZF2)
 
 ## Sprint 2 Plan
 - [x] Complete the Chat function (Sun)
-- [ ] Be able to add new chat (Together) (Update: UI Complete - Abu)
-- [ ] Invitation, add contacts (Abu)
+- [x] Be able to add new chat (Abu)
+- [x] Invitation, add contacts (Abu)
 - [x] Log in with RoseFire (Sun)
 - [x] Log out (Sun)
 - [x] Check others' profiles (Sun)
 - [x] Connect UI completely (Abu) 
-    - [x] Set up ViewPager (the issue #5)
-    - [x] Issue #15
-    - [x] Issue #17
-- [ ] Notification system (Abu) (Update: could be tested - Sun)
-- [x] Delete account (Abu) (Update: Not part of the orignal sprint plan)
+- [ ] Notification system (Abu)
+- [x] Delete account (Abu)
  
 ## Sprint 3 Plan
-- [ ] Schedule
 - [x] Check my profile (Sun)
 - [x] Edit my profile (Sun)
 - [x] Create an Image Selector (Sun)
 - [ ] Send Image
 - [ ] Group Chat
-- [ ] Notification in the Settings
 - [x] Get Contacts from FireBase (Abu)
 - [x] Get Messages from Firebase (Sun)
 - [x] Get Feedbacks from Users (Abu)
