@@ -4,9 +4,7 @@
 * [Summary](https://github.com/sunzhaoyuan/RoseChatApp#summary)
 * [Preliminary Requirements](https://github.com/sunzhaoyuan/RoseChatApp#preliminary-requirements)
 * [Screen Mock](https://github.com/sunzhaoyuan/RoseChatApp#screen-mock)
-* [Sprint 1 Plan](https://github.com/sunzhaoyuan/RoseChatApp#sprint-1-plan)
-* [Sprint 2 Plan](https://github.com/sunzhaoyuan/RoseChatApp#sprint-2-plan)
-* [Sprint 3 Plan](https://github.com/sunzhaoyuan/RoseChatApp#sprint-3-plan)
+* [Updates](https://github.com/sunzhaoyuan/RoseChatApp#updates)
 * [Also](https://github.com/sunzhaoyuan/RoseChatApp#also)
 * [Thanks](https://github.com/sunzhaoyuan/RoseChatApp#thanks)
 
@@ -34,46 +32,8 @@ Ultimately, the application core function is to allow students/professors to cha
 ## Screen Mock
 You can find our UI demo on [Ninja Mock](https://ninjamock.com/s/5FZF2) 
 
-## Sprint 1 Plan
-- [x] Learn how to use GitHub to do version control
-- [x] Finish all the XML for the key/primary parts of the app
-    - [x] Chat (Sun)
-    - [x] Message (Abu)
-    - [x] Contact (Abu)
-    - [x] Login (Sun)
-    - [x] NewChat (Abu)
-    - [x] NewContact (Abu)
-    - [x] ViewProfile (Sun)
-    - [x] EditProfile (Sun)
-    - [x] Settings
-        - [x] Main Settings (Sun)
-        - [x] Notifications (Abu)
-        - [x] Feedbacks (Abu)
-        - [x] LogOut (Abu)
-        - [x] DeleteAccount (Abu)
-        - [x] Language (Sun)
-- [x] Do and write down some research on how to send messages to other users in real time
-
-## Sprint 2 Plan
-- [x] Complete the Chat function (Sun)
-- [x] Be able to add new chat (Abu)
-- [x] Invitation, add contacts (Abu)
-- [x] Log in with RoseFire (Sun)
-- [x] Log out (Sun)
-- [x] Check others' profiles (Sun)
-- [x] Connect UI completely (Abu) 
-- [ ] Notification system (Abu)
-- [x] Delete account (Abu)
- 
-## Sprint 3 Plan
-- [x] Check my profile (Sun)
-- [x] Edit my profile (Sun)
-- [x] Create an Image Selector (Sun)
-- [ ] Send Image
-- [ ] Group Chat
-- [x] Get Contacts from FireBase (Abu)
-- [x] Get Messages from Firebase (Sun)
-- [x] Get Feedbacks from Users (Abu)
+## Updates
+As the project is contineously being developed, my project group decided to move the whole database from FireBase to MS-SQL in order to have a better performance and restriction management. 
 
 ## Also
 RoseChat tries to be as [KISS](https://en.wikipedia.org/wiki/KISS_principle) as possible
