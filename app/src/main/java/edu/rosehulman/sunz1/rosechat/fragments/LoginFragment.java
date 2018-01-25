@@ -26,6 +26,10 @@ public class LoginFragment
     private View mProgressSpinner;
     private OnLoginListener mListener;
 
+    /*
+     * This chunk is for SQL connection
+     */
+
 
     public LoginFragment() {
         // Required empty public constructor

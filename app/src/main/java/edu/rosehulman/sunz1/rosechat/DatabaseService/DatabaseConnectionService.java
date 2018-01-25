@@ -11,8 +11,8 @@ import edu.rosehulman.sunz1.rosechat.utils.Constants;
 /**
  *
  * This class handles the database connection after login successfully.
- * This class applies the Singleton pattern because we only need
- * one DataBaseConnectionService ever.
+ * This class applies the Singleton pattern because we want to ensure
+ * there is only one DataBaseConnectionService ever.
  * Created by sun on 1/24/18.
  */
 
@@ -63,5 +63,6 @@ public class DatabaseConnectionService {
     }
 
 
+    public Connection getConnection () { return this.connection; }
 
 }
