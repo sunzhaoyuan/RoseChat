@@ -16,7 +16,9 @@ import edu.rosehulman.sunz1.rosechat.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class LoginFragment extends Fragment implements View.OnClickListener{
+public class LoginFragment
+        extends Fragment
+        implements View.OnClickListener{
 
     private Button mLoginBtn;
 //    private Button mLoginBtnTest;

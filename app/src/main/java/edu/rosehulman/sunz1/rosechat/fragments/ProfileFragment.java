@@ -34,7 +34,9 @@ import edu.rosehulman.sunz1.rosechat.models.Contact;
 import edu.rosehulman.sunz1.rosechat.utils.Constants;
 import edu.rosehulman.sunz1.rosechat.utils.SharedPreferencesUtils;
 
-public class ProfileFragment extends Fragment implements View.OnClickListener {
+public class ProfileFragment
+        extends Fragment
+        implements View.OnClickListener {
 
     private TextView mEdit;
     private ImageView mProfileImg;
@@ -136,7 +138,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
+
         bindViews(view);
+
         if (!SharedPreferencesUtils.getCurrentUser(getContext()).equals(getArguments().getString(Constants.PROF_NEW_UID))) {
             Log.d(Constants.TAG_PROFILE, "Current user: " + SharedPreferencesUtils.getCurrentUser(getContext())
                     + "\nmCurrentUID: " + mCurrentUID);

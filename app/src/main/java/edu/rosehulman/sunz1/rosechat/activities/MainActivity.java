@@ -71,6 +71,11 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         }
     }
 
+    /**
+     * When create MainActivity, we set three main fragments which are in the PageViewer
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -372,6 +377,9 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     }
     //ViewPager OnPageChange Listener: ENDS
 
+    /**
+     * For the startActivity callback in LoginFragment
+     */
     public static void startActivity(Context context) {
         Intent intent = new Intent(context, MainActivity.class);
         context.startActivity(intent);

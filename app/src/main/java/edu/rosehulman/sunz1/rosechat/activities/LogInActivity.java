@@ -73,6 +73,10 @@ public class LogInActivity extends AppCompatActivity implements LoginFragment.On
         startActivityForResult(signInIntent, RC_ROSEFIRE_LOGIN);
     }
 
+    /**
+     * After login successfully, we store the current user into SharedPreferencesUtils
+     * and switch the activity to MainActivity
+     */
     private void initializeListeners() {
         Log.d(TAG, "initialize listeners");
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
@@ -80,8 +84,9 @@ public class LogInActivity extends AppCompatActivity implements LoginFragment.On
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 Log.d(TAG, "User: " + user);
-                if (user != null) {
+                if (user != null) { //log in successfully
                     SharedPreferencesUtils.setCurrentUser(getApplicationContext(), user.getUid());
+
                     switchToMainActivity();
                 } else {
 //                    switchToLoginActivity();

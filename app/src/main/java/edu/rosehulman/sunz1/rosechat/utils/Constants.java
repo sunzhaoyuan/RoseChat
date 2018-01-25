@@ -37,6 +37,7 @@ public class Constants {
     // For the SharedPreferences
     public static final String PREFS = "PREFS";
     public static final String UID_KEY = "UID_KEY";
+    public static final String DB_CON_KEY = "DB_CON_KEY";
 
     // For TAGs
     public static final String TAG = MainActivity.class.getName();
@@ -45,5 +46,9 @@ public class Constants {
     public static final String TAG_PROFILE = "profile_test";
     public static final String TAG_MESSAGE  = "message_test";
     public static final String TAG_CHAT_ADAPTER = "chatAdapter_test";
+    public static final String TAG_LOGIN = "login_test";
 
+    // For Database
+    public static final String DB_ServerName = "golem.csse.rose-hulman.edu";
+    public static final String DB_DatabaseName = "RoseChat";
 }

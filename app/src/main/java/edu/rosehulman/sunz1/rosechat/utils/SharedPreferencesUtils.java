@@ -29,4 +29,11 @@ public class SharedPreferencesUtils {
         editor.remove(Constants.UID_KEY);
         editor.apply();
     }
+
+//    public static DatabaseConnectionService getDatabaseConnectionService(Context context) {
+//        SharedPreferences prefs = context.getSharedPreferences(Constants.PREFS, Activity.MODE_PRIVATE);
+//        SharedPreferences.Editor editor = prefs.edit();
+//        return prefs
+//    }
+
 }
