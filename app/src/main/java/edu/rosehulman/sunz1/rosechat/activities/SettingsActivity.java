@@ -3,6 +3,7 @@ package edu.rosehulman.sunz1.rosechat.activities;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -15,7 +16,12 @@ import android.widget.Button;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
 import edu.rosehulman.sunz1.rosechat.R;
+import edu.rosehulman.sunz1.rosechat.SQLService.DatabaseConnectionService;
 import edu.rosehulman.sunz1.rosechat.fragments.FeedbackSettingsFragment;
 import edu.rosehulman.sunz1.rosechat.utils.SharedPreferencesUtils;
 
@@ -144,10 +150,29 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
 
     private void deleteAccount() {
-        FirebaseUser user = mAuth.getCurrentUser();
-        SharedPreferencesUtils.removeCurrentUser(getApplicationContext());
-        assert user != null;
-        user.delete();
+//        FirebaseUser user = mAuth.getCurrentUser();
+//        SharedPreferencesUtils.removeCurrentUser(getApplicationContext());
+//        assert user != null;
+//        user.delete();
+        mAuth.signOut(); //TODO: need improved
+        new DeleteAccountTask().execute();
+    }
+
+    private class DeleteAccountTask extends AsyncTask<String, String, String>{
+
+        protected  String doInBackground(String... str) {
+            DatabaseConnectionService service = DatabaseConnectionService.getInstance();
+            Connection connection = service.getConnection(); // should not be null
+            String query = "delete from [User] where UID = ?";
+            try {
+                PreparedStatement stmt = connection.prepareStatement(query);
+                stmt.setString(1, SharedPreferencesUtils.getCurrentUser(getApplicationContext()));
+                stmt.executeQuery();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
     }
 
     private void deleteAccountConfirmationDialog() {
