@@ -13,12 +13,19 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.sql.Connection;
+
 import edu.rosehulman.rosefire.Rosefire;
 import edu.rosehulman.rosefire.RosefireResult;
 import edu.rosehulman.sunz1.rosechat.R;
+import edu.rosehulman.sunz1.rosechat.SQLService.DatabaseConnectionService;
 import edu.rosehulman.sunz1.rosechat.fragments.LoginFragment;
 import edu.rosehulman.sunz1.rosechat.utils.SharedPreferencesUtils;
 
+/**
+ * This class provides support for LogIn
+ *
+ */
 public class LogInActivity extends AppCompatActivity implements LoginFragment.OnLoginListener{
     private static final String TAG = "Login";
     private static final int RC_ROSEFIRE_LOGIN = 1;
@@ -28,6 +35,12 @@ public class LogInActivity extends AppCompatActivity implements LoginFragment.On
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     private OnCompleteListener mOnCompleteListener;
 
+    /*
+     * This chunk is for SQL connection
+     */
+    private DatabaseConnectionService dbConSer;
+    private Connection mDBConnection;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +48,17 @@ public class LogInActivity extends AppCompatActivity implements LoginFragment.On
         initializeFragment();
 
         mAuth = FirebaseAuth.getInstance();
+
+        dbConSer = DatabaseConnectionService.getInstance();
+        dbConSer.connect();
+        mDBConnection = dbConSer.getConnection();
+
+//        dbConnectionService.connect(); //connect to sql db
+
         initializeListeners();
+
+//        dbConnectionService = DatabaseConnectionService.getInstance();
+//        this.mDBConnection = dbConnectionService.getConnection();
 
     }
 
@@ -86,7 +109,6 @@ public class LogInActivity extends AppCompatActivity implements LoginFragment.On
                 Log.d(TAG, "User: " + user);
                 if (user != null) { //log in successfully
                     SharedPreferencesUtils.setCurrentUser(getApplicationContext(), user.getUid());
-
                     switchToMainActivity();
                 } else {
 //                    switchToLoginActivity();

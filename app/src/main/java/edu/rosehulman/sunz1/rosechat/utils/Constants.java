@@ -51,4 +51,6 @@ public class Constants {
     // For Database
     public static final String DB_ServerName = "golem.csse.rose-hulman.edu";
     public static final String DB_DatabaseName = "RoseChat";
+    public static final String DB_ServerUsername = "RCClient";
+    public static final String DB_ServerPassword = "RCClient123";
 }
