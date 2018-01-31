@@ -6,15 +6,11 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
-
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -27,14 +23,21 @@ import edu.rosehulman.sunz1.rosechat.utils.SharedPreferencesUtils;
 
 public class SettingsActivity extends AppCompatActivity implements View.OnClickListener{
 
+    //TODO: sync with DB server
+
+    public static boolean NOTIFICATIONS = true;
+
     private Button mButtonLanguage;
     private Button mButtonLogOut;
     private Button mButtonFeedback;
     private Button mButtonDeleteAccount;
-    public static boolean NOTIFICATIONS = true;
-    private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener mAuthStateListener;
+
+//    private FirebaseAuth mAuth;
+//    private FirebaseAuth.AuthStateListener mAuthStateListener;
 //    private OnLogoutListener mLogoutListener;
+
+    DatabaseConnectionService service;
+    Connection connection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,35 +54,38 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         mButtonLanguage.setOnClickListener(this);
         mButtonLogOut.setOnClickListener(this);
 
-        mAuth = FirebaseAuth.getInstance();
-        initializeListener();
+        service = DatabaseConnectionService.getInstance();
+        Connection connection = service.getConnection();
+
+//        mAuth = FirebaseAuth.getInstance();
+//        initializeListener();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        mAuth.addAuthStateListener(mAuthStateListener);
+//        mAuth.addAuthStateListener(mAuthStateListener);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        mAuth.removeAuthStateListener(mAuthStateListener);
+//        mAuth.removeAuthStateListener(mAuthStateListener);
     }
 
-    private void initializeListener() {
-        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    // empty
-                } else {
-                    LogInActivity.startActivity(SettingsActivity.this);
-                }
-            }
-        };
-    }
+//    private void initializeListener() {
+//        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
+//            @Override
+//            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+//                FirebaseUser user = firebaseAuth.getCurrentUser();
+//                if (user != null) {
+//                    // empty
+//                } else {
+//                    LogInActivity.startActivity(SettingsActivity.this);
+//                }
+//            }
+//        };
+//    }
 
     @Override
     public void onClick(View v) {
@@ -145,7 +151,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
     private void logOut() {
         SharedPreferencesUtils.removeCurrentUser(getApplicationContext());
-        mAuth.signOut();
+//        mAuth.signOut();
+        //TODO: how do we log out in this case?
     }
 
 
@@ -154,15 +161,13 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 //        SharedPreferencesUtils.removeCurrentUser(getApplicationContext());
 //        assert user != null;
 //        user.delete();
-        mAuth.signOut(); //TODO: need improved
+//        mAuth.signOut(); //TODO: need improved
         new DeleteAccountTask().execute();
     }
 
     private class DeleteAccountTask extends AsyncTask<String, String, String>{
 
         protected  String doInBackground(String... str) {
-            DatabaseConnectionService service = DatabaseConnectionService.getInstance();
-            Connection connection = service.getConnection(); // should not be null
             String query = "delete from [User] where UID = ?";
             try {
                 PreparedStatement stmt = connection.prepareStatement(query);
@@ -171,6 +176,14 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+            return null;
+        }
+    }
+
+    //TODO: does it do its job?
+    private class SyncSettingTask extends AsyncTask<String, String, String> {
+
+        protected String doInBackground(String... str) {
             return null;
         }
     }
