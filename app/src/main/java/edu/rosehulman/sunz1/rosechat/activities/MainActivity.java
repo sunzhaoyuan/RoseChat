@@ -32,7 +32,6 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Types;
 import java.util.HashMap;
 
@@ -65,9 +64,9 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     /**
      * For SQL
      */
-    private DatabaseConnectionService dbConSer;
+//    private DatabaseConnectionService dbConSer;
     private Connection mDBConnection;
-    private Statement stmt;
+//    private Statement stmt;
 
     private HashMap<Integer, Integer> mTitlesMap = new HashMap<Integer, Integer>() {{
         put(R.id.navigation_message, R.string.navi_message);
@@ -140,25 +139,22 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         mFragmentMain = new MessageFragment();
         setTitle(R.id.navigation_message);
 
-        initConnection();
+//        initConnection();
 //        setupProfileHandler();
+        mDBConnection = DatabaseConnectionService.getInstance().getConnection();
         setupProfile();
     }
 
-    private void initConnection() {
-        dbConSer = DatabaseConnectionService.getInstance();
-
-            if (mDBConnection == null) {
-                Log.d(DEBUG_KEY, "Connection null");
-                dbConSer.connect();
-            } else {
-                Log.d(DEBUG_KEY, "Connection created");
-            }
-            mDBConnection = dbConSer.getConnection();
-//            while (mDBConnection == null) {
-//                // wait until it's connencted
-//            }
-    }
+//    private void initConnection() {
+//
+//        if (mDBConnection == null) {
+//            Log.d(DEBUG_KEY, "Connection null");
+//            dbConSer.connect();
+//        } else {
+//            Log.d(DEBUG_KEY, "Connection created");
+//        }
+//        mDBConnection = dbConSer.getConnection();
+//    }
 
     /**
      * it only creates a contact if there is no contact for this user existed
@@ -235,7 +231,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                 cs.registerOutParameter(1, Types.INTEGER);
                 cs.execute();
                 int out = cs.getInt(1);
-                Log.d(DEBUG_KEY,out+"wo gan");
+                Log.d(DEBUG_KEY, out + "wo gan");
 
 
             } catch (SQLException e) {
@@ -252,7 +248,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
         }
     }
-
 
 
     @Override
@@ -421,7 +416,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         getSupportActionBar().setTitle(title);
     }
 
-    public void setTitle(String title){
+    public void setTitle(String title) {
         getSupportActionBar().setTitle(title);
     }
 

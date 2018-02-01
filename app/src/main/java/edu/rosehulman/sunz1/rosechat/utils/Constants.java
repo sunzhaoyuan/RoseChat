@@ -47,6 +47,7 @@ public class Constants {
     public static final String TAG_MESSAGE  = "message_test";
     public static final String TAG_CHAT_ADAPTER = "chatAdapter_test";
     public static final String TAG_LOGIN = "login_test";
+    public static final String TAG_CONNECTION = "connection_test";
 
     // For Database
     public static final String DB_ServerName = "golem.csse.rose-hulman.edu";
