@@ -4,6 +4,8 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
@@ -13,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -37,6 +40,7 @@ import java.sql.Statement;
 import edu.rosehulman.sunz1.rosechat.R;
 import edu.rosehulman.sunz1.rosechat.SQLService.DatabaseConnectionService;
 import edu.rosehulman.sunz1.rosechat.activities.MainActivity;
+import edu.rosehulman.sunz1.rosechat.adapters.NavigationPagerAdapter;
 import edu.rosehulman.sunz1.rosechat.models.Contact;
 import edu.rosehulman.sunz1.rosechat.utils.Constants;
 import edu.rosehulman.sunz1.rosechat.utils.SharedPreferencesUtils;
@@ -60,6 +64,9 @@ public class ProfileFragment
     private String email;
     private String phone;
     private String avatarURL;
+    private Handler mHandler;
+    private Thread refreshThread;
+    private NavigationPagerAdapter adapter;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -73,15 +80,42 @@ public class ProfileFragment
         return fragment;
     }
 
+    public void setAdapter(NavigationPagerAdapter adapter){
+        this.adapter = adapter;
+    }
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         init();
 //        profileHandler();
-
+        mHandler = new Handler(Looper.getMainLooper());
+        refreshThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (!Thread.interrupted()) {
+                    profileViewerTask task = new profileViewerTask();
+                    task.execute(mCurrentUID);
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if(adapter!=null){
+                                adapter.notifyDataSetChanged();
+                            }
+                        }
+                    });
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+        refreshThread.start();
     }
 
-//    @Override
+    //    @Override
 //    public void getStringArray(String[] texts) {
 //        mNickNameTxt.setText(texts[0]);
 //        mEmailTxt.setText(texts[1]);
@@ -91,7 +125,7 @@ public class ProfileFragment
 //                .into(mProfileImg);
 //    }
 
-    private  class profileViewerTask extends AsyncTask<String, String, String[]> {
+    private class profileViewerTask extends AsyncTask<String, String, String[]> {
 
         private String[] result;
 //        private ResultCallback callback = null;
@@ -115,8 +149,8 @@ public class ProfileFragment
                 rs.next();
                 nickName = rs.getString("NickName");
                 email = rs.getString("Email");
-                 phone = rs.getString("Phone");
-                 avatarURL = rs.getString("AvatarURL");
+                phone = rs.getString("Phone");
+                avatarURL = rs.getString("AvatarURL");
 
                 result = new String[]{nickName, email, phone, avatarURL};
 
@@ -227,9 +261,6 @@ public class ProfileFragment
 
         // get all data from sql server
 
-        profileViewerTask task = new profileViewerTask();
-//        task.callback = this;
-        task.execute(mCurrentUID);
 //        String[] texts = task.getResult();
 
 //        mNickNameTxt.setText(nickName);
@@ -260,7 +291,7 @@ public class ProfileFragment
                     mEmailTxt.getText().toString(),
                     mNickNameTxt.getText().toString(),
                     mPhoneTxt.getText().toString(),
-        ""
+                    ""
 //                    mFireBaseContact.getProfilePicUrl()
             );
             transaction.addToBackStack("edit");

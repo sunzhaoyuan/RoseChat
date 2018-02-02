@@ -283,7 +283,83 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         }
     }
 
+    private class Indicator {
+        int result = -1;
+    }
+
+    private Indicator indicator;
+
+    private class AddContactTask extends AsyncTask<String, String, Integer> {
+
+        @Override
+        protected Integer doInBackground(String... strings) {
+            try {
+                CallableStatement cs = mDBConnection.prepareCall("{? = call Friend_Invite(?, ?)}");
+                cs.registerOutParameter(1, Types.INTEGER);
+                cs.setString(2, strings[0]);
+                cs.setString(3, strings[1]);
+                cs.execute();
+                int result = cs.getInt(1);
+                indicator.result = result;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return 0;
+        }
+    }
+
     private void addContact() {
+        final AlertDialog.Builder mBuilder = new AlertDialog.Builder(MainActivity.this);
+        View mView = getLayoutInflater().inflate(R.layout.dialog_add_contact, null);
+        final EditText mEmail = (EditText) mView.findViewById(R.id.add_contact_email);
+        final EditText mMessage = (EditText) mView.findViewById(R.id.add_contact_message);
+        mBuilder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // This is overwritten
+            }
+        });
+        mBuilder.setNegativeButton(android.R.string.cancel, null);
+        mBuilder.setView(mView);
+        final AlertDialog dialog = mBuilder.create();
+        dialog.show();
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String user = mEmail.getText().toString();
+                String message = mMessage.getText().toString();
+                if (user.isEmpty()) {
+                    Toast.makeText(MainActivity.this, "Rose ID cannot be empty", Toast.LENGTH_LONG).show();
+                } else {
+                    indicator = new Indicator();
+                    new AddContactTask().execute(SharedPreferencesUtils.getCurrentUser(getApplicationContext()), user);
+                    while (indicator.result == -1) {
+                        try {
+                            Thread.sleep(200);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    if (indicator.result == 0) {
+                        Toast.makeText(MainActivity.this, "Invitation sent successfully.", Toast.LENGTH_LONG).show();
+                        dialog.dismiss();
+                    } else {
+                        switch (indicator.result) {
+                            case 2:
+                                Toast.makeText(MainActivity.this, "User does not exist.", Toast.LENGTH_LONG).show();
+                                break;
+                            case 1:
+                                Toast.makeText(MainActivity.this, "You are already friends.", Toast.LENGTH_LONG).show();
+                                break;
+                        }
+                    }
+                }
+            }
+        });
+
+    }
+
+    /*private void addContact() {
         final AlertDialog.Builder mBuilder = new AlertDialog.Builder(MainActivity.this);
         View mView = getLayoutInflater().inflate(R.layout.dialog_add_contact, null);
         final EditText mEmail = (EditText) mView.findViewById(R.id.add_contact_email);
@@ -380,7 +456,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                 }
             }
         });
-    }
+    }*/
 
     private void sendInvite(String mEmail, String mMessage, String user) {
         DatabaseReference mUserInvitationRef = FirebaseDatabase.getInstance().getReference().child("invitations/" + user + "/" + mEmail);
@@ -398,11 +474,15 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         return false;
     }
 
+    NavigationPagerAdapter adapter;
+
     public void setupViewPager(ViewPager viewPager) {
-        NavigationPagerAdapter adapter = new NavigationPagerAdapter(getSupportFragmentManager());
+        adapter = new NavigationPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new MessageFragment(), getTitle(R.id.navigation_message));
         adapter.addFragment(new ContactsFragment(), getTitle(R.id.navigation_contact));
-        adapter.addFragment(ProfileFragment.newInstance(SharedPreferencesUtils.getCurrentUser(getApplicationContext())), getTitle(R.id.navigation_profile));
+        ProfileFragment frag = ProfileFragment.newInstance(SharedPreferencesUtils.getCurrentUser(getApplicationContext()));
+        adapter.addFragment(frag, getTitle(R.id.navigation_profile));
+        frag.setAdapter(adapter);
         viewPager.setAdapter(adapter);
     }
 
