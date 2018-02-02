@@ -3,6 +3,7 @@ package edu.rosehulman.sunz1.rosechat.activities;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -27,9 +28,15 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Types;
 import java.util.HashMap;
 
 import edu.rosehulman.sunz1.rosechat.R;
+import edu.rosehulman.sunz1.rosechat.SQLService.DatabaseConnectionService;
 import edu.rosehulman.sunz1.rosechat.adapters.NavigationPagerAdapter;
 import edu.rosehulman.sunz1.rosechat.fragments.ContactsFragment;
 import edu.rosehulman.sunz1.rosechat.fragments.MessageFragment;
@@ -53,6 +60,13 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     private BottomNavigationViewEx mNavigation;
     private BottomNavigationView mBottomNavigationView;
     private Contact mContact;
+
+    /**
+     * For SQL
+     */
+//    private DatabaseConnectionService dbConSer;
+    private Connection mDBConnection;
+//    private Statement stmt;
 
     private HashMap<Integer, Integer> mTitlesMap = new HashMap<Integer, Integer>() {{
         put(R.id.navigation_message, R.string.navi_message);
@@ -125,9 +139,22 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         mFragmentMain = new MessageFragment();
         setTitle(R.id.navigation_message);
 
-        setupProfileHandler();
+//        initConnection();
+//        setupProfileHandler();
+        mDBConnection = DatabaseConnectionService.getInstance().getConnection();
+        setupProfile();
     }
 
+//    private void initConnection() {
+//
+//        if (mDBConnection == null) {
+//            Log.d(DEBUG_KEY, "Connection null");
+//            dbConSer.connect();
+//        } else {
+//            Log.d(DEBUG_KEY, "Connection created");
+//        }
+//        mDBConnection = dbConSer.getConnection();
+//    }
 
     /**
      * it only creates a contact if there is no contact for this user existed
@@ -170,6 +197,58 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
             }
         });
     }
+
+
+    /**
+     * If we have current user in the DB, we get its data from User table.
+     * If we don't have current user, we call CreateUser procedure and create one.
+     */
+    private void setupProfile() {
+        new NetworkTask().execute();
+    }
+
+    private class NetworkTask extends AsyncTask<String, Integer, ResultSet> {
+
+        protected ResultSet doInBackground(String... params) {
+
+            String UID = SharedPreferencesUtils.getCurrentUser(MainActivity.this.getApplicationContext());
+            try {
+                String uid = "";
+
+                //we need to create current user
+                CallableStatement cs = null;
+                String defaultNickName = UID;
+                String defaultEmail = UID + "@rose-hulman.edu";
+                String defaultPhone = getString(R.string.profile_sample_phone_number);
+                String defaultAvatarURL = "https://firebasestorage.googleapis.com/v0/b/rosechat-64ae9.appspot.com/o/profile_pics%2Fdefault.png?alt=media&token=2cc54fe8-da2f-49f9-ab18-0ef0d2e8fea6";
+
+                cs = MainActivity.this.mDBConnection.prepareCall("{?=call CreateUser(?, ?, ?, ?, ?)}");
+                cs.setString(2, UID);
+                cs.setString(3, defaultNickName);
+                cs.setString(4, defaultPhone);
+                cs.setString(5, defaultEmail);
+                cs.setString(6, defaultAvatarURL);
+                cs.registerOutParameter(1, Types.INTEGER);
+                cs.execute();
+                int out = cs.getInt(1);
+                Log.d(DEBUG_KEY, out + "wo gan");
+
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        protected void onProgressUpdate(Integer... progress) {
+
+        }
+
+        protected void onPostExecute(ResultSet rs) {
+
+        }
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -337,7 +416,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         getSupportActionBar().setTitle(title);
     }
 
-    public void setTitle(String title){
+    public void setTitle(String title) {
         getSupportActionBar().setTitle(title);
     }
 
