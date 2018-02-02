@@ -48,7 +48,6 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
         user = mAuth.getCurrentUser();
         mFriendsRef = FirebaseDatabase.getInstance().getReference().child("friends/" + user.getUid());
         mFriendsRef.addChildEventListener(new ContactsChildEventListener());
-        Log.d(DEBUG_KEY, "laaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
         Log.d(DEBUG_KEY, user.getUid());
 //        addContact("temp");
     }

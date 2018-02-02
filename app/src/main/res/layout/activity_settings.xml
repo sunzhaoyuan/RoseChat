@@ -64,4 +64,18 @@
         tools:ignore="RtlCompat"
         tools:targetApi="jelly_bean" />
 
+    <Button
+        android:id="@+id/button_settings_Font"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/background_light"
+        android:fontFamily="sans"
+        android:padding="10dp"
+        android:text="@string/font"
+        android:textAlignment="textStart"
+        android:textAllCaps="false"
+        android:textSize="20sp"
+        tools:ignore="RtlCompat"
+        tools:targetApi="jelly_bean" />
+
 </LinearLayout>
