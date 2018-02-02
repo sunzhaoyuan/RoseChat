@@ -18,8 +18,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -283,6 +281,31 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         }
     }
 
+    private class Indicator {
+        int result = -1;
+    }
+
+    private Indicator indicator;
+
+    private class AddContactTask extends AsyncTask<String, String, Integer> {
+
+        @Override
+        protected Integer doInBackground(String... strings) {
+            try {
+                CallableStatement cs = mDBConnection.prepareCall("{? = call Friend_Invite(?, ?)}");
+                cs.registerOutParameter(1, Types.INTEGER);
+                cs.setString(2, strings[0]);
+                cs.setString(3, strings[1]);
+                cs.execute();
+                int result = cs.getInt(1);
+                indicator.result = result;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return 0;
+        }
+    }
+
     private void addContact() {
         final AlertDialog.Builder mBuilder = new AlertDialog.Builder(MainActivity.this);
         View mView = getLayoutInflater().inflate(R.layout.dialog_add_contact, null);
@@ -294,7 +317,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                 // This is overwritten
             }
         });
-
         mBuilder.setNegativeButton(android.R.string.cancel, null);
         mBuilder.setView(mView);
         final AlertDialog dialog = mBuilder.create();
@@ -302,84 +324,37 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Boolean wantToCloseDialog = false;
-                if (!mEmail.getText().toString().isEmpty() && !mMessage.getText().toString().isEmpty()) {
-                    final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                    final DatabaseReference mFriendsRef = FirebaseDatabase.getInstance().getReference().child("friends/" + user.getUid());
-                    mFriendsRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            if (dataSnapshot.hasChild(mEmail.getText().toString()) && dataSnapshot.child(mEmail.getText().toString()).getValue().equals(true)) {
-                                Toast.makeText(MainActivity.this, R.string.error_add_contact_existing_contact, Toast.LENGTH_LONG).show();
-                            } else if (dataSnapshot.hasChild(mEmail.getText().toString()) && dataSnapshot.child(mEmail.getText().toString()).getValue().equals(false)) {
-                                DatabaseReference mUserInvitationRef = FirebaseDatabase.getInstance().getReference().child("invitations/" + user.getUid());
-                                mUserInvitationRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(DataSnapshot dataSnapshot) {
-                                        if (dataSnapshot.hasChild(mEmail.getText().toString())) {
-                                            dialog.dismiss();
-                                            Toast.makeText(MainActivity.this, "Invite already sent", Toast.LENGTH_LONG).show();
-                                        } else {
-                                            sendInvite(mEmail.getText().toString(), mMessage.getText().toString(), user.getUid());
-                                            dialog.dismiss();
-                                            Toast.makeText(MainActivity.this, R.string.successful_add_contact, Toast.LENGTH_LONG).show();
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onCancelled(DatabaseError databaseError) {
-
-                                    }
-                                });
-                            } else {
-                                DatabaseReference mContactRef = FirebaseDatabase.getInstance().getReference().child("contacts");
-                                mContactRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(DataSnapshot dataSnapshot) {
-                                        if (!dataSnapshot.hasChild(mEmail.getText().toString())) {
-                                            Toast.makeText(MainActivity.this, "User doesn't exist", Toast.LENGTH_LONG).show();
-                                        } else {
-                                            DatabaseReference mUserInvitationRef = FirebaseDatabase.getInstance().getReference().child("invitations/" + user.getUid());
-                                            mUserInvitationRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                                @Override
-                                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                                    if (dataSnapshot.hasChild(mEmail.getText().toString())) {
-                                                        dialog.dismiss();
-                                                        Toast.makeText(MainActivity.this, "Invite already sent", Toast.LENGTH_LONG).show();
-                                                    } else {
-                                                        sendInvite(mEmail.getText().toString(), mMessage.getText().toString(), user.getUid());
-                                                        dialog.dismiss();
-                                                        Toast.makeText(MainActivity.this, R.string.successful_add_contact, Toast.LENGTH_LONG).show();
-                                                    }
-                                                }
-
-                                                @Override
-                                                public void onCancelled(DatabaseError databaseError) {
-
-                                                }
-                                            });
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onCancelled(DatabaseError databaseError) {
-
-                                    }
-                                });
-                            }
-
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });//TODO: May want to put a more thorough checks e.g. does the email ID exist?
+                String user = mEmail.getText().toString();
+                String message = mMessage.getText().toString();
+                if (user.isEmpty()) {
+                    Toast.makeText(MainActivity.this, "Rose ID cannot be empty", Toast.LENGTH_LONG).show();
                 } else {
-                    Toast.makeText(MainActivity.this, R.string.error_add_contact_empty_field, Toast.LENGTH_LONG).show();
+                    indicator = new Indicator();
+                    new AddContactTask().execute(SharedPreferencesUtils.getCurrentUser(getApplicationContext()), user);
+                    while (indicator.result == -1) {
+                        try {
+                            Thread.sleep(200);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    if (indicator.result == 0) {
+                        Toast.makeText(MainActivity.this, "Invitation sent successfully.", Toast.LENGTH_LONG).show();
+                        dialog.dismiss();
+                    } else {
+                        switch (indicator.result) {
+                            case 2:
+                                Toast.makeText(MainActivity.this, "User does not exist.", Toast.LENGTH_LONG).show();
+                                break;
+                            case 1:
+                                Toast.makeText(MainActivity.this, "You are already friends.", Toast.LENGTH_LONG).show();
+                                break;
+                        }
+                    }
                 }
             }
         });
+
     }
 
     private void sendInvite(String mEmail, String mMessage, String user) {
@@ -398,11 +373,15 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         return false;
     }
 
+    NavigationPagerAdapter adapter;
+
     public void setupViewPager(ViewPager viewPager) {
-        NavigationPagerAdapter adapter = new NavigationPagerAdapter(getSupportFragmentManager());
+        adapter = new NavigationPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new MessageFragment(), getTitle(R.id.navigation_message));
         adapter.addFragment(new ContactsFragment(), getTitle(R.id.navigation_contact));
-        adapter.addFragment(ProfileFragment.newInstance(SharedPreferencesUtils.getCurrentUser(getApplicationContext())), getTitle(R.id.navigation_profile));
+        ProfileFragment frag = ProfileFragment.newInstance(SharedPreferencesUtils.getCurrentUser(getApplicationContext()));
+        adapter.addFragment(frag, getTitle(R.id.navigation_profile));
+        frag.setAdapter(adapter);
         viewPager.setAdapter(adapter);
     }
 

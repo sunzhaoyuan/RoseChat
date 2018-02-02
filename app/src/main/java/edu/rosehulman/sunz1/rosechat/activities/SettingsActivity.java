@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
@@ -22,13 +23,15 @@ import com.google.firebase.auth.FirebaseUser;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Types;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import edu.rosehulman.sunz1.rosechat.R;
 import edu.rosehulman.sunz1.rosechat.SQLService.DatabaseConnectionService;
 import edu.rosehulman.sunz1.rosechat.fragments.FeedbackSettingsFragment;
+import edu.rosehulman.sunz1.rosechat.utils.Constants;
 import edu.rosehulman.sunz1.rosechat.utils.SharedPreferencesUtils;
 
 public class SettingsActivity extends AppCompatActivity implements View.OnClickListener {
@@ -44,6 +47,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     private Button mButtonFontSize;
     private Button mButtonFontFamily;
     private View mProcessBar;
+    private Handler mHandler;
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
@@ -52,7 +56,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     private DatabaseConnectionService mConService;
     private Connection mConnection;
 
-    private ArrayList<String> mSettingsArray; //store all settings here
+    private ArrayList<String> mSettingsArray; //0:UID 1:FontSize 2:FontFamily 3:FontLanguage 4:Notification
+    private boolean mIsFirstTimeReadServer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +70,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         mButtonLogOut = (Button) findViewById(R.id.button_settings_logOut);
         mButtonFontSize = (Button) findViewById(R.id.button_settings_fontsize);
         mButtonFontFamily = (Button) findViewById(R.id.button_settings_fontfamily);
-
 
         mButtonDeleteAccount.setOnClickListener(this);
         mButtonFeedback.setOnClickListener(this);
@@ -84,6 +88,32 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
         mProcessBar = findViewById(R.id.processbar_setting);
         mProcessBar.setVisibility(View.GONE);
+
+        mIsFirstTimeReadServer = true;
+
+        new SyncSettingTask().execute();
+
+        // reads server constantly
+//        mHandler = new Handler(Looper.getMainLooper());
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                while (!Thread.interrupted()) {
+//                    new SyncSettingTask().execute();
+//                    mHandler.post(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            // return to the main thread
+//                        }
+//                    });
+//                    try {
+//                        Thread.sleep(2000);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            }
+//        }).start();
     }
 
     @Override
@@ -113,11 +143,12 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     }
 
     @Override
-    public void onClick(View v) {
+    public void onClick(View v) { //mSettingsArray: {0:UID 1:FontSize 2:FontFamily 3:FontLanguage 4:Notification}
         int id = v.getId();
         switch (id) {
             case R.id.button_settings_Language:
-                switchLanguage();
+                mSettingsArray.set(3, switchLanguage()); //set language
+                new SyncSettingTask().execute();
                 return;
             case R.id.button_settings_logOut:
                 Log.d("setting", "logout clicked");
@@ -163,7 +194,10 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 //TODO:
-                                String sizeFactor = fontfamilyArray[which];
+                                String fontFamily = fontfamilyArray[which];
+                                mSettingsArray.set(2, fontFamily);
+                                Log.d(Constants.TAG_SETTING, "Set Font Size : " + mSettingsArray.get(2));
+                                new SyncSettingTask().execute();
 //                                mProcessBar.setVisibility(View.VISIBLE);
 //
 //                                mProcessBar.setVisibility(View.GONE);
@@ -183,12 +217,16 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             public Dialog onCreateDialog(Bundle savedInstanceState) {
                 Log.d("setting", "fontSize in dialog");
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                final String[] sizefactorArray = {"0.5", "1", "2"};
 
                 builder.setTitle("Pick a font size factor")
                         .setItems(R.array.fontsize_array, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                //TODO:
+                                String sizefactor = sizefactorArray[which];
+                                mSettingsArray.set(1, sizefactor);
+                                Log.d(Constants.TAG_SETTING, "Set Font Size : " + mSettingsArray.get(1));
+                                new SyncSettingTask().execute();
                             }
                         });
 
@@ -262,25 +300,40 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    //TODO: does it do its job?
+    //0:UID 1:FontSize 2:FontFamily 3:FontLanguage 4:Notification
     private class SyncSettingTask extends AsyncTask<String, String, String> {
 
         protected String doInBackground(String... str) {
             String UID = SharedPreferencesUtils.getCurrentUser(getApplicationContext());
             try {
 
-                //we need to create current user
                 CallableStatement cs = null;
 
-                cs = mConnection.prepareCall("{?=call SyncDisplaySettings(?, ?, ?, ?, ?)}");
-                cs.setString(2, UID); //@UID varchar(50)
-                cs.setInt(3, Integer.parseInt(mSettingsArray.get(2))); //@FontSize int
-                cs.setString(4, mSettingsArray.get(3)); //@FontFamily nvarchar(20)
-                cs.setString(5, mSettingsArray.get(4)); //@FontLanguage nvarchar(10)
-                cs.setInt(6, Integer.parseInt(mSettingsArray.get(5))); //@Notification bit
-                cs.registerOutParameter(1, Types.INTEGER);
-                cs.execute(); //add these data into db
-                int out = cs.getInt(1);
+                if (mSettingsArray.size() <= 0) { //if first time read, we add data into mSettingsArray
+                    Log.d(Constants.TAG_SETTING, "First Time in Async");
+                    mIsFirstTimeReadServer = false;
+                    cs = mConnection.prepareCall("{call GetAllSettings(?)}"); //@Fontsize int output, @FontFamily nvarchar(20) output, @Language nvarchar(20) output, @Notification bit output, @UID string input
+                    cs.setString(1, UID);
+                    cs.execute();
+                    ResultSet resultSet = cs.getResultSet();
+                    while (resultSet.next()) {
+                        mSettingsArray.add(0, UID);
+                        mSettingsArray.add(1, Integer.toString(resultSet.getInt("Fontsize")));
+                        mSettingsArray.add(2, resultSet.getString("FontFamily"));
+                        mSettingsArray.add(3, resultSet.getString("Language"));
+                        mSettingsArray.add(4, resultSet.getByte("Notification") + "");
+                    }
+                } else {
+                    Log.d(Constants.TAG_SETTING, "Not First Time in Async");
+                    //we need to create current user
+                    cs = mConnection.prepareCall("{call SyncDisplaySettings(?, ?, ?, ?, ?)}");
+                    cs.setString(1, UID); //@UID varchar(50)
+                    cs.setInt(2, Integer.parseInt(mSettingsArray.get(1))); //@FontSize int
+                    cs.setString(3, mSettingsArray.get(2)); //@FontFamily nvarchar(20)
+                    cs.setString(4, mSettingsArray.get(3)); //@FontLanguage nvarchar(10)
+                    cs.setInt(5, Integer.parseInt(mSettingsArray.get(4))); //@Notification bit
+                    cs.execute(); //add these data into db
+                }
 
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -305,8 +358,9 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         dialog.show();
     }
 
-    private void switchLanguage() {
+    private String switchLanguage() {
         Intent intent = new Intent(Settings.ACTION_LOCALE_SETTINGS);
         startActivity(intent);
+        return Locale.getDefault().getISO3Language();
     }
 }
