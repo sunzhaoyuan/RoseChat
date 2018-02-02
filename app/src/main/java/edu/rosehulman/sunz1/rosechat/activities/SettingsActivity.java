@@ -40,7 +40,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     private Button mButtonLogOut;
     private Button mButtonFeedback;
     private Button mButtonDeleteAccount;
-    private Button mButtonFont;
+    private Button mButtonFontSize;
+    private Button mButtonFontFamily;
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
@@ -58,13 +59,16 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         mButtonFeedback= (Button) findViewById(R.id.button_settings_feedback);
         mButtonLanguage = (Button) findViewById(R.id.button_settings_Language);
         mButtonLogOut= (Button) findViewById(R.id.button_settings_logOut);
-        mButtonFont = (Button) findViewById(R.id.button_settings_Font);
+        mButtonFontSize = (Button) findViewById(R.id.button_settings_fontsize);
+        mButtonFontFamily = (Button) findViewById(R.id.button_settings_fontfamily);
+
 
         mButtonDeleteAccount.setOnClickListener(this);
         mButtonFeedback.setOnClickListener(this);
         mButtonLanguage.setOnClickListener(this);
         mButtonLogOut.setOnClickListener(this);
-        mButtonFont.setOnClickListener(this);
+        mButtonFontSize.setOnClickListener(this);
+        mButtonFontFamily.setOnClickListener(this);
 
         service = DatabaseConnectionService.getInstance();
         Connection connection = service.getConnection();
@@ -125,36 +129,54 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                     feedbackTransaction.commit();
                 }
                 return;
-            case R.id.button_settings_Font:
-                Log.d("setting", "fontSize clicked");
-                showFontDialog();
+            case R.id.button_settings_fontsize:
+                showFontSizeDialog();
+                return;
+            case R.id.button_settings_fontfamily:
+                showFontFamilyDialog();
                 return;
         }
 
     }
 
-    private void showFontDialog() {
+    private void showFontFamilyDialog() {
         DialogFragment df = new DialogFragment() {
             @Override
             public Dialog onCreateDialog(Bundle savedInstanceState) {
                 Log.d("setting", "fontSize in dialog");
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-//                View view = getActivity().getLayoutInflater().inflate(R.layout.dialogfragment_font, null);
-//                builder.setView(view);
 
-//                builder.setTitle("Pick a font size factor")
-//                        .setItems()
-
-//                final EditText fontSizeEditText = (EditText) view.findViewById(R.id.dialogfragment_fontsize_editext);
-//                final EditText fontFamilyEditText = (EditText) view.findViewById(R.id.dialogfragment_fontfamily_editext);
+                builder.setTitle("Pick a font family")
+                        .setItems(R.array.fontfamily_array, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //TODO:
+                            }
+                        });
 
                 builder.setNegativeButton(android.R.string.cancel, null);
-                builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //TODO: be able to edit font family and font size
-                    }
-                });
+                return builder.create();
+            }
+        };
+        df.show(getFragmentManager(), "fontSize");
+    }
+
+    private void showFontSizeDialog() {
+        DialogFragment df = new DialogFragment() {
+            @Override
+            public Dialog onCreateDialog(Bundle savedInstanceState) {
+                Log.d("setting", "fontSize in dialog");
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+                builder.setTitle("Pick a font size factor")
+                        .setItems(R.array.fontsize_array, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //TODO:
+                            }
+                        });
+
+                builder.setNegativeButton(android.R.string.cancel, null);
                 return builder.create();
             }
         };
