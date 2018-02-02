@@ -24,13 +24,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.ArrayList;
 
 import edu.rosehulman.sunz1.rosechat.R;
 import edu.rosehulman.sunz1.rosechat.SQLService.DatabaseConnectionService;
 import edu.rosehulman.sunz1.rosechat.fragments.FeedbackSettingsFragment;
 import edu.rosehulman.sunz1.rosechat.utils.SharedPreferencesUtils;
 
-public class SettingsActivity extends AppCompatActivity implements View.OnClickListener{
+public class SettingsActivity extends AppCompatActivity implements View.OnClickListener {
 
     //TODO: sync with DB server
 
@@ -42,13 +43,16 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     private Button mButtonDeleteAccount;
     private Button mButtonFontSize;
     private Button mButtonFontFamily;
+    private View mProcessBar;
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
 //    private OnLogoutListener mLogoutListener;
 
-    DatabaseConnectionService service;
-    Connection connection;
+    private DatabaseConnectionService mConService;
+    private Connection mConnection;
+
+    private ArrayList<String> mSettingsArray; //store all settings here
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,9 +60,9 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.activity_settings);
 
         mButtonDeleteAccount = (Button) findViewById(R.id.button_settings_deleteAccount);
-        mButtonFeedback= (Button) findViewById(R.id.button_settings_feedback);
+        mButtonFeedback = (Button) findViewById(R.id.button_settings_feedback);
         mButtonLanguage = (Button) findViewById(R.id.button_settings_Language);
-        mButtonLogOut= (Button) findViewById(R.id.button_settings_logOut);
+        mButtonLogOut = (Button) findViewById(R.id.button_settings_logOut);
         mButtonFontSize = (Button) findViewById(R.id.button_settings_fontsize);
         mButtonFontFamily = (Button) findViewById(R.id.button_settings_fontfamily);
 
@@ -70,11 +74,16 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         mButtonFontSize.setOnClickListener(this);
         mButtonFontFamily.setOnClickListener(this);
 
-        service = DatabaseConnectionService.getInstance();
-        Connection connection = service.getConnection();
+        mConService = DatabaseConnectionService.getInstance();
+        mConnection = mConService.getConnection();
+
+        mSettingsArray = new ArrayList<>();
 
         mAuth = FirebaseAuth.getInstance();
         initializeListener();
+
+        mProcessBar = findViewById(R.id.processbar_setting);
+        mProcessBar.setVisibility(View.GONE);
     }
 
     @Override
@@ -106,7 +115,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        switch (id){
+        switch (id) {
             case R.id.button_settings_Language:
                 switchLanguage();
                 return;
@@ -120,11 +129,11 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             case R.id.button_settings_feedback:
                 FragmentTransaction feedbackTransaction = getSupportFragmentManager().beginTransaction();
                 FeedbackSettingsFragment fragment = new FeedbackSettingsFragment();
-                if(this.getSupportFragmentManager().getBackStackEntryCount() == 0) {
+                if (this.getSupportFragmentManager().getBackStackEntryCount() == 0) {
                     feedbackTransaction.addToBackStack("feedback");
                     feedbackTransaction.add(R.id.settings_container, fragment);
                     feedbackTransaction.commit();
-                }else{
+                } else {
                     getSupportFragmentManager().popBackStack("feedback", FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     feedbackTransaction.commit();
                 }
@@ -146,11 +155,18 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 Log.d("setting", "fontSize in dialog");
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
+                //BE CAREFUL: if R.array.fontfamily_array is changed, this variable needs to be changed as well
+                final String[] fontfamilyArray = {"Arial", "Times New Roma"};
+
                 builder.setTitle("Pick a font family")
                         .setItems(R.array.fontfamily_array, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 //TODO:
+                                String sizeFactor = fontfamilyArray[which];
+//                                mProcessBar.setVisibility(View.VISIBLE);
+//
+//                                mProcessBar.setVisibility(View.GONE);
                             }
                         });
 
@@ -219,7 +235,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     private void logOut() {
         SharedPreferencesUtils.removeCurrentUser(getApplicationContext());
         mAuth.signOut();
-        //TODO: how do we log out in this case? -by using firbaseAuth.signOut
     }
 
 
@@ -232,12 +247,12 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         new DeleteAccountTask().execute();
     }
 
-    private class DeleteAccountTask extends AsyncTask<String, String, String>{
+    private class DeleteAccountTask extends AsyncTask<String, String, String> {
 
-        protected  String doInBackground(String... str) {
+        protected String doInBackground(String... str) {
             String query = "delete from [User] where UID = ?";
             try {
-                PreparedStatement stmt = connection.prepareStatement(query);
+                PreparedStatement stmt = mConnection.prepareStatement(query);
                 stmt.setString(1, SharedPreferencesUtils.getCurrentUser(getApplicationContext()));
                 stmt.executeQuery();
             } catch (SQLException e) {
@@ -253,23 +268,18 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         protected String doInBackground(String... str) {
             String UID = SharedPreferencesUtils.getCurrentUser(getApplicationContext());
             try {
-                String uid = "";
 
                 //we need to create current user
                 CallableStatement cs = null;
-                String defaultNickName = UID;
-                String defaultEmail = UID + "@rose-hulman.edu";
-                String defaultPhone = getString(R.string.profile_sample_phone_number);
-                String defaultAvatarURL = "https://firebasestorage.googleapis.com/v0/b/rosechat-64ae9.appspot.com/o/profile_pics%2Fdefault.png?alt=media&token=2cc54fe8-da2f-49f9-ab18-0ef0d2e8fea6";
 
-//                cs = MainActivity.this.mDBConnection.prepareCall("{?=call CreateUser(?, ?, ?, ?, ?)}");
-                cs.setString(2, UID);
-                cs.setString(3, defaultNickName);
-                cs.setString(4, defaultPhone);
-                cs.setString(5, defaultEmail);
-                cs.setString(6, defaultAvatarURL);
+                cs = mConnection.prepareCall("{?=call SyncDisplaySettings(?, ?, ?, ?, ?)}");
+                cs.setString(2, UID); //@UID varchar(50)
+                cs.setInt(3, Integer.parseInt(mSettingsArray.get(2))); //@FontSize int
+                cs.setString(4, mSettingsArray.get(3)); //@FontFamily nvarchar(20)
+                cs.setString(5, mSettingsArray.get(4)); //@FontLanguage nvarchar(10)
+                cs.setInt(6, Integer.parseInt(mSettingsArray.get(5))); //@Notification bit
                 cs.registerOutParameter(1, Types.INTEGER);
-                cs.execute();
+                cs.execute(); //add these data into db
                 int out = cs.getInt(1);
 
             } catch (SQLException e) {
@@ -295,7 +305,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         dialog.show();
     }
 
-    private void switchLanguage(){
+    private void switchLanguage() {
         Intent intent = new Intent(Settings.ACTION_LOCALE_SETTINGS);
         startActivity(intent);
     }
