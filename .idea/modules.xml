@@ -3,8 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/RoseChat.iml" filepath="$PROJECT_DIR$/RoseChat.iml" />
-      <module fileurl="file://$PROJECT_DIR$/RoseChat.iml" filepath="$PROJECT_DIR$/RoseChat.iml" />
-      <module fileurl="file://$PROJECT_DIR$/RoseChatApp.iml" filepath="$PROJECT_DIR$/RoseChatApp.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
