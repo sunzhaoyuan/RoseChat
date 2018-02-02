@@ -6,11 +6,15 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -32,8 +36,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     private Button mButtonFeedback;
     private Button mButtonDeleteAccount;
 
-//    private FirebaseAuth mAuth;
-//    private FirebaseAuth.AuthStateListener mAuthStateListener;
+    private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthStateListener;
 //    private OnLogoutListener mLogoutListener;
 
     DatabaseConnectionService service;
@@ -57,35 +61,35 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         service = DatabaseConnectionService.getInstance();
         Connection connection = service.getConnection();
 
-//        mAuth = FirebaseAuth.getInstance();
-//        initializeListener();
+        mAuth = FirebaseAuth.getInstance();
+        initializeListener();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-//        mAuth.addAuthStateListener(mAuthStateListener);
+        mAuth.addAuthStateListener(mAuthStateListener);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-//        mAuth.removeAuthStateListener(mAuthStateListener);
+        mAuth.removeAuthStateListener(mAuthStateListener);
     }
 
-//    private void initializeListener() {
-//        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
-//            @Override
-//            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-//                FirebaseUser user = firebaseAuth.getCurrentUser();
-//                if (user != null) {
-//                    // empty
-//                } else {
-//                    LogInActivity.startActivity(SettingsActivity.this);
-//                }
-//            }
-//        };
-//    }
+    private void initializeListener() {
+        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    // empty
+                } else {
+                    LogInActivity.startActivity(SettingsActivity.this);
+                }
+            }
+        };
+    }
 
     @Override
     public void onClick(View v) {
@@ -151,17 +155,17 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
     private void logOut() {
         SharedPreferencesUtils.removeCurrentUser(getApplicationContext());
-//        mAuth.signOut();
-        //TODO: how do we log out in this case?
+        mAuth.signOut();
+        //TODO: how do we log out in this case? -by using firbaseAuth.signOut
     }
 
 
     private void deleteAccount() {
-//        FirebaseUser user = mAuth.getCurrentUser();
-//        SharedPreferencesUtils.removeCurrentUser(getApplicationContext());
-//        assert user != null;
-//        user.delete();
-//        mAuth.signOut(); //TODO: need improved
+        FirebaseUser user = mAuth.getCurrentUser();
+        SharedPreferencesUtils.removeCurrentUser(getApplicationContext());
+        assert user != null;
+        user.delete();
+        mAuth.signOut(); //TODO: need improved
         new DeleteAccountTask().execute();
     }
 
@@ -184,6 +188,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     private class SyncSettingTask extends AsyncTask<String, String, String> {
 
         protected String doInBackground(String... str) {
+
             return null;
         }
     }
