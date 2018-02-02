@@ -1,66 +1,81 @@
 package edu.rosehulman.sunz1.rosechat.adapters;
 
 import android.content.Context;
+import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import edu.rosehulman.sunz1.rosechat.R;
+import edu.rosehulman.sunz1.rosechat.SQLService.DatabaseConnectionService;
 import edu.rosehulman.sunz1.rosechat.fragments.ContactsFragment;
 import edu.rosehulman.sunz1.rosechat.fragments.ProfileFragment;
+import edu.rosehulman.sunz1.rosechat.utils.SharedPreferencesUtils;
 
 /**
  * Created by agarwaa on 10-Jul-17.
  */
 
-public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHolder>{
+public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHolder> {
     private Context mContext;
     ArrayList<String> mContactList;
     ContactsFragment.Callback mCallback;
-    private DatabaseReference mFriendsRef;
-    FirebaseAuth mAuth;
-    FirebaseUser user;
     final private String DEBUG_KEY = "Debug";
 
+    private String UID;
+    private Connection mDBConnection;
+    Handler handler;
 
-
-    public ContactsAdapter(Context context, ContactsFragment.Callback callback){
+    public ContactsAdapter(Context context, ContactsFragment.Callback callback) {
         mCallback = callback;
         mContext = context;
         mContactList = new ArrayList<String>();
-        mAuth = FirebaseAuth.getInstance();
-        user = mAuth.getCurrentUser();
-        mFriendsRef = FirebaseDatabase.getInstance().getReference().child("friends/" + user.getUid());
-        mFriendsRef.addChildEventListener(new ContactsChildEventListener());
-        Log.d(DEBUG_KEY, user.getUid());
-//        addContact("temp");
+        UID = SharedPreferencesUtils.getCurrentUser(context);
+        mDBConnection = DatabaseConnectionService.getInstance().getConnection();
+        handler = new Handler(Looper.getMainLooper());
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (!Thread.interrupted()) {
+                    new GetFriendsTask().execute(UID);
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            refresh();
+                        }
+                    });
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).start();
     }
 
-
-    private void addContact(String contact) {
-        mFriendsRef.child(contact).setValue(true);
+    private synchronized void refresh() {
+        notifyDataSetChanged();
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.contact_view, parent, false);
-            return new ViewHolder(itemView);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.contact_view, parent, false);
+        return new ViewHolder(itemView);
     }
 
     @Override
@@ -70,24 +85,26 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
     }
 
     @Override
-    public int getItemCount() {return mContactList.size();}
+    public int getItemCount() {
+        return mContactList.size();
+    }
 
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView mContactName;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
-            itemView.setOnLongClickListener(new View.OnLongClickListener(){
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
-                public boolean onLongClick(View v){
+                public boolean onLongClick(View v) {
                     deleteContact(getAdapterPosition());
                     return false;
                 }
             });
-            
+
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -96,14 +113,14 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
             });
 
             mContactName = (TextView) itemView.findViewById(R.id.contact_name);
-            
+
         }
     }
 
     private void enterProfile(int adapterPosition) {
         //TODO:
         String currentUID = mContactList.get(adapterPosition);
-        FragmentTransaction transaction = ((AppCompatActivity)mContext).getSupportFragmentManager().beginTransaction();
+        FragmentTransaction transaction = ((AppCompatActivity) mContext).getSupportFragmentManager().beginTransaction();
         Fragment profileFragment = ProfileFragment.newInstance(currentUID);
         transaction.addToBackStack("view_profile");
         transaction.replace(R.id.container, profileFragment);
@@ -111,50 +128,29 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
     }
 
     private void deleteContact(int adapterPosition) {
-        Log.d(DEBUG_KEY, "user selected" + mFriendsRef.child(mContactList.get(adapterPosition)).getKey());
-        mFriendsRef.child(mContactList.get(adapterPosition)).setValue(false);
+
     }
 
-    private class ContactsChildEventListener implements ChildEventListener {
+    private class GetFriendsTask extends AsyncTask<String, String, Integer> {
 
         @Override
-        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-            if(dataSnapshot.getValue().equals(true)) {
-                String contactName = dataSnapshot.getKey();
-                mContactList.add(0, contactName);
-                notifyDataSetChanged();
+        protected Integer doInBackground(String... strings) {
+            try {
+                CallableStatement cs = ContactsAdapter.this.mDBConnection.prepareCall("{call Get_Friends(?)}");
+                cs.setString(1, UID);
+                cs.execute();
+                ResultSet rs = cs.getResultSet();
+                mContactList.clear();
+                ;
+                while (rs.next()) {
+                    String s = rs.getString(1);
+                    ContactsAdapter.this.mContactList.add(s);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-
-        }
-
-        @Override
-        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-            if(dataSnapshot.getValue().equals(true)) {
-                String contactName = dataSnapshot.getKey();
-                mContactList.add(0, contactName);
-                notifyDataSetChanged();
-            }else{
-                mContactList.remove(dataSnapshot.getKey());
-                notifyDataSetChanged();
-            }
-            DatabaseReference mOtherFriendRef = FirebaseDatabase.getInstance().getReference().child("friends/" + dataSnapshot.getKey());
-            mOtherFriendRef.child(user.getUid()).setValue(false);
-        }
-
-        @Override
-        public void onChildRemoved(DataSnapshot dataSnapshot) {
-            mContactList.remove(dataSnapshot.getKey());
-            notifyDataSetChanged();
-        }
-
-        @Override
-        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-        }
-
-        @Override
-        public void onCancelled(DatabaseError databaseError) {
-
+            return 0;
         }
     }
+
 }
