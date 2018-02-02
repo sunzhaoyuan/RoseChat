@@ -1,7 +1,6 @@
 package edu.rosehulman.sunz1.rosechat.fragments;
 
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -29,13 +28,7 @@ import com.google.firebase.storage.StorageReference;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.squareup.picasso.Picasso;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-
 import edu.rosehulman.sunz1.rosechat.R;
-import edu.rosehulman.sunz1.rosechat.SQLService.DatabaseConnectionService;
 import edu.rosehulman.sunz1.rosechat.activities.MainActivity;
 import edu.rosehulman.sunz1.rosechat.models.Contact;
 import edu.rosehulman.sunz1.rosechat.utils.Constants;
@@ -56,11 +49,6 @@ public class ProfileFragment
     private Contact mFireBaseContact;
     private BottomNavigationViewEx bottomNavigationViewEx;
 
-    private String nickName;
-    private String email;
-    private String phone;
-    private String avatarURL;
-
     public ProfileFragment() {
         // Required empty public constructor
     }
@@ -77,70 +65,7 @@ public class ProfileFragment
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         init();
-//        profileHandler();
-
-    }
-
-//    @Override
-//    public void getStringArray(String[] texts) {
-//        mNickNameTxt.setText(texts[0]);
-//        mEmailTxt.setText(texts[1]);
-//        mPhoneTxt.setText(texts[2]);
-//        Picasso.with(getContext())
-//                .load(texts[3])
-//                .into(mProfileImg);
-//    }
-
-    private  class profileViewerTask extends AsyncTask<String, String, String[]> {
-
-        private String[] result;
-//        private ResultCallback callback = null;
-
-//        public profileViewerTask(ResultCallback callback) {
-//            this.callback = callback;
-//        }
-
-        protected String[] doInBackground(String... params) {
-            Log.d(Constants.TAG_PROFILE, "In ProfileHandler.");
-            DatabaseConnectionService service = DatabaseConnectionService.getInstance();
-            Connection connection = service.getConnection(); // should not be null
-
-            String[] toReturn = null;
-
-            String query = "select * from [User] where UID = '" + mCurrentUID + "'"; //param[0] is current user
-            Statement stmt = null;
-            try {
-                stmt = connection.createStatement();
-                ResultSet rs = stmt.executeQuery(query);
-                rs.next();
-                nickName = rs.getString("NickName");
-                email = rs.getString("Email");
-                 phone = rs.getString("Phone");
-                 avatarURL = rs.getString("AvatarURL");
-
-                result = new String[]{nickName, email, phone, avatarURL};
-
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-
-            return result;
-        }
-
-        protected void onProgressUpdate(String... progress) {
-
-        }
-
-        protected void onPostExecute(String[] toReturn) {
-            mNickNameTxt.setText(nickName);
-            mEmailTxt.setText(email);
-            mPhoneTxt.setText(phone);
-        }
-
-//        public interface ResultCallback {
-//            void getStringArray(String[] toReturn);
-//        }
-
+        profileHandler();
     }
 
     /**
@@ -159,7 +84,6 @@ public class ProfileFragment
                 assert mFireBaseContact != null;
                 //get Profile pic - worked!
                 StorageReference profileRef = FirebaseStorage.getInstance().getReference().child("profile_pics/" + mCurrentUID);
-
                 profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
@@ -180,7 +104,6 @@ public class ProfileFragment
                         Log.d(Constants.TAG_PROFILE, "Doesn't have custom profile yet.");
                     }
                 });
-
                 //get Text Data
                 mNickNameTxt.setText(mFireBaseContact.getNickName());
 //                Log.d(Constants.TAG_PROFILE, "nick name is\n" +
@@ -206,7 +129,7 @@ public class ProfileFragment
     private void init() {
         mEdit.setOnClickListener(this);
         mCurrentUID = getArguments().getString(Constants.PROF_NEW_UID);
-        ((MainActivity) getActivity()).setTitle(mCurrentUID);
+        ((MainActivity)getActivity()).setTitle(mCurrentUID);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -224,21 +147,6 @@ public class ProfileFragment
             bottomNavigationViewEx.setVisibility(View.GONE);
             mEdit.setVisibility(View.GONE);
         }
-
-        // get all data from sql server
-
-        profileViewerTask task = new profileViewerTask();
-//        task.callback = this;
-        task.execute(mCurrentUID);
-//        String[] texts = task.getResult();
-
-//        mNickNameTxt.setText(nickName);
-//        mEmailTxt.setText(email);
-//        mPhoneTxt.setText(phone);
-//        Picasso.with(getContext())
-//                .load(avatarURL)
-//                .into(mProfileImg);
-
         return view;
     }
 
@@ -260,8 +168,7 @@ public class ProfileFragment
                     mEmailTxt.getText().toString(),
                     mNickNameTxt.getText().toString(),
                     mPhoneTxt.getText().toString(),
-        ""
-//                    mFireBaseContact.getProfilePicUrl()
+                    mFireBaseContact.getProfilePicUrl()
             );
             transaction.addToBackStack("edit");
             transaction.replace(R.id.container, editProfileFragment);
