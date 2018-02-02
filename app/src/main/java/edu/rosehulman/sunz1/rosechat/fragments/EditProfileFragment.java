@@ -3,7 +3,6 @@ package edu.rosehulman.sunz1.rosechat.fragments;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -16,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -24,16 +24,12 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
+import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Types;
 
 import edu.rosehulman.sunz1.rosechat.R;
-import edu.rosehulman.sunz1.rosechat.SQLService.DatabaseConnectionService;
 import edu.rosehulman.sunz1.rosechat.activities.MainActivity;
 import edu.rosehulman.sunz1.rosechat.models.Contact;
 import edu.rosehulman.sunz1.rosechat.sys.image_selector.UserPicture;
@@ -57,11 +53,6 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
     private String mProfilePicURL;
     private String mToken;
     private BottomNavigationViewEx bottomNavigationViewEx;
-
-    private String newNickName;
-    private String newPhone;
-    private String newEmail;
-    private String newAvatarURL;
 
     public static EditProfileFragment newInstance(String email,
                                                   String nickName,
@@ -98,15 +89,15 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         mEmailTxtE.setText(getArguments().getString(Constants.PROF_EMAIL));
         mNickNameTxtE.setText(getArguments().getString(Constants.PROF_NICK_NAME));
         mPhoneTxtE.setText(getArguments().getString(Constants.PROF_PHONE));
-//        FirebaseStorage.getInstance().getReference().child("profile_pics/" + mCurrentUID).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-//            @Override
-//            public void onSuccess(Uri uri) {
-//                mProfilePicURL = uri.toString();
-//                Picasso.with(getContext())
-//                        .load(mProfilePicURL)
-//                        .into(mProfileImgE);
-//            }
-//        });
+        FirebaseStorage.getInstance().getReference().child("profile_pics/" + mCurrentUID).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                mProfilePicURL = uri.toString();
+                Picasso.with(getContext())
+                        .load(mProfilePicURL)
+                        .into(mProfileImgE);
+            }
+        });
         // TODO: get Token from firebase
         DatabaseReference token = FirebaseDatabase.getInstance().getReference().child(Constants.PATH_CONTACT)
                 .child(mCurrentUID).child("fireBaseToken");
@@ -165,19 +156,18 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
 //        StorageReference profilePicStorageRef = FirebaseStorage.getInstance().getReference()
 //                .child(Constants.PATH_PROFILE_PIC + "/" + mCurrentUID);
         // TODO: write the txt from those EditTxts 
-        newNickName = mNickNameTxtE.getText().toString();
-        newPhone = mPhoneTxtE.getText().toString();
-        newEmail = mEmailTxtE.getText().toString();
+        final String nickNameNew = mNickNameTxtE.getText().toString();
+        final String phoneNew = mPhoneTxtE.getText().toString();
+        final String emailNew = mEmailTxtE.getText().toString();
         // TODO: update all and go back
         Handler handler = new Handler();
         handler.postAtTime(new Runnable() {
             @Override
             public void run() {
-//                Contact newContact = new Contact(mCurrentUID, nickNameNew, mProfilePicURL, phoneNew, emailNew, mToken);
-//                uploadAllToFirebase(newContact);
-                new EditProfTask().execute();
+                Contact newContact = new Contact(mCurrentUID, nickNameNew, mProfilePicURL, phoneNew, emailNew, mToken);
+                uploadAllToFirebase(newContact);
             }
-        }, 1000); // 1000ms = 1s
+        }, 100); // 1000ms = 1s
     }
 
     private void uploadAllToFirebase(final Contact newContact) {
@@ -258,39 +248,6 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
 //                Log.d(Constants.TAG_PROFILE, "GET PROFILE PIC URL FAILED :\n" + e.toString());
 //            }
 //        });
-    }
-
-    private class EditProfTask extends AsyncTask<String, String, String> {
-
-        protected String doInBackground(String... str) {
-
-            DatabaseConnectionService service = DatabaseConnectionService.getInstance();
-            Connection connection = service.getConnection(); // should not be null
-
-            CallableStatement cs = null;
-
-            try {
-                cs = connection.prepareCall("{?=call EditProfile(?, ?, ?, ?, ?)}");
-                cs.setString(2, mCurrentUID);
-                cs.setString(3, newNickName);
-                cs.setString(4, newPhone);
-                cs.setString(5, newEmail);
-                cs.setString(6, newAvatarURL);
-                cs.registerOutParameter(1, Types.INTEGER);
-                cs.execute();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-
-            return null;
-        }
-
-        protected void onPostExecute(String str) {
-            mEmailTxtE.setText(newEmail);
-            mNickNameTxtE.setText(newNickName);
-            mPhoneTxtE.setText(newPhone);
-        }
-
     }
 
     @Override
