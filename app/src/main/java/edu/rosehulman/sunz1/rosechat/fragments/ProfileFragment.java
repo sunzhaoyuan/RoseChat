@@ -1,12 +1,10 @@
 package edu.rosehulman.sunz1.rosechat.fragments;
 
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
@@ -18,16 +16,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.squareup.picasso.Picasso;
 
@@ -40,7 +28,6 @@ import edu.rosehulman.sunz1.rosechat.R;
 import edu.rosehulman.sunz1.rosechat.SQLService.DatabaseConnectionService;
 import edu.rosehulman.sunz1.rosechat.activities.MainActivity;
 import edu.rosehulman.sunz1.rosechat.adapters.NavigationPagerAdapter;
-import edu.rosehulman.sunz1.rosechat.models.Contact;
 import edu.rosehulman.sunz1.rosechat.utils.Constants;
 import edu.rosehulman.sunz1.rosechat.utils.SharedPreferencesUtils;
 
@@ -53,16 +40,15 @@ public class ProfileFragment
     private TextView mEmailTxt;
     private TextView mNickNameTxt;
     private TextView mPhoneTxt;
-    //    private Bitmap mBitmap;
-    //    private TableLayout
     private String mCurrentUID;
-    private Contact mFireBaseContact;
     private BottomNavigationViewEx bottomNavigationViewEx;
 
     private String nickName;
     private String email;
     private String phone;
     private String avatarURL;
+
+    private String[] profileElement;
 
     private Handler handler;
     private NavigationPagerAdapter adapter;
@@ -100,6 +86,7 @@ public class ProfileFragment
                         public void run() {
                             if(adapter!=null){
                                 adapter.notifyDataSetChanged();
+
                             }
                         }
                     });
@@ -113,34 +100,15 @@ public class ProfileFragment
         }).start();
     }
 
-//    @Override
-//    public void getStringArray(String[] texts) {
-//        mNickNameTxt.setText(texts[0]);
-//        mEmailTxt.setText(texts[1]);
-//        mPhoneTxt.setText(texts[2]);
-//        Picasso.with(getContext())
-//                .load(texts[3])
-//                .into(mProfileImg);
-//    }
-
     private  class profileViewerTask extends AsyncTask<String, String, String[]> {
-
-        private String[] result;
-//        private ResultCallback callback = null;
-
-//        public profileViewerTask(ResultCallback callback) {
-//            this.callback = callback;
-//        }
 
         protected String[] doInBackground(String... params) {
             Log.d(Constants.TAG_PROFILE, "In ProfileHandler.");
             DatabaseConnectionService service = DatabaseConnectionService.getInstance();
             Connection connection = service.getConnection(); // should not be null
 
-            String[] toReturn = null;
-
             String query = "select * from [User] where UID = '" + mCurrentUID + "'"; //param[0] is current user
-            Statement stmt = null;
+            Statement stmt;
             try {
                 stmt = connection.createStatement();
                 ResultSet rs = stmt.executeQuery(query);
@@ -150,89 +118,49 @@ public class ProfileFragment
                 phone = rs.getString("Phone");
                 avatarURL = rs.getString("AvatarURL");
 
-                result = new String[]{nickName, email, phone, avatarURL};
+                profileElement = new String[]{nickName, email, phone, avatarURL};
 
             } catch (SQLException e) {
                 e.printStackTrace();
             }
 
-            return result;
+            return null;
         }
 
         protected void onProgressUpdate(String... progress) {
 
         }
 
-        protected void onPostExecute(String[] toReturn) {
+        protected void onPostExecute(final String[] toReturn) {
             mNickNameTxt.setText(nickName);
             mEmailTxt.setText(email);
             mPhoneTxt.setText(phone);
+            // ProfilePic Thread
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    while (!Thread.interrupted()){
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                Log.d("picasso", "Trying to get profile picture");
+                                Picasso.with(getContext())
+                                        .load(profileElement[3]) //get url
+                                        .placeholder(R.drawable.rose_logo)
+                                        .error(R.drawable.rosenamelogo)
+                                        .into(mProfileImg);
+                            }
+                        });
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }).start();
         }
 
-//        public interface ResultCallback {
-//            void getStringArray(String[] toReturn);
-//        }
-
-    }
-
-    /**
-     * this method gets profile from FireBase and set every fields correctly.
-     */
-    public void profileHandler() {
-        Log.d(Constants.TAG_PROFILE, "In ProfileHandler.");
-        DatabaseReference mDBRef = FirebaseDatabase.getInstance().getReference().child(Constants.PATH_CONTACT);
-        Query query = mDBRef.orderByChild("uid").equalTo(mCurrentUID);
-        query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-//                Log.d(Constants.TAG_PROFILE, "this snapshot is" + dataSnapshot.toString());
-                Log.d(Constants.TAG_PROFILE, "about to sync profile data");
-                mFireBaseContact = dataSnapshot.getChildren().iterator().next().getValue(Contact.class); //this works cuz there will be only one matches
-                assert mFireBaseContact != null;
-                //get Profile pic - worked!
-                StorageReference profileRef = FirebaseStorage.getInstance().getReference().child("profile_pics/" + mCurrentUID);
-
-                profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        String profilePicURL = uri.toString();
-                        Picasso.with(getContext())
-                                .load(profilePicURL)
-                                .into(mProfileImg);
-                        Log.d(Constants.TAG_PROFILE, "profile pic url is\n" +
-                                profilePicURL +
-                                "\nset profile pic -DONE");
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Picasso.with(getContext())
-                                .load(mFireBaseContact.getProfilePicUrl())
-                                .into(mProfileImg);
-                        Log.d(Constants.TAG_PROFILE, "Doesn't have custom profile yet.");
-                    }
-                });
-
-                //get Text Data
-                mNickNameTxt.setText(mFireBaseContact.getNickName());
-//                Log.d(Constants.TAG_PROFILE, "nick name is\n" +
-//                        mFireBaseContact.getNickName() +
-//                        "\nset NickName -DONE");
-                mEmailTxt.setText(mFireBaseContact.getEmail());
-//                Log.d(Constants.TAG_PROFILE, "email is\n" +
-//                        mFireBaseContact.getEmail() +
-//                        "\nset email -DONE");
-                mPhoneTxt.setText(mFireBaseContact.getPhoneNumber());
-//                Log.d(Constants.TAG_PROFILE, "phone number is\n" +
-//                        mFireBaseContact.getPhoneNumber() +
-//                        "\nset phone number -DONE");
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.d(Constants.TAG_PROFILE, "failed to handle query for the existed profile");
-            }
-        });
     }
 
     private void init() {
@@ -257,17 +185,6 @@ public class ProfileFragment
             mEdit.setVisibility(View.GONE);
         }
 
-        // get all data from sql server
-
-//        String[] texts = task.getResult();
-
-//        mNickNameTxt.setText(nickName);
-//        mEmailTxt.setText(email);
-//        mPhoneTxt.setText(phone);
-//        Picasso.with(getContext())
-//                .load(avatarURL)
-//                .into(mProfileImg);
-
         return view;
     }
 
@@ -289,8 +206,7 @@ public class ProfileFragment
                     mEmailTxt.getText().toString(),
                     mNickNameTxt.getText().toString(),
                     mPhoneTxt.getText().toString(),
-                    ""
-//                    mFireBaseContact.getProfilePicUrl()
+                    profileElement[3]
             );
             transaction.addToBackStack("edit");
             transaction.replace(R.id.container, editProfileFragment);
