@@ -3,71 +3,135 @@
     android:id="@+id/profile_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="edu.rosehulman.sunz1.rosechat.fragments.ProfileFragment" >
+    tools:context="edu.rosehulman.sunz1.rosechat.fragments.ProfileFragment">
 
-    <RelativeLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/profile_image"
-            style="@style/ProfileBorder"
-            android:layout_width="200sp"
-            android:layout_height="200dp"
-            android:layout_centerHorizontal="true"
-            android:src="@drawable/rose_logo"
-            android:cropToPadding="true"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/profile_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/profile_image"
-            android:layout_centerHorizontal="true"
-            android:paddingTop="@dimen/padding_big"
-            android:text="@string/profile_sample_name"
-            android:textSize="30sp"
-            android:textStyle="bold" />
+            <ImageView
+                android:id="@+id/profile_image"
+                style="@style/ProfileBorder"
+                android:layout_width="200sp"
+                android:layout_height="200dp"
+                android:layout_centerHorizontal="true"
+                android:cropToPadding="true"
+                android:src="@drawable/rose_logo" />
 
-        <TextView
-            android:id="@+id/profile_email"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/profile_name"
-            android:layout_centerHorizontal="true"
-            android:paddingTop="@dimen/padding_small"
-            android:text="@string/profile_sample_email"
-            android:textSize="15sp" />
+            <TextView
+                android:id="@+id/profile_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/profile_image"
+                android:layout_centerHorizontal="true"
+                android:paddingTop="@dimen/padding_big"
+                android:text="@string/profile_sample_name"
+                android:textSize="30sp"
+                android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/profile_phone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/profile_email"
-            android:layout_centerHorizontal="true"
-            android:paddingTop="@dimen/padding_small"
-            android:text="@string/profile_sample_phone_number"
-            android:textSize="18sp" />
+            <TextView
+                android:id="@+id/profile_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/profile_name"
+                android:layout_centerHorizontal="true"
+                android:paddingTop="@dimen/padding_small"
+                android:text="@string/profile_sample_email"
+                android:textSize="15sp" />
 
-        <TextView
-            android:id="@+id/profile_edit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/profile_phone"
-            android:layout_centerHorizontal="true"
-            android:paddingTop="@dimen/padding_small"
-            android:text="@string/profile_edit"
-            android:textAlignment="textStart"
-            android:textColor="#57a0d4"
-            android:textSize="15sp" />
+            <TextView
+                android:id="@+id/profile_phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/profile_email"
+                android:layout_centerHorizontal="true"
+                android:paddingTop="@dimen/padding_small"
+                android:text="@string/profile_sample_phone_number"
+                android:textSize="18sp" />
 
-        <View
-            android:layout_width="30sp"
-            android:layout_height="3sp"
-            android:layout_below="@+id/profile_edit"
-            android:layout_centerHorizontal="true"
-            android:background="#57a0d4" />
+            <TextView
+                android:id="@+id/profile_course1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/profile_phone"
+                android:layout_centerHorizontal="true"
+                android:paddingTop="16sp"
+                android:text="Course 1"
+                android:visibility="gone" />
 
-    </RelativeLayout>
+            <TextView
+                android:id="@+id/profile_course2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/profile_course1"
+                android:layout_centerHorizontal="true"
+                android:paddingTop="16sp"
+                android:text="Course 2"
+                android:visibility="gone" />
 
+            <TextView
+                android:id="@+id/profile_course3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/profile_course2"
+                android:layout_centerHorizontal="true"
+                android:paddingTop="16sp"
+                android:text="Course 3"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/profile_course4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/profile_course3"
+                android:layout_centerHorizontal="true"
+                android:paddingTop="16sp"
+                android:text="Course 4"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/profile_course5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/profile_course4"
+                android:layout_centerHorizontal="true"
+                android:paddingTop="16sp"
+                android:text="Course 5"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/profile_course6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/profile_course5"
+                android:layout_centerHorizontal="true"
+                android:paddingTop="16sp"
+                android:text="Course 6"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/profile_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/profile_course6"
+                android:layout_centerHorizontal="true"
+                android:paddingTop="@dimen/padding_small"
+                android:text="@string/profile_edit"
+                android:textAlignment="textStart"
+                android:textColor="#57a0d4"
+                android:textSize="15sp" />
+
+            <View
+                android:layout_width="30sp"
+                android:layout_height="3sp"
+                android:layout_below="@+id/profile_edit"
+                android:layout_centerHorizontal="true"
+                android:background="#57a0d4" />
+
+        </RelativeLayout>
+    </ScrollView>
 </FrameLayout>
