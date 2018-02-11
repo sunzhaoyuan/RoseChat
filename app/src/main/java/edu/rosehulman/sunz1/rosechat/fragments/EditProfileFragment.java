@@ -107,20 +107,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
 //                        .into(mProfileImgE);
 //            }
 //        });
-//        // TODO: get Token from firebase
-//        DatabaseReference token = FirebaseDatabase.getInstance().getReference().child(Constants.PATH_CONTACT)
-//                .child(mCurrentUID).child("fireBaseToken");
-//        token.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                mToken = dataSnapshot.getValue().toString();
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
+
         ((MainActivity)getActivity()).setTitle(mCurrentUID);
     }
 
