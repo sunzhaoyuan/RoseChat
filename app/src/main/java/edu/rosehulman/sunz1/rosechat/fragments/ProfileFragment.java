@@ -11,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.telecom.Call;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +32,7 @@ import com.google.firebase.storage.StorageReference;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.squareup.picasso.Picasso;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -53,6 +55,7 @@ public class ProfileFragment
     private TextView mEmailTxt;
     private TextView mNickNameTxt;
     private TextView mPhoneTxt;
+    private TextView[] mCourses;
     //    private Bitmap mBitmap;
     //    private TableLayout
     private String mCurrentUID;
@@ -63,6 +66,8 @@ public class ProfileFragment
     private String email;
     private String phone;
     private String avatarURL;
+
+    private String[] courses;
 
     private Handler handler;
     private NavigationPagerAdapter adapter;
@@ -95,6 +100,7 @@ public class ProfileFragment
                 while (!Thread.interrupted()){
                     profileViewerTask task = new profileViewerTask();
                     task.execute(mCurrentUID);
+                    new GetCoursesTask().execute();
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
@@ -113,24 +119,9 @@ public class ProfileFragment
         }).start();
     }
 
-//    @Override
-//    public void getStringArray(String[] texts) {
-//        mNickNameTxt.setText(texts[0]);
-//        mEmailTxt.setText(texts[1]);
-//        mPhoneTxt.setText(texts[2]);
-//        Picasso.with(getContext())
-//                .load(texts[3])
-//                .into(mProfileImg);
-//    }
-
     private  class profileViewerTask extends AsyncTask<String, String, String[]> {
 
         private String[] result;
-//        private ResultCallback callback = null;
-
-//        public profileViewerTask(ResultCallback callback) {
-//            this.callback = callback;
-//        }
 
         protected String[] doInBackground(String... params) {
             Log.d(Constants.TAG_PROFILE, "In ProfileHandler.");
@@ -173,6 +164,43 @@ public class ProfileFragment
 //            void getStringArray(String[] toReturn);
 //        }
 
+    }
+
+    private class GetCoursesTask extends AsyncTask<String, String, String>{
+
+        @Override
+        protected String doInBackground(String... strings) {
+            DatabaseConnectionService service = DatabaseConnectionService.getInstance();
+            try {
+                CallableStatement cs = service.getConnection().prepareCall("{call Get_Courses(?)}");
+                cs.setString(1, mCurrentUID);
+                cs.execute();
+                ResultSet rs = cs.getResultSet();
+                int index = 0;
+                while(rs.next()){
+                    if(index>=6){
+                        break;
+                    }
+                    String course = rs.getString(1);
+                    courses[index] = course;
+                    index++;
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            int index = 0;
+            while (courses[index] != null) {
+                mCourses[index].setText(courses[index]);
+                mCourses[index].setVisibility(View.VISIBLE);
+                index++;
+            }
+        }
     }
 
     /**
@@ -277,6 +305,14 @@ public class ProfileFragment
         mEmailTxt = (TextView) view.findViewById(R.id.profile_email);
         mNickNameTxt = (TextView) view.findViewById(R.id.profile_name);
         mPhoneTxt = (TextView) view.findViewById(R.id.profile_phone);
+        mCourses = new TextView[6];
+        mCourses[0] = (TextView) view.findViewById(R.id.profile_course1);
+        mCourses[1] = (TextView) view.findViewById(R.id.profile_course2);
+        mCourses[2] = (TextView) view.findViewById(R.id.profile_course3);
+        mCourses[3] = (TextView) view.findViewById(R.id.profile_course4);
+        mCourses[4] = (TextView) view.findViewById(R.id.profile_course5);
+        mCourses[5] = (TextView) view.findViewById(R.id.profile_course6);
+        courses = new String[6];
         bottomNavigationViewEx = (BottomNavigationViewEx) getActivity().findViewById(R.id.bnve);
     }
 

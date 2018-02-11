@@ -107,6 +107,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
 //                        .into(mProfileImgE);
 //            }
 //        });
+
         ((MainActivity)getActivity()).setTitle(mCurrentUID);
     }
 
