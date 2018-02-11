@@ -61,14 +61,6 @@ public class Message {
         this.lastInteraction = lastInteraction;
     }
 
-    public String getPictureURL() {
-        return pictureURL;
-    }
-
-    public void setPictureURL(String pictureURL) {
-        this.pictureURL = pictureURL;
-    }
-
     public String getSenderUID() {
         return senderUID;
     }

@@ -302,7 +302,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
     private boolean inviteAlreadySentCheck(final String mEmail, String user) {
 
-
         return false;
     }
 

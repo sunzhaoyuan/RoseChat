@@ -23,7 +23,6 @@ public class ChatActivity extends AppCompatActivity {
         intent.putExtra(Constants.ARG_MESSAGE_KEY, messageKey);
         intent.putExtra(Constants.ARG_SENDER_UID, senderUID);
         Log.d(Constants.TAG_CHAT, "IN CHAT ACTIVITY\n Receiver UID: " + receiverUID);
-//        intent.putExtra(Constants.ARG_FIREBASE_TOKEN, firebaseToken);
         context.startActivity(intent);
     }
 
@@ -31,16 +30,12 @@ public class ChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-//        mToolbar = (Toolbar) findViewById(R.id.toolbar);
         init();
     }
 
     private void init() {
-//        setSupportActionBar(mToolbar);
-//        mToolbar.setTitle(getIntent().getExtras().getString(Constants.ARG_RECEIVER));
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-//        Log.d(Constants.TAG_CHAT, "IN CHAT ACTIVITY\nmessageKey: " + getIntent().getExtras().getString(Constants.ARG_MESSAGE_KEY));
         fragmentTransaction.replace(R.id.frame_layout_chat_container,
                 ChatFragment.newInstance(getIntent().getExtras().getString(Constants.ARG_MESSAGE_NAME),
                         getIntent().getExtras().getString(Constants.ARG_SENDER_UID),
