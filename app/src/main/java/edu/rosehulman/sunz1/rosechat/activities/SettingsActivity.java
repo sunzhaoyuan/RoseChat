@@ -22,7 +22,6 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -277,22 +276,28 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
 
     private void deleteAccount() {
+        String UID = SharedPreferencesUtils.getCurrentUser(getApplicationContext());
+        new DeleteAccountTask(UID).execute();
         FirebaseUser user = mAuth.getCurrentUser();
         SharedPreferencesUtils.removeCurrentUser(getApplicationContext());
         assert user != null;
         user.delete();
         mAuth.signOut(); //TODO: need improved
-        new DeleteAccountTask().execute();
     }
 
     private class DeleteAccountTask extends AsyncTask<String, String, String> {
 
+        private String mUID;
+
+        public DeleteAccountTask (String uid) {
+            mUID = uid;
+        }
+
         protected String doInBackground(String... str) {
-            String query = "delete from [User] where UID = ?";
             try {
-                PreparedStatement stmt = mConnection.prepareStatement(query);
-                stmt.setString(1, SharedPreferencesUtils.getCurrentUser(getApplicationContext()));
-                stmt.executeQuery();
+                CallableStatement stmt = mConnection.prepareCall("{call DeleteUser(?)}");
+                stmt.setString(1, mUID);
+                stmt.execute();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
