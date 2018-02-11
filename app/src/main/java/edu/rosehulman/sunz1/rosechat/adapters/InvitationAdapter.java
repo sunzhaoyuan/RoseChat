@@ -1,6 +1,7 @@
 package edu.rosehulman.sunz1.rosechat.adapters;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -18,11 +20,17 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import edu.rosehulman.sunz1.rosechat.R;
+import edu.rosehulman.sunz1.rosechat.SQLService.DatabaseConnectionService;
 import edu.rosehulman.sunz1.rosechat.activities.InvitationActivity;
 import edu.rosehulman.sunz1.rosechat.models.Invitation;
+import edu.rosehulman.sunz1.rosechat.utils.SharedPreferencesUtils;
 
 /**
  * Created by agarwaa on 14-Aug-17.
@@ -33,18 +41,33 @@ public class InvitationAdapter extends RecyclerView.Adapter<InvitationAdapter.Vi
 
     private Context mContext;
     private InvitationActivity.Callback mCallback;
-    DatabaseReference mInvitationRef;
     ArrayList<Invitation> mInvitationList;
-    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     final private String DEBUG_KEY = "Debug";
+
+    private Connection mDBConnection;
+    private String UID;
+    private String inviterID = null;
 
     public InvitationAdapter(Context context, InvitationActivity.Callback callback){
 
         mCallback = callback;
         mContext = context;
         mInvitationList = new ArrayList<Invitation>();
-        mInvitationRef = FirebaseDatabase.getInstance().getReference().child("invitations/"+user.getUid());
-        mInvitationRef.addChildEventListener(new InvitationChildEventListener());
+        UID = SharedPreferencesUtils.getCurrentUser(context);
+        mDBConnection = DatabaseConnectionService.getInstance().getConnection();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while(!Thread.interrupted()){
+                    new GetInvitationTask().execute();
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).start();
     }
 
     @Override
@@ -59,12 +82,8 @@ public class InvitationAdapter extends RecyclerView.Adapter<InvitationAdapter.Vi
         Invitation invite = mInvitationList.get(position);
         holder.mInviteName.setText(invite.getmName());
         holder.mInviteMessage.setText(invite.getmMessage());
-        if(invite.getmStatus().equals("Pending")){
-            holder.mInvitePending.setVisibility(View.VISIBLE);
-        }else {
-            holder.mConfirmInvite.setVisibility(View.VISIBLE);
-            holder.mDeclineInvite.setVisibility(View.VISIBLE);
-        }
+        holder.mConfirmInvite.setVisibility(View.VISIBLE);
+        holder.mDeclineInvite.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -91,19 +110,8 @@ public class InvitationAdapter extends RecyclerView.Adapter<InvitationAdapter.Vi
                 @Override
                 public void onClick(View v) {
                     Invitation confirmInvite = mInvitationList.get(getAdapterPosition());
-                    mInvitationRef.child(confirmInvite.getmName()).removeValue();
-                    mInvitationRef = FirebaseDatabase.getInstance().getReference().child("invitations/"+confirmInvite.getmName());
-                    mInvitationRef.child(user.getUid()).removeValue();
-
-                    DatabaseReference mFriendsRef = FirebaseDatabase.getInstance().getReference().child("friends/"+user.getUid());
-                    mFriendsRef.child(confirmInvite.getmName()).setValue(true);
-                    mFriendsRef = FirebaseDatabase.getInstance().getReference().child("friends/"+confirmInvite.getmName());
-                    mFriendsRef.child(user.getUid()).setValue(true);
-
-//                    mInvitationList.remove(getAdapterPosition());
-                    notifyDataSetChanged();
-
-                    mInvitationRef = FirebaseDatabase.getInstance().getReference().child("invitations/"+user.getUid());
+                    inviterID = confirmInvite.getmName();
+                    new HandleInvitationTask().execute(new Boolean(true));
 
                 }
             });
@@ -112,74 +120,73 @@ public class InvitationAdapter extends RecyclerView.Adapter<InvitationAdapter.Vi
                 @Override
                 public void onClick(View v) {
                     Invitation confirmInvite = mInvitationList.get(getAdapterPosition());
-                    mInvitationRef.child(confirmInvite.getmName()).removeValue();
-                    mInvitationRef = FirebaseDatabase.getInstance().getReference().child("invitations/"+confirmInvite.getmName());
-                    mInvitationRef.child(user.getUid()).removeValue();
-
-//                    mInvitationList.remove(getAdapterPosition());
-                    notifyDataSetChanged();
-
-                    mInvitationRef = FirebaseDatabase.getInstance().getReference().child("invitations/"+user.getUid());
+                    inviterID = confirmInvite.getmName();
+                    new HandleInvitationTask().execute(new Boolean(false));
                 }
             });
-
         }
     }
 
-    private class InvitationChildEventListener implements ChildEventListener {
+    private class GetInvitationTask extends AsyncTask<String, String, String> {
+
         @Override
-        public void onChildAdded(final DataSnapshot dataSnapshot, String s) {
-            final Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    // Do something after 5s = 5000ms
-                    Log.d(DEBUG_KEY, dataSnapshot.toString());
+        protected String doInBackground(String... strings) {
+            try {
+                CallableStatement cs = mDBConnection.prepareCall("{call Get_Invites(?)}");
+                cs.setString(1, UID);
+                cs.execute();
+                ResultSet rs = cs.getResultSet();
+                mInvitationList.clear();
+                while (rs.next()) {
+                    String s = rs.getString(1);
                     Invitation invite = new Invitation();
-                    Log.d(DEBUG_KEY, dataSnapshot.getKey().toString());
-                    invite.setmName(dataSnapshot.getKey().toString());
-                    Log.d(DEBUG_KEY, dataSnapshot.child("message").getValue().toString());
-                    invite.setmMessage("Message: " + dataSnapshot.child("message").getValue().toString());
-                    Log.d(DEBUG_KEY, dataSnapshot.child("status").getValue().toString());
-                    invite.setmStatus(dataSnapshot.child("status").getValue().toString());
-                    mInvitationList.add(0, invite);
-                    notifyDataSetChanged();
+                    invite.setmName(s);
+                    invite.setmMessage("Empty Message");
+                    mInvitationList.add(invite);
                 }
-            }, 10000);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return null;
         }
 
         @Override
-        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-        }
-
-        @Override
-        public void onChildRemoved(final DataSnapshot dataSnapshot) {
-            final Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    // Do something after 5s = 5000ms
-                    String key = dataSnapshot.getKey();
-                    for(Invitation mq: mInvitationList){
-                        if(mq.getmName().equals(key)){
-                            mInvitationList.remove(mq);
-                            notifyDataSetChanged();
-                            return;
-                        }
-                    }
-                }
-            }, 250);
-        }
-
-        @Override
-        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-        }
-
-        @Override
-        public void onCancelled(DatabaseError databaseError) {
-
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            notifyDataSetChanged();
         }
     }
+
+    private class HandleInvitationTask extends AsyncTask<Boolean, String, String>{
+
+        @Override
+        protected String doInBackground(Boolean... booleans) {
+            boolean isAccepted = booleans[0].booleanValue();
+            CallableStatement cs=null;
+            try {
+                if(isAccepted){
+                    cs=mDBConnection.prepareCall("{call Friend_Accept(?, ?)}");
+                    cs.setString(1, inviterID);
+                    cs.setString(2, UID);
+                    cs.execute();
+                }else{
+                    cs=mDBConnection.prepareCall("{call FriendRequest_Decline(?, ?)}");
+                    cs.setString(1, inviterID);
+                    cs.setString(2, UID);
+                    cs.execute();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            inviterID = null;
+            notifyDataSetChanged();
+        }
+    }
+
 }

@@ -17,7 +17,7 @@ import edu.rosehulman.sunz1.rosechat.adapters.InvitationAdapter;
 
 public class InvitationActivity extends AppCompatActivity {
     final private String DEBUG_KEY = "Debug";
-    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+//    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     InvitationAdapter mAdapter;
     private Callback mCallback;
 
