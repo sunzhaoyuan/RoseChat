@@ -1,31 +1,30 @@
 package edu.rosehulman.sunz1.rosechat.adapters;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
-import android.app.FragmentManager;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.os.AsyncTask;
-import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
+import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Types;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 
 import edu.rosehulman.sunz1.rosechat.R;
-import edu.rosehulman.sunz1.rosechat.SQLService.DatabaseConnectionService;
 import edu.rosehulman.sunz1.rosechat.activities.NewChatActivity;
+import edu.rosehulman.sunz1.rosechat.models.Contact;
+import edu.rosehulman.sunz1.rosechat.models.Message;
 import edu.rosehulman.sunz1.rosechat.utils.SharedPreferencesUtils;
 
 /**
@@ -37,19 +36,21 @@ public class NewChatAdapter extends RecyclerView.Adapter<NewChatAdapter.ViewHold
     ArrayList<String> mContactList;
     ArrayList<String> mSelectedContactsList;
     NewChatActivity.Callback mCallback;
-    //For SQL
-    private Connection mDBConnection;
-    private String UID;
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    DatabaseReference mFriendsRef;
+    final private String DEBUG_KEY = "NewChatDebug ";
 
     public NewChatAdapter(Context context, NewChatActivity.Callback callback){
-        Log.d("SUCK","?????");
-        mDBConnection = DatabaseConnectionService.getInstance().getConnection();
+
         mCallback = callback;
         mContext = context;
-        UID = SharedPreferencesUtils.getCurrentUser(mContext);
         mContactList = new ArrayList<String>();
-        new getFriendTask(UID).execute();
-        System.out.print("wtf " + mContactList.toString());
+        mFriendsRef = FirebaseDatabase.getInstance().getReference().child("friends/"+user.getUid());
+        mFriendsRef.addChildEventListener(new FriendsChildEventListener());
+    }
+
+    private void addContact(String contact) {
+        mSelectedContactsList.add(0, contact);
     }
 
     @Override
@@ -71,18 +72,56 @@ public class NewChatAdapter extends RecyclerView.Adapter<NewChatAdapter.ViewHold
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         TextView mContactName;
-        String FriendID;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
             itemView.setOnClickListener(new View.OnClickListener() {
-
                 @Override
-                public void onClick(View view) {
-                    //create chat room
-                    FriendID= ((TextView) view.findViewById(R.id.newChat_name)).getText().toString();
-                    showFontSizeDialog(FriendID);
+                public void onClick(View v) {
+                    final String contactToMessage = mContactList.get(getAdapterPosition());
+                    Log.d(DEBUG_KEY, contactToMessage);
+
+                    final DatabaseReference mMessagesRef = FirebaseDatabase.getInstance().getReference().child("messages");
+                    mMessagesRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            boolean containsChat = false;
+                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                Log.d(DEBUG_KEY, contactToMessage);
+                                Log.d(DEBUG_KEY, "current senderUid is : " + snapshot.child("senderUID").getValue() +
+                                        "\ncurrent receiverUid is : " + snapshot.child("receiverUID").getValue());
+                                if(snapshot.child("senderUID").getValue().equals(user.getUid())){
+                                    if(snapshot.child("receiverUID").getValue().equals(contactToMessage)){
+                                        Toast.makeText(mContext, "Chat already exists", Toast.LENGTH_LONG).show();
+                                        Log.d(DEBUG_KEY, "I am inside error SENDER UID");
+                                        containsChat = true;
+                                        break;
+                                    }
+                                }else if(snapshot.child("receiverUID").getValue().equals(user.getUid())){
+                                    if((snapshot.child("senderUID").getValue().equals(contactToMessage))){
+                                        Log.d(DEBUG_KEY, "I am inside error RECEOVER UID");
+                                        Toast.makeText(mContext, "Chat already exists", Toast.LENGTH_LONG).show();
+                                        containsChat = true;
+                                        break;
+                                    }
+                                }
+                            }
+                            if(!containsChat){
+                                Toast.makeText(mContext, "Chat created", Toast.LENGTH_LONG).show();
+                                //TODO What will happen if the chat does not exist yet
+                                DatabaseReference mFriendRef = FirebaseDatabase.getInstance().getReference().child("contacts/" + contactToMessage);
+                                Message message = new Message(contactToMessage ,"Start chatting now!", mFriendRef.child("profilePicUrl").toString(),user.getUid(), contactToMessage);
+                                mMessagesRef.push().setValue(message);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
                 }
             });
 
@@ -90,106 +129,35 @@ public class NewChatAdapter extends RecyclerView.Adapter<NewChatAdapter.ViewHold
         }
     }
 
-    private void showFontSizeDialog(final String FriendID) {
-        FragmentManager manager = ((Activity) mContext).getFragmentManager();
-        DialogFragment df = new DialogFragment() {
-            @Override
-            public Dialog onCreateDialog(Bundle savedInstanceState) {
-                Log.d("chatroom", "create chatroom");
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                View view = getActivity().getLayoutInflater().inflate(R.layout.dialogfragment_newchat,null);
-                builder.setView(view);
-                final  EditText editText = (EditText) view.findViewById(R.id.dialogfragment_newchat_editext);
-                builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        new addMemberAndCreateTask(UID,editText.getText().toString(),FriendID).execute();
-                    }
-                });
 
-                builder.setNegativeButton(android.R.string.cancel,null);
-                return builder.create();
-            }
-        };
-        df.show(manager, "fontSize");
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-    //----------------------------------------------------------Connection SQL Tasks------------------------------------------//
-    private  class getFriendTask  extends AsyncTask<String, Integer, ResultSet>{
-        private  String  UID = null;
-        private  ResultSet set = null;
-        private  getFriendTask(String UID){
-            this.UID = UID;
-        }
+    private class FriendsChildEventListener implements ChildEventListener {
         @Override
-        protected ResultSet doInBackground(String... strings) {
-            Log.d("gerFriend","?");
-            System.out.print("........");
-            try {
-                System.out.print(UID);
-                CallableStatement stem = NewChatAdapter.this.mDBConnection.prepareCall("{? = call Get_Friends(?)}");
-                stem.registerOutParameter(1,Types.INTEGER);
-                stem.setString(2,UID);
-                stem.execute();
-                set = stem.getResultSet();
-                System.out.print(set.toString());
-                while (set.next()) {
-                    String friend;
-                    friend = set.getString("FriendID");
-                    NewChatAdapter.this.mContactList.add(friend);
-                }
-            }catch (SQLException e){
-                e.printStackTrace();
+        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            if(dataSnapshot.getValue().equals(true)) {
+                String contactName = dataSnapshot.getKey();
+                mContactList.add(0, contactName);
+                notifyDataSetChanged();
             }
-            return set;
         }
 
-    }
-
-    private  class addMemberAndCreateTask  extends AsyncTask<String, Integer, ResultSet>{
-        private  String  UID;
-        private  String chatroomName;
-        private  String memberName;
-        private  ResultSet set;
-        private  int CID;
-        private  addMemberAndCreateTask(String UID,String chatroomName,String memberName){
-            this.UID = UID;
-            this.chatroomName = chatroomName;
-            this.memberName = memberName;
-        }
         @Override
-        protected ResultSet doInBackground(String... strings) {
-            try {
-                CallableStatement stem = NewChatAdapter.this.mDBConnection.prepareCall("{? = call UserCreateChatRoom(?, ?)}");
-                stem.registerOutParameter(1,Types.INTEGER);
-                stem.setString(2,UID);
-                stem.setString(3,chatroomName);
-                stem.execute();
-                CID = stem.getInt(1);
-                CallableStatement stem2 = NewChatAdapter.this.mDBConnection.prepareCall("{call AddUserChatRoom(?,?)}");
-                stem2.setString(1,memberName);
-                stem2.setInt(2,CID);
-                stem2.execute();
-            }catch (SQLException e){
-                e.printStackTrace();
-            }
-            return set;
+        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
         }
 
-    }
+        @Override
+        public void onChildRemoved(DataSnapshot dataSnapshot) {
 
+        }
+
+        @Override
+        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+
+        }
+    }
 }
-
-

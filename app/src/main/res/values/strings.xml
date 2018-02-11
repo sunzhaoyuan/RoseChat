@@ -69,8 +69,4 @@
     <string name="add_new_chat">Add New Chat</string>
     <string name="send_invitation">Send Invitation</string>
     <string name="welcome_to_rosechat">Welcome to RoseChat</string>
-    <string name="fontsize">Font Size</string>
-    <string name="fontfamily">Font Family</string>
-    <string name="font">Font</string>
-    <string name="font_family">Font Family:</string>
 </resources>
