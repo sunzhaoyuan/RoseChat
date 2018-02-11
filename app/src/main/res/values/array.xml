@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="font_size_pointfive">0.5</string>
+    <string name="font_size_one">1</string>
+    <string name="font_size_two">2</string>
+    <array name="fontsize_array">
+        <item>@string/font_size_pointfive</item>
+        <item>@string/font_size_one</item>
+        <item>@string/font_size_two</item>
+    </array>
+
+    <string name="font_family_arial">Arial</string>
+    <string name="font_family_times_new_roma">Times New Roma</string>
+    <array name="fontfamily_array">
+        <item>@string/font_family_arial</item>
+        <item>@string/font_family_times_new_roma</item>
+    </array>
+
+</resources>
