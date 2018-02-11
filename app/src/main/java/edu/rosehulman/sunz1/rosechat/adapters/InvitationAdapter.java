@@ -41,9 +41,7 @@ public class InvitationAdapter extends RecyclerView.Adapter<InvitationAdapter.Vi
 
     private Context mContext;
     private InvitationActivity.Callback mCallback;
-//    DatabaseReference mInvitationRef;
     ArrayList<Invitation> mInvitationList;
-//    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     final private String DEBUG_KEY = "Debug";
 
     private Connection mDBConnection;
@@ -55,8 +53,6 @@ public class InvitationAdapter extends RecyclerView.Adapter<InvitationAdapter.Vi
         mCallback = callback;
         mContext = context;
         mInvitationList = new ArrayList<Invitation>();
-//        mInvitationRef = FirebaseDatabase.getInstance().getReference().child("invitations/"+user.getUid());
-//        mInvitationRef.addChildEventListener(new InvitationChildEventListener());
         UID = SharedPreferencesUtils.getCurrentUser(context);
         mDBConnection = DatabaseConnectionService.getInstance().getConnection();
         new Thread(new Runnable() {
@@ -88,12 +84,6 @@ public class InvitationAdapter extends RecyclerView.Adapter<InvitationAdapter.Vi
         holder.mInviteMessage.setText(invite.getmMessage());
         holder.mConfirmInvite.setVisibility(View.VISIBLE);
         holder.mDeclineInvite.setVisibility(View.VISIBLE);
-        /*if(invite.getmStatus().equals("Pending")){
-            holder.mInvitePending.setVisibility(View.VISIBLE);
-        }else {
-            holder.mConfirmInvite.setVisibility(View.VISIBLE);
-            holder.mDeclineInvite.setVisibility(View.VISIBLE);
-        }*/
     }
 
     @Override
@@ -122,18 +112,6 @@ public class InvitationAdapter extends RecyclerView.Adapter<InvitationAdapter.Vi
                     Invitation confirmInvite = mInvitationList.get(getAdapterPosition());
                     inviterID = confirmInvite.getmName();
                     new HandleInvitationTask().execute(new Boolean(true));
-//                    mInvitationRef.child(confirmInvite.getmName()).removeValue();
-//                    mInvitationRef = FirebaseDatabase.getInstance().getReference().child("invitations/"+confirmInvite.getmName());
-//                    mInvitationRef.child(user.getUid()).removeValue();
-
-//                    DatabaseReference mFriendsRef = FirebaseDatabase.getInstance().getReference().child("friends/"+user.getUid());
-//                    mFriendsRef.child(confirmInvite.getmName()).setValue(true);
-//                    mFriendsRef = FirebaseDatabase.getInstance().getReference().child("friends/"+confirmInvite.getmName());
-//                    mFriendsRef.child(user.getUid()).setValue(true);
-
-//                    mInvitationList.remove(getAdapterPosition());
-//                    notifyDataSetChanged();
-//                    mInvitationRef = FirebaseDatabase.getInstance().getReference().child("invitations/"+user.getUid());
 
                 }
             });
@@ -144,17 +122,8 @@ public class InvitationAdapter extends RecyclerView.Adapter<InvitationAdapter.Vi
                     Invitation confirmInvite = mInvitationList.get(getAdapterPosition());
                     inviterID = confirmInvite.getmName();
                     new HandleInvitationTask().execute(new Boolean(false));
-//                    mInvitationRef.child(confirmInvite.getmName()).removeValue();
-//                    mInvitationRef = FirebaseDatabase.getInstance().getReference().child("invitations/"+confirmInvite.getmName());
-//                    mInvitationRef.child(user.getUid()).removeValue();
-
-//                    mInvitationList.remove(getAdapterPosition());
-//                    notifyDataSetChanged();
-
-//                    mInvitationRef = FirebaseDatabase.getInstance().getReference().child("invitations/"+user.getUid());
                 }
             });
-
         }
     }
 
