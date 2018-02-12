@@ -41,41 +41,39 @@ public class ChatRoomFragment extends Fragment implements ChatSystem.View, TextV
         // Required empty public constructor
     }
 
-    public static ChatRoomFragment newInstance(String messageName,
-                                               String senderUid,
-                                               String receiverUid,
-                                               String messageKey) {
-
+    /**
+     * Get values that were passed from ChatRoomActivity : init()
+     *
+     * @param chatRoomName
+     * @param chatRoomID
+     * @return fragment - a ChatRoomFragment callback that ChatRoomActivity
+     *                    uses to replace fragment container
+     */
+    public static ChatRoomFragment newInstance(String chatRoomName,
+                                               String chatRoomID)
+    {
         Bundle args = new Bundle();
-        args.putString(Constants.ARG_SENDER_UID, senderUid);
-        args.putString(Constants.ARG_MESSAGE_NAME, messageName);
-        args.putString(Constants.ARG_RECEIVER_UID, receiverUid);
-        args.putString(Constants.ARG_MESSAGE_KEY, messageKey);
+        args.putString(Constants.ARG_CHATROOM_NAME, chatRoomName);
+        args.putString(Constants.ARG_CHATROOM_ID, chatRoomID);
         ChatRoomFragment fragment = new ChatRoomFragment();
         fragment.setArguments(args);
         return fragment;
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater,
+                             ViewGroup container,
+                             Bundle savedInstanceState)
+    {
         View view = inflater.inflate(R.layout.fragment_chat, container, false);
-        bindViews(view);
-        return view;
-    }
-
-    private void bindViews(View view) {
         mRecyclerViewChat = (RecyclerView) view.findViewById(R.id.recycler_view_chat);
         mEditTextChat = (EditText) view.findViewById(R.id.edit_text_chat);
+        return view;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        init();
-    }
-
-    private void init() {
         mCurrentUID = SharedPreferencesUtils.getCurrentUser(getContext());
         mProgressDialog = new ProgressDialog(getActivity());
         mProgressDialog.setTitle(getString(R.string.loading));
@@ -85,11 +83,13 @@ public class ChatRoomFragment extends Fragment implements ChatSystem.View, TextV
         mEditTextChat.setOnEditorActionListener(this);
 
         mChatPresenter = new ChatPresenter(this);
-        Log.d(Constants.TAG_CHAT, "IN CHAT FRAGMENT\nmessageKey: " + getArguments().getString(Constants.ARG_MESSAGE_KEY));
+        Log.d(Constants.TAG_CHAT, "IN CHAT FRAGMENT\nChatRoom ID: " + getArguments().getString(Constants.ARG_CHATROOM_ID));
         String receiverUID = getArguments().getString(Constants.ARG_RECEIVER_UID);
-        mChatPresenter.getMessage(mCurrentUID,
+        mChatPresenter.getMessage(
+                mCurrentUID,
                 receiverUID.equals(mCurrentUID) ? getArguments().getString(Constants.ARG_SENDER_UID) : receiverUID,
-                getArguments().getString(Constants.ARG_MESSAGE_KEY));
+                getArguments().getString(Constants.ARG_MESSAGE_KEY)
+        );
     }
 
     @Override
@@ -108,13 +108,19 @@ public class ChatRoomFragment extends Fragment implements ChatSystem.View, TextV
     @Override
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
         if (actionId == EditorInfo.IME_ACTION_SEND) {
+            // after the user pushes "Send" button
             sendMessage();
             return true;
         }
         return false;
     }
 
+    /**
+     *
+     *
+     */
     private void sendMessage() {
+        
         String text = mEditTextChat.getText().toString();
         String receiverUid = getArguments().getString(Constants.ARG_RECEIVER_UID);
         String senderUid = getArguments().getString(Constants.ARG_SENDER_UID);

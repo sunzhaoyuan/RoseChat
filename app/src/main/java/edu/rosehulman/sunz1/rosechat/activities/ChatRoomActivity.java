@@ -37,10 +37,8 @@ public class ChatRoomActivity extends AppCompatActivity {
         fragmentTransaction.replace(
                 R.id.frame_layout_chat_container,
                 ChatRoomFragment.newInstance(
-                        getIntent().getExtras().getString(Constants.ARG_MESSAGE_NAME),
-                        getIntent().getExtras().getString(Constants.ARG_SENDER_UID),
-                        getIntent().getExtras().getString(Constants.ARG_RECEIVER_UID),
-                        getIntent().getExtras().getString(Constants.ARG_MESSAGE_KEY)
+                        getIntent().getExtras().getString(Constants.ARG_CHATROOM_NAME),
+                        getIntent().getExtras().getString(Constants.ARG_CHATROOM_ID)
                 ),
                 ChatRoomFragment.class.getSimpleName()
         );
