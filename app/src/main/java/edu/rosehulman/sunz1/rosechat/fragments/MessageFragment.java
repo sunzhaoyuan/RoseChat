@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 
 import edu.rosehulman.sunz1.rosechat.R;
 import edu.rosehulman.sunz1.rosechat.adapters.MessageAdapter;
-import edu.rosehulman.sunz1.rosechat.models.Message;
 
 public class MessageFragment extends Fragment {
 

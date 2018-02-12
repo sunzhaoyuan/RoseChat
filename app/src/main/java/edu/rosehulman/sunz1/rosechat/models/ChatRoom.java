@@ -20,4 +20,5 @@ public class ChatRoom {
     public int getCID() {
         return CID;
     }
+
 }

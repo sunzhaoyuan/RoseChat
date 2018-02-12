@@ -120,7 +120,10 @@ public class ChatRoomFragment extends Fragment implements ChatSystem.View, TextV
      *
      */
     private void sendMessage() {
-        
+
+        // add message to Message entity & update HasMessage
+        // Update Send relationship
+
         String text = mEditTextChat.getText().toString();
         String receiverUid = getArguments().getString(Constants.ARG_RECEIVER_UID);
         String senderUid = getArguments().getString(Constants.ARG_SENDER_UID);
