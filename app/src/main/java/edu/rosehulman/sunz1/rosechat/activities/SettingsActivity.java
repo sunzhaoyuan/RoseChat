@@ -91,28 +91,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         mIsFirstTimeReadServer = true;
 
         new SyncSettingTask().execute();
-
-        // reads server constantly
-//        mHandler = new Handler(Looper.getMainLooper());
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                while (!Thread.interrupted()) {
-//                    new SyncSettingTask().execute();
-//                    mHandler.post(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            // return to the main thread
-//                        }
-//                    });
-//                    try {
-//                        Thread.sleep(2000);
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            }
-//        }).start();
     }
 
     @Override
