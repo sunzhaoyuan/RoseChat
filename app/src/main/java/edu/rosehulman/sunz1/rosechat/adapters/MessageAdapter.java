@@ -113,7 +113,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
     /**
      * Enter the ChatRoom at selected adapter position
-     * 
+     *
      * @param adapterPosition
      */
     private void enterChat(int adapterPosition) {

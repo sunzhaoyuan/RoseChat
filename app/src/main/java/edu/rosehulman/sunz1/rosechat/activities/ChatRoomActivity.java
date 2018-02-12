@@ -9,7 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
 import edu.rosehulman.sunz1.rosechat.R;
-import edu.rosehulman.sunz1.rosechat.fragments.ChatFragment;
+import edu.rosehulman.sunz1.rosechat.fragments.ChatRoomFragment;
 import edu.rosehulman.sunz1.rosechat.utils.Constants;
 
 public class ChatRoomActivity extends AppCompatActivity {
@@ -34,12 +34,16 @@ public class ChatRoomActivity extends AppCompatActivity {
     private void init() {
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.frame_layout_chat_container,
-                ChatFragment.newInstance(getIntent().getExtras().getString(Constants.ARG_MESSAGE_NAME),
+        fragmentTransaction.replace(
+                R.id.frame_layout_chat_container,
+                ChatRoomFragment.newInstance(
+                        getIntent().getExtras().getString(Constants.ARG_MESSAGE_NAME),
                         getIntent().getExtras().getString(Constants.ARG_SENDER_UID),
                         getIntent().getExtras().getString(Constants.ARG_RECEIVER_UID),
-                        getIntent().getExtras().getString(Constants.ARG_MESSAGE_KEY)),
-                ChatFragment.class.getSimpleName());
+                        getIntent().getExtras().getString(Constants.ARG_MESSAGE_KEY)
+                ),
+                ChatRoomFragment.class.getSimpleName()
+        );
         fragmentTransaction.commit();
     }
 

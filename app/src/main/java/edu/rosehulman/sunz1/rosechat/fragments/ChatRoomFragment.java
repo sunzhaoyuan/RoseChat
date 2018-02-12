@@ -25,7 +25,7 @@ import edu.rosehulman.sunz1.rosechat.sys.chat.ChatSystem;
 import edu.rosehulman.sunz1.rosechat.utils.Constants;
 import edu.rosehulman.sunz1.rosechat.utils.SharedPreferencesUtils;
 
-public class ChatFragment extends Fragment implements ChatSystem.View, TextView.OnEditorActionListener {
+public class ChatRoomFragment extends Fragment implements ChatSystem.View, TextView.OnEditorActionListener {
 
     public static final String TAG = Constants.TAG_CHAT;
 
@@ -37,21 +37,21 @@ public class ChatFragment extends Fragment implements ChatSystem.View, TextView.
 
     private String mCurrentUID;
 
-    public ChatFragment() {
+    public ChatRoomFragment() {
         // Required empty public constructor
     }
 
-    public static ChatFragment newInstance(String messageName,
-                                           String senderUid,
-                                           String receiverUid,
-                                           String messageKey) {
+    public static ChatRoomFragment newInstance(String messageName,
+                                               String senderUid,
+                                               String receiverUid,
+                                               String messageKey) {
 
         Bundle args = new Bundle();
         args.putString(Constants.ARG_SENDER_UID, senderUid);
         args.putString(Constants.ARG_MESSAGE_NAME, messageName);
         args.putString(Constants.ARG_RECEIVER_UID, receiverUid);
         args.putString(Constants.ARG_MESSAGE_KEY, messageKey);
-        ChatFragment fragment = new ChatFragment();
+        ChatRoomFragment fragment = new ChatRoomFragment();
         fragment.setArguments(args);
         return fragment;
     }
