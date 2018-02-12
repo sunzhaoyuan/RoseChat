@@ -19,6 +19,7 @@ import java.util.ArrayList;
 
 import edu.rosehulman.sunz1.rosechat.R;
 import edu.rosehulman.sunz1.rosechat.SQLService.DatabaseConnectionService;
+import edu.rosehulman.sunz1.rosechat.activities.ChatRoomActivity;
 import edu.rosehulman.sunz1.rosechat.models.ChatRoom;
 import edu.rosehulman.sunz1.rosechat.utils.Constants;
 import edu.rosehulman.sunz1.rosechat.utils.SharedPreferencesUtils;
@@ -110,19 +111,16 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
     }
 
+    /**
+     * Enter the ChatRoom at selected adapter position
+     * 
+     * @param adapterPosition
+     */
     private void enterChat(int adapterPosition) {
         ChatRoom currChatRoom = mChatRoomList.get(adapterPosition);
-        int chatRoomID = currChatRoom.getCID();
+        Integer chatRoomID = currChatRoom.getCID();
         String chatRoomName = currChatRoom.getName();
-//        Message currentMessage = mMessageList.get(adapterPosition);
-//        String messageName = currentMessage.getName();
-//        String messageKey = currentMessage.getKey();
-//        String receiversUID = currentMessage.getReceiverUID();
-//        String senderUID = currentMessage.getSenderUID();
-//        Log.d(Constants.TAG_CHAT, "IN MESSAGE_ADAPTER\nreceiverUID: " + receiversUID);
-//        ChatActivity.startActivity(mContext, messageName, senderUID, receiversUID, messageKey);
-//        ChatRoom currentChatRoom = mChatRoomList.get(adapterPosition);
-//        ChatActivity.startActivity(mContext,currentChatRoom.getCID());
+        ChatRoomActivity.startActivity(mContext, chatRoomID, chatRoomName);
     }
 
     private void messageOptions(int adapterPosition) {
