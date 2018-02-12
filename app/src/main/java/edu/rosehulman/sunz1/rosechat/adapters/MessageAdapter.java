@@ -2,21 +2,14 @@ package edu.rosehulman.sunz1.rosechat.adapters;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -26,9 +19,7 @@ import java.util.ArrayList;
 
 import edu.rosehulman.sunz1.rosechat.R;
 import edu.rosehulman.sunz1.rosechat.SQLService.DatabaseConnectionService;
-import edu.rosehulman.sunz1.rosechat.activities.ChatActivity;
 import edu.rosehulman.sunz1.rosechat.models.ChatRoom;
-import edu.rosehulman.sunz1.rosechat.models.Message;
 import edu.rosehulman.sunz1.rosechat.utils.Constants;
 import edu.rosehulman.sunz1.rosechat.utils.SharedPreferencesUtils;
 
@@ -44,7 +35,6 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     private String mCurrentUID;
 
 
-
     public MessageAdapter(Context context) {
         mContext = context;
         mChatRoomList = new ArrayList<>();
@@ -54,7 +44,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             @Override
             public void run() {
                 while (!Thread.interrupted()) {
-                    new getChatroom().execute();
+                    new GetChatRoomTask().execute();
                     try {
                         Thread.sleep(2000);
                     } catch (InterruptedException e) {
@@ -121,7 +111,9 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     }
 
     private void enterChat(int adapterPosition) {
-//        //TODO: link ChatFragment here
+        ChatRoom currChatRoom = mChatRoomList.get(adapterPosition);
+        int chatRoomID = currChatRoom.getCID();
+        String chatRoomName = currChatRoom.getName();
 //        Message currentMessage = mMessageList.get(adapterPosition);
 //        String messageName = currentMessage.getName();
 //        String messageKey = currentMessage.getKey();
@@ -137,7 +129,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     }
 
 
-    private class getChatroom extends AsyncTask<String,String,String>{
+    private class GetChatRoomTask extends AsyncTask<String, String, String> {
 
         @Override
         protected String doInBackground(String... str) {
@@ -145,13 +137,13 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             try {
                 mChatRoomList.clear();
                 CallableStatement cs = connection.prepareCall("call getChatRoom(?)");
-                cs.setString(1,mCurrentUID);
+                cs.setString(1, mCurrentUID);
                 cs.execute();
                 ResultSet rs = cs.getResultSet();
-                while (rs.next()){
-                    mChatRoomList.add(0,new ChatRoom(rs.getString("Name"),rs.getInt("CID")));
+                while (rs.next()) {
+                    mChatRoomList.add(0, new ChatRoom(rs.getString("Name"), rs.getInt("CID")));
                 }
-            }catch (SQLException e){
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
             return null;
