@@ -64,20 +64,39 @@ public class ChatCommunicator implements ChatSystem.Communicator {
 //                mOnSendMessageListener.onSendMessageFailure("Unable to send message: " + databaseError.getMessage());
 //            }
 //        });
-        Connection connection = DatabaseConnectionService.getInstance().getConnection();
-        try {
-            // 1: varchar(50) UID; 2: int ChatRoomID; 3: nvarchar(50) text
-            CallableStatement cs = connection.prepareCall("call UserSendMessage(?, ?, ?)");
-            cs.setString(1, UID);
-            cs.setInt(2, chatRoomID);
-            cs.setString(3, text);
-            cs.execute();
+        new SendMessageTask(chatRoomID, text, UID).execute();
+    }
 
-            Log.d(Constants.TAG_CHAT, "Send message: " + text + "Success.");
-            mOnSendMessageListener.onSendMessageSuccess();
-        } catch (SQLException e) {
-            mOnSendMessageListener.onSendMessageFailure("Unable to send message: " + e.getMessage());
-            e.printStackTrace();
+    private class SendMessageTask extends AsyncTask<String, String, String> {
+
+        private Integer chatRoomID;
+        private String text;
+        private String UID;
+
+        public SendMessageTask(Integer chatRoomID, String text, String UID) {
+            this.chatRoomID = chatRoomID;
+            this.text = text;
+            this.UID = UID;
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            Connection connection = DatabaseConnectionService.getInstance().getConnection();
+            try {
+                // 1: varchar(50) UID; 2: int ChatRoomID; 3: nvarchar(50) text
+                CallableStatement cs = connection.prepareCall("call UserSendMessage(?, ?, ?)");
+                cs.setString(1, UID);
+                cs.setInt(2, chatRoomID);
+                cs.setString(3, text);
+                cs.execute();
+
+                Log.d(Constants.TAG_CHAT, "Send message: " + text + "Success.");
+                mOnSendMessageListener.onSendMessageSuccess();
+            } catch (SQLException e) {
+                mOnSendMessageListener.onSendMessageFailure("Unable to send message: " + e.getMessage());
+                e.printStackTrace();
+            }
+            return null;
         }
     }
 
@@ -144,7 +163,7 @@ public class ChatCommunicator implements ChatSystem.Communicator {
                 while (messages.next()) {
                     Integer MID = messages.getInt("MID");
                     String text = messages.getString("Text");
-                    String senderID = messages.getString("UID");
+                    String senderID = messages.getString("SenderUID");
                     Message message = new Message(MID, text, senderID);
                     Log.d(Constants.TAG_CHAT, "Get message: " + message + "Success.");
                     mOnGetMessagesListener.onGetMessagesSuccess(message);

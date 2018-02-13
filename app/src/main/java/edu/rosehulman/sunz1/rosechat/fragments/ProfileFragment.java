@@ -9,7 +9,6 @@ import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.telecom.Call;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -73,7 +72,7 @@ public class ProfileFragment
         return fragment;
     }
 
-    public void setAdapter(NavigationPagerAdapter adapter){
+    public void setAdapter(NavigationPagerAdapter adapter) {
         this.adapter = adapter;
     }
 
@@ -86,14 +85,14 @@ public class ProfileFragment
         new Thread(new Runnable() {
             @Override
             public void run() {
-                while (!Thread.interrupted()){
+                while (!Thread.interrupted()) {
                     profileViewerTask task = new profileViewerTask();
                     task.execute(mCurrentUID);
                     new GetCoursesTask().execute();
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            if(adapter!=null){
+                            if (adapter != null) {
                                 adapter.notifyDataSetChanged();
 
                             }
@@ -109,7 +108,7 @@ public class ProfileFragment
         }).start();
     }
 
-    private  class profileViewerTask extends AsyncTask<String, String, String[]> {
+    private class profileViewerTask extends AsyncTask<String, String, String[]> {
 
         private String[] result;
 
@@ -151,7 +150,7 @@ public class ProfileFragment
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    while (!Thread.interrupted()){
+                    while (!Thread.interrupted()) {
                         handler.post(new Runnable() {
                             @Override
                             public void run() {
@@ -168,11 +167,14 @@ public class ProfileFragment
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-        }
+                    }
 
+                }
+            });
+        }
     }
 
-    private class GetCoursesTask extends AsyncTask<String, String, String>{
+    private class GetCoursesTask extends AsyncTask<String, String, String> {
 
         @Override
         protected String doInBackground(String... strings) {
@@ -183,8 +185,8 @@ public class ProfileFragment
                 cs.execute();
                 ResultSet rs = cs.getResultSet();
                 int index = 0;
-                while(rs.next()){
-                    if(index>=6){
+                while (rs.next()) {
+                    if (index >= 6) {
                         break;
                     }
                     String course = rs.getString(1);
@@ -209,47 +211,49 @@ public class ProfileFragment
         }
     }
 
-    /**
-     * this method gets profile from FireBase and set every fields correctly.
-     */
-    public void profileHandler() {
-        Log.d(Constants.TAG_PROFILE, "In ProfileHandler.");
-        DatabaseReference mDBRef = FirebaseDatabase.getInstance().getReference().child(Constants.PATH_CONTACT);
-        Query query = mDBRef.orderByChild("uid").equalTo(mCurrentUID);
-        query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-//                Log.d(Constants.TAG_PROFILE, "this snapshot is" + dataSnapshot.toString());
-                Log.d(Constants.TAG_PROFILE, "about to sync profile data");
-                mFireBaseContact = dataSnapshot.getChildren().iterator().next().getValue(Contact.class); //this works cuz there will be only one matches
-                assert mFireBaseContact != null;
-                //get Profile pic - worked!
-                StorageReference profileRef = FirebaseStorage.getInstance().getReference().child("profile_pics/" + mCurrentUID);
-
-                profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        String profilePicURL = uri.toString();
-                        Picasso.with(getContext())
-                                .load(profilePicURL)
-                                .into(mProfileImg);
-                        Log.d(Constants.TAG_PROFILE, "profile pic url is\n" +
-                                profilePicURL +
-                                "\nset profile pic -DONE");
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Picasso.with(getContext())
-                                .load(mFireBaseContact.getProfilePicUrl())
-                                .into(mProfileImg);
-                        Log.d(Constants.TAG_PROFILE, "Doesn't have custom profile yet.");
-                    }
-                }
-            }).start();
-        }
-
-    }
+//                /**
+//                 * this method gets profile from FireBase and set every fields correctly.
+//                 */
+//                public void profileHandler() {
+//                    Log.d(Constants.TAG_PROFILE, "In ProfileHandler.");
+//                    DatabaseReference mDBRef = FirebaseDatabase.getInstance().getReference().child(Constants.PATH_CONTACT);
+//                    Query query = mDBRef.orderByChild("uid").equalTo(mCurrentUID);
+//                    query.addValueEventListener(new ValueEventListener() {
+//                        @Override
+//                        public void onDataChange(DataSnapshot dataSnapshot) {
+////                Log.d(Constants.TAG_PROFILE, "this snapshot is" + dataSnapshot.toString());
+//                            Log.d(Constants.TAG_PROFILE, "about to sync profile data");
+//                            mFireBaseContact = dataSnapshot.getChildren().iterator().next().getValue(Contact.class); //this works cuz there will be only one matches
+//                            assert mFireBaseContact != null;
+//                            //get Profile pic - worked!
+//                            StorageReference profileRef = FirebaseStorage.getInstance().getReference().child("profile_pics/" + mCurrentUID);
+//
+//                            profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+//                                @Override
+//                                public void onSuccess(Uri uri) {
+//                                    String profilePicURL = uri.toString();
+//                                    Picasso.with(getContext())
+//                                            .load(profilePicURL)
+//                                            .into(mProfileImg);
+//                                    Log.d(Constants.TAG_PROFILE, "profile pic url is\n" +
+//                                            profilePicURL +
+//                                            "\nset profile pic -DONE");
+//                                }
+//                            }).addOnFailureListener(new OnFailureListener() {
+//                                @Override
+//                                public void onFailure(@NonNull Exception e) {
+//                                    Picasso.with(getContext())
+//                                            .load(mFireBaseContact.getProfilePicUrl())
+//                                            .into(mProfileImg);
+//                                    Log.d(Constants.TAG_PROFILE, "Doesn't have custom profile yet.");
+//                                }
+//                            }
+//                        }).
+//
+//                        start();
+//                    }
+//                }
+//            }
 
     private void init() {
         mEdit.setOnClickListener(this);
