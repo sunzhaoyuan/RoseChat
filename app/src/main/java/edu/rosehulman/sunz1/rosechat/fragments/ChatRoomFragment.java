@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 import edu.rosehulman.sunz1.rosechat.R;
 import edu.rosehulman.sunz1.rosechat.adapters.MessageRecyclerAdapter;
-import edu.rosehulman.sunz1.rosechat.models.Chat;
+import edu.rosehulman.sunz1.rosechat.models.Message;
 import edu.rosehulman.sunz1.rosechat.sys.chat.ChatPresenter;
 import edu.rosehulman.sunz1.rosechat.sys.chat.ChatSystem;
 import edu.rosehulman.sunz1.rosechat.utils.Constants;
@@ -138,13 +138,13 @@ public class ChatRoomFragment extends Fragment implements ChatSystem.View, TextV
     }
 
     @Override
-    public void onGetMessagesSuccess(String message) {
+    public void onGetMessagesSuccess(Message message) {
         if (mChatAdapter == null) {
-            mChatAdapter = new MessageRecyclerAdapter(getContext(), new ArrayList<Chat>());
+            mChatAdapter = new MessageRecyclerAdapter(getContext(), new ArrayList<Message>());
             mRecyclerViewChat.setAdapter(mChatAdapter);
         }
-        if (!mChatAdapter.contains(chat.getTimeStamp())) {
-            mChatAdapter.add(chat);
+        if (!mChatAdapter.contains(message.getMID())) {
+            mChatAdapter.add(message);
             mRecyclerViewChat.smoothScrollToPosition(mChatAdapter.getItemCount());
         }
     }

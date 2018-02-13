@@ -12,7 +12,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import edu.rosehulman.sunz1.rosechat.R;
-import edu.rosehulman.sunz1.rosechat.models.Chat;
+import edu.rosehulman.sunz1.rosechat.models.Message;
 import edu.rosehulman.sunz1.rosechat.utils.Constants;
 import edu.rosehulman.sunz1.rosechat.utils.SharedPreferencesUtils;
 
@@ -26,11 +26,11 @@ public class MessageRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     public static final int VIEW_TYPE_CHAT_ME = 0;
     public static final int VIEW_TYPE_CHAT_OTHER = 1;
 
-    private List<Chat> mChats;
+    private List<Message> mMessageList;
     private Context mContext;
 
-    public MessageRecyclerAdapter(Context context, List<Chat> chats) {
-        mChats = chats;
+    public MessageRecyclerAdapter(Context context, List<Message> messageList) {
+        mMessageList = messageList;
         mContext = context;
     }
 
@@ -55,7 +55,7 @@ public class MessageRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         // if me: configureMyChatViewHolder
         // if others: configureOtherChatViewHolder
-        if (TextUtils.equals(mChats.get(position).getSenderUid(),
+        if (TextUtils.equals(mMessageList.get(position).getSenderID(),
                 SharedPreferencesUtils.getCurrentUser(mContext))) {
             Log.d(Constants.TAG_CHAT_ADAPTER, "CONFIGURE MY CHAT");
             configureMyChatViewHolder((MyChatViewHolder) holder, position);
@@ -67,16 +67,16 @@ public class MessageRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     @Override
     public int getItemCount() {
-        return mChats.size();
+        return mMessageList.size();
     }
 
     @Override
     public int getItemViewType(int position) {
         String userID = SharedPreferencesUtils.getCurrentUser(mContext);
         Log.d(Constants.TAG_CHAT_ADAPTER, "VIEW TYPE position " + position +
-                "\n    SENDER ID: " + mChats.get(position).getSenderUid() +
+                "\n    SENDER ID: " + mMessageList.get(position).getSenderID() +
                 "\n    mUserID: " + userID);
-        if (TextUtils.equals(mChats.get(position).getSenderUid(),
+        if (TextUtils.equals(mMessageList.get(position).getSenderID(),
                 userID)) {
             Log.d(Constants.TAG_CHAT_ADAPTER, "VIEW TYPE : ME");
             return VIEW_TYPE_CHAT_ME;
@@ -86,35 +86,46 @@ public class MessageRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         }
     }
 
-    public boolean contains(long chatTime) {
-        for (int i = 0; i < mChats.size(); i++){
-            if (mChats.get(i).getTimeStamp().equals(chatTime)){
+    /**
+     * return true if messageList contains MID
+     *
+     * @param MID
+     * @return
+     */
+    public boolean contains(int MID) {
+        for (int i = 0; i < mMessageList.size(); i++){
+            if (mMessageList.get(i).getMID().equals(MID)){
                 return true;
             }
         }
         return false;
     }
 
-    public void add(Chat chat) {
-        mChats.add(chat);
+    /**
+     * Add message into messageList
+     *
+     * @param message
+     */
+    public void add(Message message) {
+        mMessageList.add(message);
         Log.d(Constants.TAG_CHAT_ADAPTER, "A new Chat has just been ADDED: \nsenderID: " +
-                chat.getSenderUid() + "\nreceiverID: " + chat.getReceiverUid());
-        notifyItemInserted(mChats.size() - 1);
+                message.getSenderID());
+        notifyItemInserted(mMessageList.size() - 1);
     }
 
     private void configureMyChatViewHolder(MyChatViewHolder myChatViewHolder, int position) {
-        Chat chat = mChats.get(position);
+        Message chat = mMessageList.get(position);
         Log.d(TAG, chat.getText());
-        String myProfileNameString = chat.getSenderUid().substring(0, 1); // we other want one char
+        String myProfileNameString = chat.getSenderID().substring(0, 1); // we want one char
 //
         myChatViewHolder.chatProfilePicTxt.setText(myProfileNameString);
         myChatViewHolder.chatTxt.setText(chat.getText());
     }
 
     private void configureOtherChatViewHolder(OthersChatViewHolder otherChatViewHolder, int position) {
-        Chat chat = mChats.get(position);
+        Message chat = mMessageList.get(position);
         Log.d(TAG, chat.getText());
-        String otherProfileNameString = chat.getSenderUid().substring(0, 1);
+        String otherProfileNameString = chat.getSenderID().substring(0, 1); // we want one char
 //
         otherChatViewHolder.chatProfilePicTxt.setText(otherProfileNameString);
         otherChatViewHolder.chatTxt.setText(chat.getText());

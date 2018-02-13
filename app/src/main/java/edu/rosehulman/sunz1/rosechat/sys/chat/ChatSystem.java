@@ -2,6 +2,8 @@ package edu.rosehulman.sunz1.rosechat.sys.chat;
 
 import android.content.Context;
 
+import edu.rosehulman.sunz1.rosechat.models.Message;
+
 /**
  * Created by sun on 7/25/17.
  */
@@ -12,7 +14,7 @@ public interface ChatSystem {
 
         void onSendMessageFailure(String message); //Error Message
 
-        void onGetMessagesSuccess(String message); //Text Message
+        void onGetMessagesSuccess(Message message); //Text Message
 
         void onGetMessagesFailure(String message); //Error Message
     }
@@ -36,7 +38,7 @@ public interface ChatSystem {
     }
 
     interface OnGetMessagesListener {
-        void onGetMessagesSuccess(String message);
+        void onGetMessagesSuccess(Message message);
 
         void onGetMessagesFailure(String errorMessage);
     }

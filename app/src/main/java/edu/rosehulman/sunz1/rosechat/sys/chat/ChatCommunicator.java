@@ -18,6 +18,7 @@ import java.sql.SQLException;
 
 import edu.rosehulman.sunz1.rosechat.R;
 import edu.rosehulman.sunz1.rosechat.SQLService.DatabaseConnectionService;
+import edu.rosehulman.sunz1.rosechat.models.Message;
 import edu.rosehulman.sunz1.rosechat.utils.Constants;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
@@ -141,7 +142,10 @@ public class ChatCommunicator implements ChatSystem.Communicator {
                 Log.d(Constants.TAG_CHAT, "Get message from Chat Room: " + chatRoomID + "Success.");
                 ResultSet messages = cs.getResultSet();
                 while (messages.next()) {
-                    String message = messages.getString("Text");
+                    Integer MID = messages.getInt("MID");
+                    String text = messages.getString("Text");
+                    String senderID = messages.getString("UID");
+                    Message message = new Message(MID, text, senderID);
                     Log.d(Constants.TAG_CHAT, "Get message: " + message + "Success.");
                     mOnGetMessagesListener.onGetMessagesSuccess(message);
                 }

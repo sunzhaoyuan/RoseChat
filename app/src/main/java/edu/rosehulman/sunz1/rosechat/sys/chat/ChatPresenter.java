@@ -2,6 +2,8 @@ package edu.rosehulman.sunz1.rosechat.sys.chat;
 
 import android.content.Context;
 
+import edu.rosehulman.sunz1.rosechat.models.Message;
+
 /**
  * Created by sun on 7/25/17.
  *
@@ -48,7 +50,7 @@ public class ChatPresenter implements ChatSystem.Presenter,
 
     //////////////////// OnGet BEGINS ////////////////////
     @Override
-    public void onGetMessagesSuccess(String message) {
+    public void onGetMessagesSuccess(Message message) {
         mChatView.onGetMessagesSuccess(message);
     }
 
