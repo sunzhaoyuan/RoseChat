@@ -4,18 +4,20 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
+
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import edu.rosehulman.sunz1.rosechat.R;
-import edu.rosehulman.sunz1.rosechat.models.Chat;
+import edu.rosehulman.sunz1.rosechat.SQLService.DatabaseConnectionService;
 import edu.rosehulman.sunz1.rosechat.utils.Constants;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
@@ -41,69 +43,114 @@ public class ChatCommunicator implements ChatSystem.Communicator {
     }
 
     @Override
-    public void sendMessageToUser(Context context, final Chat chat) {
+    public void sendMessageToUser(Context context, Integer chatRoomID, String text, String UID) {
         //TODO: need a helper method to get all receivers' ids - Sprint 3
 
-        mChatReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                mChatReference.push().setValue(chat);
-                chat.setKey(dataSnapshot.getKey());
-                Log.d(Constants.TAG_CHAT, "getMessage Fired");
-//                getMessageFromUser(chat.getSenderUid(), chat.getReceiverUid(), chat.getMessageKey());
-//                getMessageForSending();
-//                sendPushNotificationToReceiver(); //TODO: waiting for the test
-                mOnSendMessageListener.onSendMessageSuccess();
-            }
+//        mChatReference.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                mChatReference.push().setValue(chat);
+//                chat.setKey(dataSnapshot.getKey());
+//                Log.d(Constants.TAG_CHAT, "getMessage Fired");
+////                getMessageFromUser(chat.getSenderUid(), chat.getReceiverUid(), chat.getMessageKey());
+////                getMessageForSending();
+////                sendPushNotificationToReceiver(); //TODO: waiting for the test
+//                mOnSendMessageListener.onSendMessageSuccess();
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//                mOnSendMessageListener.onSendMessageFailure("Unable to send message: " + databaseError.getMessage());
+//            }
+//        });
+        Connection connection = DatabaseConnectionService.getInstance().getConnection();
+        try {
+            // 1: varchar(50) UID; 2: int ChatRoomID; 3: nvarchar(50) text
+            CallableStatement cs = connection.prepareCall("call UserSendMessage(?, ?, ?)");
+            cs.setString(1, UID);
+            cs.setInt(2, chatRoomID);
+            cs.setString(3, text);
+            cs.execute();
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                mOnSendMessageListener.onSendMessageFailure("Unable to send message: " + databaseError.getMessage());
-            }
-        });
-    }
-
-    private void getMessageForSending() {
-        mChatReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Chat chat = new Chat();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    chat = snapshot.getValue(Chat.class);
-                    Log.d(Constants.TAG_CHAT, "current chat is: " + chat.toString());
-                }
-                mOnGetMessagesListener.onGetMessagesSuccess(chat);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                mOnGetMessagesListener.onGetMessagesFailure("unable to get Latest message " + databaseError.getMessage());
-            }
-        });
+            Log.d(Constants.TAG_CHAT, "Send message: " + text + "Success.");
+            mOnSendMessageListener.onSendMessageSuccess();
+        } catch (SQLException e) {
+            mOnSendMessageListener.onSendMessageFailure("Unable to send message: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     @Override
-    public void getMessageFromUser(final String senderUid, String receiverUid, final String messageKey) { //TODO: receiverUid should be a ArrayList - Sprint 3
+    public void getMessageFromUser(final String UID, final Integer chatRoomID) {
 
-        Log.d(Constants.TAG_CHAT, "IN CHAT COMMUNICATOR\n" + "sender ID: " + senderUid + "\nreceiver ID: " + receiverUid + "\nmessageKey: " + messageKey);
-        Query query = mChatReference.orderByChild(Constants.ARG_MESSAGE_KEY).equalTo(messageKey);
-        query.addValueEventListener(new ValueEventListener() {
+        Log.d(Constants.TAG_CHAT, "IN CHAT COMMUNICATOR\n" + "sender ID: " + UID + "\nchatRoomID: " + chatRoomID + "\n");
+//        Query query = mChatReference.orderByChild(Constants.ARG_MESSAGE_KEY).equalTo(messageKey);
+//        query.addValueEventListener(new ValueEventListener() {
+//
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+////                Log.d(Constants.TAG_CHAT, "This dataSnapshot is " + dataSnapshot.getValue().toString() + "\n");
+//                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+//                    Chat chat = snapshot.getValue(Chat.class);
+//                    Log.d(Constants.TAG_CHAT, chat.toString());
+//                    mOnGetMessagesListener.onGetMessagesSuccess(chat);
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//                mOnGetMessagesListener.onGetMessagesFailure("unable to get message " + databaseError.getMessage());
+//            }
+//        });
 
+        new Thread(new Runnable() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-//                Log.d(Constants.TAG_CHAT, "This dataSnapshot is " + dataSnapshot.getValue().toString() + "\n");
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Chat chat = snapshot.getValue(Chat.class);
-                    Log.d(Constants.TAG_CHAT, chat.toString());
-                    mOnGetMessagesListener.onGetMessagesSuccess(chat);
+            public void run() {
+                while (!Thread.interrupted()) {
+                    new GetMessageFromUserTask(UID, chatRoomID).execute();
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
+        }).start();
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                mOnGetMessagesListener.onGetMessagesFailure("unable to get message " + databaseError.getMessage());
+    }
+
+    private class GetMessageFromUserTask extends AsyncTask<String, String, String> {
+
+        private String UID;
+        private Integer chatRoomID;
+
+        public GetMessageFromUserTask(String UID, Integer chatRoomID) {
+            this.UID = UID;
+            this.chatRoomID = chatRoomID;
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            Connection connection = DatabaseConnectionService.getInstance().getConnection();
+            try {
+                // 1: varchar(50) UID; 2: int ChatRoomID;
+                CallableStatement cs = connection.prepareCall("call GetMessageInChatRoom(?, ?)");
+                cs.setString(1, UID);
+                cs.setInt(2, chatRoomID);
+                cs.execute();
+                Log.d(Constants.TAG_CHAT, "Get message from Chat Room: " + chatRoomID + "Success.");
+                ResultSet messages = cs.getResultSet();
+                while (messages.next()) {
+                    String message = messages.getString("Text");
+                    Log.d(Constants.TAG_CHAT, "Get message: " + message + "Success.");
+                    mOnGetMessagesListener.onGetMessagesSuccess(message);
+                }
+            } catch (SQLException e) {
+                mOnGetMessagesListener.onGetMessagesFailure("unable to get message " + e.getMessage());
+                e.printStackTrace();
             }
-        });
+            return null;
+        }
     }
 
     private void sendPushNotificationToReceiver(String sender, String message, Context context) {

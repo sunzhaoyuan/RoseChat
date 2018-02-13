@@ -2,8 +2,6 @@ package edu.rosehulman.sunz1.rosechat.sys.chat;
 
 import android.content.Context;
 
-import edu.rosehulman.sunz1.rosechat.models.Chat;
-
 /**
  * Created by sun on 7/25/17.
  *
@@ -24,13 +22,13 @@ public class ChatPresenter implements ChatSystem.Presenter,
 
     //////////////////// PRESENTER BEGINS ////////////////////
     @Override
-    public void sendMessage(Context context, Chat chat) {
-        mChatComm.sendMessageToUser(context, chat);
+    public void sendMessage(Context context, Integer chatRoomID, String text, String UID) {
+        mChatComm.sendMessageToUser(context, chatRoomID, text, UID);
     }
 
     @Override
-    public void getMessage(String senderUid, String receiverUid, String messageKey) {
-        mChatComm.getMessageFromUser(senderUid, receiverUid, messageKey);
+    public void getMessage(String UID, Integer chatRoomID) {
+        mChatComm.getMessageFromUser(UID, chatRoomID);
     }
     ///////////////////////// PRESENTER ENDS /////////////////////////
 
@@ -50,13 +48,13 @@ public class ChatPresenter implements ChatSystem.Presenter,
 
     //////////////////// OnGet BEGINS ////////////////////
     @Override
-    public void onGetMessagesSuccess(Chat chat) {
-        mChatView.onGetMessagesSuccess(chat);
+    public void onGetMessagesSuccess(String message) {
+        mChatView.onGetMessagesSuccess(message);
     }
 
     @Override
-    public void onGetMessagesFailure(String message) {
-        mChatView.onGetMessagesFailure(message);
+    public void onGetMessagesFailure(String errorMessage) {
+        mChatView.onGetMessagesFailure(errorMessage);
     }
     ///////////////////////// OnGet ENDS /////////////////////////
 }

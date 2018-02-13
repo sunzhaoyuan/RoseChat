@@ -38,7 +38,7 @@ public class ChatRoomActivity extends AppCompatActivity {
                 R.id.frame_layout_chat_container,
                 ChatRoomFragment.newInstance(
                         getIntent().getExtras().getString(Constants.ARG_CHATROOM_NAME),
-                        getIntent().getExtras().getString(Constants.ARG_CHATROOM_ID)
+                        getIntent().getExtras().getInt(Constants.ARG_CHATROOM_ID)
                 ),
                 ChatRoomFragment.class.getSimpleName()
         );

@@ -10,11 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import edu.rosehulman.sunz1.rosechat.R;
-import edu.rosehulman.sunz1.rosechat.adapters.MessageAdapter;
+import edu.rosehulman.sunz1.rosechat.adapters.ChatRoomAdapter;
 
 public class MessageFragment extends Fragment {
 
-    MessageAdapter mAdapter;
+    ChatRoomAdapter mAdapter;
 //    private Callback mCallback;
 
     public MessageFragment(){
@@ -37,7 +37,7 @@ public class MessageFragment extends Fragment {
 //        mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         final LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         view.setLayoutManager(mLayoutManager);
-        mAdapter = new MessageAdapter(getContext());
+        mAdapter = new ChatRoomAdapter(getContext());
         view.setAdapter(mAdapter);
         return view;
     }

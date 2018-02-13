@@ -29,14 +29,14 @@ import edu.rosehulman.sunz1.rosechat.utils.SharedPreferencesUtils;
  * Edit by Yifei Li and sunz1  on 2/10/18
  */
 
-public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
+public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ViewHolder> {
     private Context mContext;
     ArrayList<ChatRoom> mChatRoomList;
     private DatabaseReference mMessageRef;
     private String mCurrentUID;
 
 
-    public MessageAdapter(Context context) {
+    public ChatRoomAdapter(Context context) {
         mContext = context;
         mChatRoomList = new ArrayList<>();
         mMessageRef = FirebaseDatabase.getInstance().getReference().child(Constants.PATH_MESSAGE);
@@ -63,7 +63,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(MessageAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(ChatRoomAdapter.ViewHolder holder, int position) {
         ChatRoom chat = mChatRoomList.get(position);
         holder.mNameTextView.setText(chat.getName());
         holder.mLastInteraction.setText("not yet");

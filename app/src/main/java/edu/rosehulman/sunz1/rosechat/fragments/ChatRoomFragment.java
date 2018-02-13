@@ -18,7 +18,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import edu.rosehulman.sunz1.rosechat.R;
-import edu.rosehulman.sunz1.rosechat.adapters.ChatRecyclerAdapter;
+import edu.rosehulman.sunz1.rosechat.adapters.MessageRecyclerAdapter;
 import edu.rosehulman.sunz1.rosechat.models.Chat;
 import edu.rosehulman.sunz1.rosechat.sys.chat.ChatPresenter;
 import edu.rosehulman.sunz1.rosechat.sys.chat.ChatSystem;
@@ -30,7 +30,7 @@ public class ChatRoomFragment extends Fragment implements ChatSystem.View, TextV
     public static final String TAG = Constants.TAG_CHAT;
 
     private ProgressDialog mProgressDialog;
-    private ChatRecyclerAdapter mChatAdapter;
+    private MessageRecyclerAdapter mChatAdapter;
     private ChatPresenter mChatPresenter;
     private RecyclerView mRecyclerViewChat;
     private EditText mEditTextChat;
@@ -50,11 +50,11 @@ public class ChatRoomFragment extends Fragment implements ChatSystem.View, TextV
      *                    uses to replace fragment container
      */
     public static ChatRoomFragment newInstance(String chatRoomName,
-                                               String chatRoomID)
+                                               Integer chatRoomID)
     {
         Bundle args = new Bundle();
         args.putString(Constants.ARG_CHATROOM_NAME, chatRoomName);
-        args.putString(Constants.ARG_CHATROOM_ID, chatRoomID);
+        args.putInt(Constants.ARG_CHATROOM_ID, chatRoomID);
         ChatRoomFragment fragment = new ChatRoomFragment();
         fragment.setArguments(args);
         return fragment;
@@ -87,8 +87,7 @@ public class ChatRoomFragment extends Fragment implements ChatSystem.View, TextV
         String receiverUID = getArguments().getString(Constants.ARG_RECEIVER_UID);
         mChatPresenter.getMessage(
                 mCurrentUID,
-                receiverUID.equals(mCurrentUID) ? getArguments().getString(Constants.ARG_SENDER_UID) : receiverUID,
-                getArguments().getString(Constants.ARG_MESSAGE_KEY)
+                getArguments().getInt(Constants.ARG_CHATROOM_ID)
         );
     }
 
@@ -120,21 +119,12 @@ public class ChatRoomFragment extends Fragment implements ChatSystem.View, TextV
      *
      */
     private void sendMessage() {
-
-        // add message to Message entity & update HasMessage
-        // Update Send relationship
-
+        Integer chatRoomID = getArguments().getInt(Constants.ARG_CHATROOM_ID);
         String text = mEditTextChat.getText().toString();
-        String receiverUid = getArguments().getString(Constants.ARG_RECEIVER_UID);
-        String senderUid = getArguments().getString(Constants.ARG_SENDER_UID);
-        String messageKey = getArguments().getString(Constants.ARG_MESSAGE_KEY);
-
-        receiverUid = receiverUid.equals(mCurrentUID) ? senderUid : receiverUid;
-        String receiver = receiverUid;
-
-        Chat chat = new Chat(messageKey, mCurrentUID, receiver, mCurrentUID, receiverUid, text, System.currentTimeMillis());
-        mChatPresenter.sendMessage(getActivity().getApplicationContext(), chat);
+        mChatPresenter.sendMessage(getActivity().getApplicationContext(), chatRoomID, text, mCurrentUID);
     }
+
+
 
     @Override
     public void onSendMessageSuccess() {
@@ -148,9 +138,9 @@ public class ChatRoomFragment extends Fragment implements ChatSystem.View, TextV
     }
 
     @Override
-    public void onGetMessagesSuccess(Chat chat) {
+    public void onGetMessagesSuccess(String message) {
         if (mChatAdapter == null) {
-            mChatAdapter = new ChatRecyclerAdapter(getContext(), new ArrayList<Chat>());
+            mChatAdapter = new MessageRecyclerAdapter(getContext(), new ArrayList<Chat>());
             mRecyclerViewChat.setAdapter(mChatAdapter);
         }
         if (!mChatAdapter.contains(chat.getTimeStamp())) {

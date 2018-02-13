@@ -20,7 +20,7 @@ import edu.rosehulman.sunz1.rosechat.utils.SharedPreferencesUtils;
  * Created by sun on 7/21/17.
  */
 
-public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class MessageRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final String TAG = "ChatAdapter";
 
     public static final int VIEW_TYPE_CHAT_ME = 0;
@@ -29,7 +29,7 @@ public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private List<Chat> mChats;
     private Context mContext;
 
-    public ChatRecyclerAdapter(Context context, List<Chat> chats) {
+    public MessageRecyclerAdapter(Context context, List<Chat> chats) {
         mChats = chats;
         mContext = context;
     }
