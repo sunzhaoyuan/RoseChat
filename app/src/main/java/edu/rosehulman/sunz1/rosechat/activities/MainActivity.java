@@ -43,10 +43,7 @@ import edu.rosehulman.sunz1.rosechat.models.Contact;
 import edu.rosehulman.sunz1.rosechat.utils.Constants;
 import edu.rosehulman.sunz1.rosechat.utils.SharedPreferencesUtils;
 
-public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener,
-
-        ContactsFragment.Callback,
-        NewChatActivity.Callback {
+public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, ContactsFragment.Callback {
 
     final private String DEBUG_KEY = "Debug";
 
@@ -161,7 +158,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                 String defaultPhone = getString(R.string.profile_sample_phone_number);
                 String defaultAvatarURL = "https://firebasestorage.googleapis.com/v0/b/rosechat-64ae9.appspot.com/o/profile_pics%2Fdefault.png?alt=media&token=2cc54fe8-da2f-49f9-ab18-0ef0d2e8fea6";
 
-                cs = MainActivity.this.mDBConnection.prepareCall("{?=call CreateUser(?, ?, ?, ?, ?)}");
+                cs = DatabaseConnectionService.getInstance().getConnection().prepareCall("{?=call CreateUser(?, ?, ?, ?, ?)}");
                 cs.setString(2, UID);
                 cs.setString(3, defaultNickName);
                 cs.setString(4, defaultPhone);
@@ -375,9 +372,5 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         context.startActivity(intent);
     }
 
-    @Override
-    public void onNewChatSelected(Contact contact) {
-
-    }
 
 }

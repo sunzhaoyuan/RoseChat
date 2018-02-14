@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -37,21 +38,18 @@ public class NewChatAdapter extends RecyclerView.Adapter<NewChatAdapter.ViewHold
     private Context mContext;
     ArrayList<String> mContactList;
     ArrayList<String> mSelectedContactsList;
-    NewChatActivity.Callback mCallback;
     //For SQL
     private Connection mDBConnection;
     private String UID;
 
-    public NewChatAdapter(Context context, NewChatActivity.Callback callback) {
+    public NewChatAdapter(Context context) {
         mDBConnection = DatabaseConnectionService.getInstance().getConnection();
-        mCallback = callback;
         mContext = context;
         UID = SharedPreferencesUtils.getCurrentUser(mContext);
         mContactList = new ArrayList<>();
         mSelectedContactsList = new ArrayList<>();
         new getFriendTask(UID).execute();
     }
-
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.new_chat_view, parent, false);
@@ -83,8 +81,17 @@ public class NewChatAdapter extends RecyclerView.Adapter<NewChatAdapter.ViewHold
                 @Override
                 public void onClick(View view) {
                     //create chat room
-                    FriendID = ((TextView) view.findViewById(R.id.newChat_name)).getText().toString();
-                    selectFriendDialog(FriendID);
+                    if(((CheckedTextView) view.findViewById(R.id.newChat_name)).isChecked()){
+                        ((CheckedTextView) view.findViewById(R.id.newChat_name)).setChecked(false);
+                        ((CheckedTextView) view.findViewById(R.id.newChat_name)).setCheckMarkDrawable(null);
+                        FriendID = ((TextView) view.findViewById(R.id.newChat_name)).getText().toString();
+                        mSelectedContactsList.add(FriendID);
+                    }else{
+                        ((CheckedTextView) view.findViewById(R.id.newChat_name)).setChecked(true);
+                        ((CheckedTextView) view.findViewById(R.id.newChat_name)).setCheckMarkDrawable(R.mipmap.ic_check_box);
+                    }
+
+
                 }
             });
 
@@ -92,28 +99,9 @@ public class NewChatAdapter extends RecyclerView.Adapter<NewChatAdapter.ViewHold
         }
     }
 
-    private void selectFriendDialog(final String FriendID) {
-        FragmentManager manager = ((Activity) mContext).getFragmentManager();
-        DialogFragment df = new DialogFragment() {
-            @Override
-            public Dialog onCreateDialog(Bundle savedInstanceState) {
-                Log.d("chatroom", "create chatroom");
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                View view = getActivity().getLayoutInflater().inflate(R.layout.dialogfragment_newchat, null);
-                builder.setView(view);
-                final EditText editText = (EditText) view.findViewById(R.id.dialogfragment_newchat_editext);
-                builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        new addMemberAndCreateTask(UID, editText.getText().toString(), FriendID).execute();
-                    }
-                });
 
-                builder.setNegativeButton(android.R.string.cancel, null);
-                return builder.create();
-            }
-        };
-        df.show(manager, "fontSize");
+    public ArrayList<String> getNameList(){
+        return  mSelectedContactsList;
     }
 
 
@@ -151,39 +139,6 @@ public class NewChatAdapter extends RecyclerView.Adapter<NewChatAdapter.ViewHold
 
     }
 
-    private class addMemberAndCreateTask extends AsyncTask<String, Integer, ResultSet> {
-        private String UID;
-        private String chatroomName;
-        private String memberName;
-        private ResultSet set;
-        private int CID;
-
-        private addMemberAndCreateTask(String UID, String chatroomName, String memberName) {
-            this.UID = UID;
-            this.chatroomName = chatroomName;
-            this.memberName = memberName;
-        }
-
-        @Override
-        protected ResultSet doInBackground(String... strings) {
-            try {
-                CallableStatement stem = NewChatAdapter.this.mDBConnection.prepareCall("{? = call UserCreateChatRoom(?, ?)}");
-                stem.registerOutParameter(1, Types.INTEGER);
-                stem.setString(2, UID);
-                stem.setString(3, chatroomName);
-                stem.execute();
-                CID = stem.getInt(1);
-                CallableStatement stem2 = NewChatAdapter.this.mDBConnection.prepareCall("{call AddUserChatRoom(?,?)}");
-                stem2.setString(1, memberName);
-                stem2.setInt(2, CID);
-                stem2.execute();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            return set;
-        }
-
-    }
 
 }
 

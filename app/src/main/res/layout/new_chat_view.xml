@@ -34,7 +34,6 @@
                     android:layout_height="wrap_content"
                     android:textSize="20sp"
                     android:checked="false"
-                    android:checkMark="@mipmap/ic_check_box"
                     android:text="Temp_Name" />
             </LinearLayout>
 
