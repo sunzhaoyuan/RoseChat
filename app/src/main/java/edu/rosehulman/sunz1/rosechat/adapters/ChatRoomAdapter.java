@@ -3,6 +3,7 @@ package edu.rosehulman.sunz1.rosechat.adapters;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ import edu.rosehulman.sunz1.rosechat.R;
 import edu.rosehulman.sunz1.rosechat.SQLService.DatabaseConnectionService;
 import edu.rosehulman.sunz1.rosechat.activities.ChatRoomActivity;
 import edu.rosehulman.sunz1.rosechat.models.ChatRoom;
+import edu.rosehulman.sunz1.rosechat.models.Message;
 import edu.rosehulman.sunz1.rosechat.utils.Constants;
 import edu.rosehulman.sunz1.rosechat.utils.SharedPreferencesUtils;
 
@@ -34,6 +36,7 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ViewHo
     ArrayList<ChatRoom> mChatRoomList;
     private DatabaseReference mMessageRef;
     private String mCurrentUID;
+    private String lastinteraction;
 
 
     public ChatRoomAdapter(Context context) {
@@ -66,7 +69,8 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ViewHo
     public void onBindViewHolder(ChatRoomAdapter.ViewHolder holder, int position) {
         ChatRoom chat = mChatRoomList.get(position);
         holder.mNameTextView.setText(chat.getName());
-        holder.mLastInteraction.setText("not yet");
+        new GetMessageFromUserTask(chat.getCID()).execute();
+        holder.mLastInteraction.setText(lastinteraction);
     }
 
     @Override
@@ -153,4 +157,39 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ViewHo
             notifyDataSetChanged();
         }
     }
+
+    private class GetMessageFromUserTask extends AsyncTask<String, String, Boolean> {
+        private int CID;
+
+        GetMessageFromUserTask(int CID) {
+            this.CID = CID;
+        }
+
+        @Override
+        protected Boolean doInBackground(String... strings) {
+            Connection connection = DatabaseConnectionService.getInstance().getConnection();
+            try {
+                // 1: varchar(50) UID; 2: int ChatRoomID;
+                CallableStatement cs = connection.prepareCall("call GetMessageInChatRoom(?, ?)");
+                cs.setString(1, SharedPreferencesUtils.getCurrentUser(mContext));
+                cs.setInt(2, CID);
+                cs.execute();
+                Log.d(Constants.TAG_CHAT, "Get message from Chat Room: " + CID + "Success.");
+                ResultSet messages = cs.getResultSet();
+                messages.next();
+                Integer MID = messages.getInt("MID");
+                String text = messages.getString("Text");
+                String senderID = messages.getString("SenderUID");
+                Message message = new Message(MID, text, senderID);
+                Log.d(Constants.TAG_CHAT, "Get message: " + message + "Success.");
+                lastinteraction = message.getText(); //in databse : DESC; so latest message on the left end
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return false;
+            }
+            return true;
+        }
+    }
 }
+
