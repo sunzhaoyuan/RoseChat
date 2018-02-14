@@ -169,7 +169,7 @@ public class ChatCommunicator implements ChatSystem.Communicator {
                     String senderID = messages.getString("SenderUID");
                     Message message = new Message(MID, text, senderID);
                     Log.d(Constants.TAG_CHAT, "Get message: " + message + "Success.");
-                    messageList.add(message);
+                    messageList.add(0, message); //in databse : DESC
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
