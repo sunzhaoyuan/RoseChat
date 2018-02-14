@@ -85,10 +85,12 @@ public class NewChatAdapter extends RecyclerView.Adapter<NewChatAdapter.ViewHold
                         ((CheckedTextView) view.findViewById(R.id.newChat_name)).setChecked(false);
                         ((CheckedTextView) view.findViewById(R.id.newChat_name)).setCheckMarkDrawable(null);
                         FriendID = ((TextView) view.findViewById(R.id.newChat_name)).getText().toString();
-                        mSelectedContactsList.add(FriendID);
+                        mSelectedContactsList.remove(FriendID);
                     }else{
                         ((CheckedTextView) view.findViewById(R.id.newChat_name)).setChecked(true);
                         ((CheckedTextView) view.findViewById(R.id.newChat_name)).setCheckMarkDrawable(R.mipmap.ic_check_box);
+                        FriendID = ((TextView) view.findViewById(R.id.newChat_name)).getText().toString();
+                        mSelectedContactsList.add(FriendID);
                     }
 
 
