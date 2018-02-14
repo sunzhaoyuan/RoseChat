@@ -67,15 +67,15 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         mButtonFeedback = (Button) findViewById(R.id.button_settings_feedback);
         mButtonLanguage = (Button) findViewById(R.id.button_settings_Language);
         mButtonLogOut = (Button) findViewById(R.id.button_settings_logOut);
-        mButtonFontSize = (Button) findViewById(R.id.button_settings_fontsize);
-        mButtonFontFamily = (Button) findViewById(R.id.button_settings_fontfamily);
+//        mButtonFontSize = (Button) findViewById(R.id.button_settings_fontsize);
+//        mButtonFontFamily = (Button) findViewById(R.id.button_settings_fontfamily);
 
         mButtonDeleteAccount.setOnClickListener(this);
         mButtonFeedback.setOnClickListener(this);
         mButtonLanguage.setOnClickListener(this);
         mButtonLogOut.setOnClickListener(this);
-        mButtonFontSize.setOnClickListener(this);
-        mButtonFontFamily.setOnClickListener(this);
+//        mButtonFontSize.setOnClickListener(this);
+//        mButtonFontFamily.setOnClickListener(this);
 
         mConService = DatabaseConnectionService.getInstance();
         mConnection = mConService.getConnection();
@@ -146,12 +146,12 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                     feedbackTransaction.commit();
                 }
                 return;
-            case R.id.button_settings_fontsize:
-                showFontSizeDialog();
-                return;
-            case R.id.button_settings_fontfamily:
-                showFontFamilyDialog();
-                return;
+//            case R.id.button_settings_fontsize:
+//                showFontSizeDialog();
+//                return;
+//            case R.id.button_settings_fontfamily:
+//                showFontFamilyDialog();
+//                return;
         }
 
     }
