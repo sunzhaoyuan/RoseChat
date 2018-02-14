@@ -170,9 +170,10 @@ public class ProfileFragment
                     }
 
                 }
-            }).run();
+            }).start();
         }
     }
+
 
     private class GetCoursesTask extends AsyncTask<String, String, String> {
 
@@ -210,50 +211,6 @@ public class ProfileFragment
             }
         }
     }
-
-//                /**
-//                 * this method gets profile from FireBase and set every fields correctly.
-//                 */
-//                public void profileHandler() {
-//                    Log.d(Constants.TAG_PROFILE, "In ProfileHandler.");
-//                    DatabaseReference mDBRef = FirebaseDatabase.getInstance().getReference().child(Constants.PATH_CONTACT);
-//                    Query query = mDBRef.orderByChild("uid").equalTo(mCurrentUID);
-//                    query.addValueEventListener(new ValueEventListener() {
-//                        @Override
-//                        public void onDataChange(DataSnapshot dataSnapshot) {
-////                Log.d(Constants.TAG_PROFILE, "this snapshot is" + dataSnapshot.toString());
-//                            Log.d(Constants.TAG_PROFILE, "about to sync profile data");
-//                            mFireBaseContact = dataSnapshot.getChildren().iterator().next().getValue(Contact.class); //this works cuz there will be only one matches
-//                            assert mFireBaseContact != null;
-//                            //get Profile pic - worked!
-//                            StorageReference profileRef = FirebaseStorage.getInstance().getReference().child("profile_pics/" + mCurrentUID);
-//
-//                            profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-//                                @Override
-//                                public void onSuccess(Uri uri) {
-//                                    String profilePicURL = uri.toString();
-//                                    Picasso.with(getContext())
-//                                            .load(profilePicURL)
-//                                            .into(mProfileImg);
-//                                    Log.d(Constants.TAG_PROFILE, "profile pic url is\n" +
-//                                            profilePicURL +
-//                                            "\nset profile pic -DONE");
-//                                }
-//                            }).addOnFailureListener(new OnFailureListener() {
-//                                @Override
-//                                public void onFailure(@NonNull Exception e) {
-//                                    Picasso.with(getContext())
-//                                            .load(mFireBaseContact.getProfilePicUrl())
-//                                            .into(mProfileImg);
-//                                    Log.d(Constants.TAG_PROFILE, "Doesn't have custom profile yet.");
-//                                }
-//                            }
-//                        }).
-//
-//                        start();
-//                    }
-//                }
-//            }
 
     private void init() {
         mEdit.setOnClickListener(this);
