@@ -33,37 +33,23 @@ import edu.rosehulman.sunz1.rosechat.utils.SharedPreferencesUtils;
 public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHolder> {
     private Context mContext;
     ArrayList<String> mContactList;
-    ArrayList<String> buffer;
     ContactsFragment.Callback mCallback;
     final private String DEBUG_KEY = "Debug";
-    private int oldSize = 0;
     private String UID;
     private Connection mDBConnection;
-    Handler handler;
-    RecyclerView mView;
-    boolean dataChanged = false;
 
-    public ContactsAdapter(Context context, ContactsFragment.Callback callback, RecyclerView view) {
+    public ContactsAdapter(Context context, ContactsFragment.Callback callback) {
         mCallback = callback;
         mContext = context;
-        mView = view;
         mContactList = new ArrayList<String>();
-        buffer = new ArrayList<>();
         UID = SharedPreferencesUtils.getCurrentUser(context);
         mDBConnection = DatabaseConnectionService.getInstance().getConnection();
-        handler = new Handler(Looper.getMainLooper());
 
         new Thread(new Runnable() {
             @Override
             public void run() {
                 while (!Thread.interrupted()) {
                     new GetFriendsTask().execute(UID);
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            refresh();
-                        }
-                    });
                     try {
                         Thread.sleep(500);
                     } catch (InterruptedException e) {
@@ -72,17 +58,6 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
                 }
             }
         }).start();
-    }
-
-    private void refresh() {
-//        mView.getRecycledViewPool().clear();
-        if(dataChanged){
-            mContactList.clear();
-            mContactList.addAll(buffer);
-            buffer.clear();
-            notifyDataSetChanged();
-            dataChanged = false;
-        }
     }
 
     @Override
@@ -153,17 +128,21 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
                 cs.setString(1, UID);
                 cs.execute();
                 ResultSet rs = cs.getResultSet();
-                oldSize = mContactList.size();
-                buffer.clear();
+                mContactList.clear();
                 while (rs.next()) {
                     String s = rs.getString(1);
-                    ContactsAdapter.this.buffer.add(s);
+                    ContactsAdapter.this.mContactList.add(s);
                 }
-                dataChanged = true;
             } catch (SQLException e) {
                 e.printStackTrace();
             }
             return 0;
+        }
+
+        @Override
+        protected void onPostExecute(Integer integer) {
+            super.onPostExecute(integer);
+            notifyDataSetChanged();
         }
     }
 
