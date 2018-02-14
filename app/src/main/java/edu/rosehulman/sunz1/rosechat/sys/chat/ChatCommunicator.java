@@ -15,6 +15,7 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import edu.rosehulman.sunz1.rosechat.R;
 import edu.rosehulman.sunz1.rosechat.SQLService.DatabaseConnectionService;
@@ -139,18 +140,20 @@ public class ChatCommunicator implements ChatSystem.Communicator {
 
     }
 
-    private class GetMessageFromUserTask extends AsyncTask<String, String, String> {
+    private class GetMessageFromUserTask extends AsyncTask<String, String, Boolean> {
 
         private String UID;
         private Integer chatRoomID;
+        private ArrayList<Message> messageList;
 
         public GetMessageFromUserTask(String UID, Integer chatRoomID) {
             this.UID = UID;
             this.chatRoomID = chatRoomID;
+            messageList = new ArrayList<>();
         }
 
         @Override
-        protected String doInBackground(String... strings) {
+        protected Boolean doInBackground(String... strings) {
             Connection connection = DatabaseConnectionService.getInstance().getConnection();
             try {
                 // 1: varchar(50) UID; 2: int ChatRoomID;
@@ -166,13 +169,24 @@ public class ChatCommunicator implements ChatSystem.Communicator {
                     String senderID = messages.getString("SenderUID");
                     Message message = new Message(MID, text, senderID);
                     Log.d(Constants.TAG_CHAT, "Get message: " + message + "Success.");
-                    mOnGetMessagesListener.onGetMessagesSuccess(message);
+                    messageList.add(message);
                 }
             } catch (SQLException e) {
-                mOnGetMessagesListener.onGetMessagesFailure("unable to get message " + e.getMessage());
                 e.printStackTrace();
+                return false;
             }
-            return null;
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean getMessageSuccessful) {
+            super.onPostExecute(getMessageSuccessful);
+            if (getMessageSuccessful) {
+                for (Message m : messageList)
+                    mOnGetMessagesListener.onGetMessagesSuccess(m);
+            } else {
+                mOnGetMessagesListener.onGetMessagesFailure("unable to get message ");
+            }
         }
     }
 

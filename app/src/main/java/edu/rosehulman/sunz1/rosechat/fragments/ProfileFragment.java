@@ -170,7 +170,7 @@ public class ProfileFragment
                     }
 
                 }
-            });
+            }).run();
         }
     }
 
