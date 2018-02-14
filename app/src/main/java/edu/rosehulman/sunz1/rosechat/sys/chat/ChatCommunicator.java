@@ -68,7 +68,7 @@ public class ChatCommunicator implements ChatSystem.Communicator {
         new SendMessageTask(chatRoomID, text, UID).execute();
     }
 
-    private class SendMessageTask extends AsyncTask<String, String, String> {
+    private class SendMessageTask extends AsyncTask<String, String, Boolean> {
 
         private Integer chatRoomID;
         private String text;
@@ -81,7 +81,7 @@ public class ChatCommunicator implements ChatSystem.Communicator {
         }
 
         @Override
-        protected String doInBackground(String... strings) {
+        protected Boolean doInBackground(String... strings) {
             Connection connection = DatabaseConnectionService.getInstance().getConnection();
             try {
                 // 1: varchar(50) UID; 2: int ChatRoomID; 3: nvarchar(50) text
@@ -92,12 +92,21 @@ public class ChatCommunicator implements ChatSystem.Communicator {
                 cs.execute();
 
                 Log.d(Constants.TAG_CHAT, "Send message: " + text + "Success.");
-                mOnSendMessageListener.onSendMessageSuccess();
+
             } catch (SQLException e) {
-                mOnSendMessageListener.onSendMessageFailure("Unable to send message: " + e.getMessage());
                 e.printStackTrace();
+                return false;
             }
-            return null;
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean sendMessageSuccessful) {
+            super.onPostExecute(sendMessageSuccessful);
+            if (sendMessageSuccessful)
+                mOnSendMessageListener.onSendMessageSuccess();
+            else
+                mOnSendMessageListener.onSendMessageFailure("Unable to send message: ");
         }
     }
 

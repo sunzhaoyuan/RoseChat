@@ -2,11 +2,11 @@ package edu.rosehulman.sunz1.rosechat.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import edu.rosehulman.sunz1.rosechat.R;
 import edu.rosehulman.sunz1.rosechat.adapters.InvitationAdapter;
-import edu.rosehulman.sunz1.rosechat.utils.LinearLayoutManagerPreferred;
 
 /**
  * Created by agarwaa on 14-Aug-17.
@@ -28,7 +28,7 @@ public class InvitationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_invitation);
 
         RecyclerView recyclerView = (RecyclerView)findViewById(R.id.invitation_recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManagerPreferred(this));
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
 
         mAdapter = new InvitationAdapter(this, mCallback);
