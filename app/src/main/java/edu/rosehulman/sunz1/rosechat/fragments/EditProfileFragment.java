@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -17,8 +18,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.squareup.picasso.Picasso;
 
@@ -202,7 +208,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
     }
 
     private void updateProfilePic() {
-        StorageReference profilePicStorageRef = FirebaseStorage.getInstance().getReference()
+        final StorageReference profilePicStorageRef = FirebaseStorage.getInstance().getReference()
                 .child(Constants.PATH_PROFILE_PIC + "/" + mCurrentUID);
         mProfileImgE.setDrawingCacheEnabled(true);
         mProfileImgE.buildDrawingCache();
@@ -211,9 +217,38 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();
 
-        profilePicStorageRef.putBytes(data);
-        mProfilePicURL = data.toString();
-        Log.d(Constants.TAG_PROFILE, "JUST UPLOAD PIC TO STORAGE");
+        profilePicStorageRef.putBytes(data).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                profilePicStorageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        String profilePicURL = uri.toString();
+                        newAvatarURL = profilePicURL;
+                        mProfilePicURL = profilePicURL;
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(Constants.TAG_PROFILE, "Doesn't have custom profile yet.");
+                    }
+                });
+            }
+        });
+        /*profilePicStorageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                String profilePicURL = uri.toString();
+                newAvatarURL = profilePicURL;
+                mProfilePicURL = profilePicURL;
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(Constants.TAG_PROFILE, "Doesn't have custom profile yet.");
+            }
+        });
+        Log.d(Constants.TAG_PROFILE, "JUST UPLOAD PIC TO STORAGE");*/
     }
 
     private class EditProfTask extends AsyncTask<String, String, String> {
