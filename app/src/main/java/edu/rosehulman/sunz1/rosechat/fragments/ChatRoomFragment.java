@@ -129,12 +129,12 @@ public class ChatRoomFragment extends Fragment implements ChatSystem.View, TextV
     @Override
     public void onSendMessageSuccess() {
         mEditTextChat.setText(""); // clear EditText
-        Toast.makeText(getActivity(), "Message sent", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getActivity(), "Message sent", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onSendMessageFailure(String message) {
-        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
     }
 
     @Override

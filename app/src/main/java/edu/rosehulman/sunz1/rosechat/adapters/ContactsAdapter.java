@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.sql.Array;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -32,17 +33,22 @@ import edu.rosehulman.sunz1.rosechat.utils.SharedPreferencesUtils;
 public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHolder> {
     private Context mContext;
     ArrayList<String> mContactList;
+    ArrayList<String> buffer;
     ContactsFragment.Callback mCallback;
     final private String DEBUG_KEY = "Debug";
-
+    private int oldSize = 0;
     private String UID;
     private Connection mDBConnection;
     Handler handler;
+    RecyclerView mView;
+    boolean dataChanged = false;
 
-    public ContactsAdapter(Context context, ContactsFragment.Callback callback) {
+    public ContactsAdapter(Context context, ContactsFragment.Callback callback, RecyclerView view) {
         mCallback = callback;
         mContext = context;
+        mView = view;
         mContactList = new ArrayList<String>();
+        buffer = new ArrayList<>();
         UID = SharedPreferencesUtils.getCurrentUser(context);
         mDBConnection = DatabaseConnectionService.getInstance().getConnection();
         handler = new Handler(Looper.getMainLooper());
@@ -68,8 +74,15 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
         }).start();
     }
 
-    private synchronized void refresh() {
-        notifyDataSetChanged();
+    private void refresh() {
+//        mView.getRecycledViewPool().clear();
+        if(dataChanged){
+            mContactList.clear();
+            mContactList.addAll(buffer);
+            buffer.clear();
+            notifyDataSetChanged();
+            dataChanged = false;
+        }
     }
 
     @Override
@@ -140,12 +153,13 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
                 cs.setString(1, UID);
                 cs.execute();
                 ResultSet rs = cs.getResultSet();
-                mContactList.clear();
-                ;
+                oldSize = mContactList.size();
+                buffer.clear();
                 while (rs.next()) {
                     String s = rs.getString(1);
-                    ContactsAdapter.this.mContactList.add(s);
+                    ContactsAdapter.this.buffer.add(s);
                 }
+                dataChanged = true;
             } catch (SQLException e) {
                 e.printStackTrace();
             }
