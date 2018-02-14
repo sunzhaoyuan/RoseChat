@@ -92,6 +92,11 @@ public class ProfileFragment
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
+                            Picasso.with(getContext())
+                                    .load(profileElement[3]) //get url
+                                    .placeholder(R.drawable.rose_logo)
+                                    .error(R.drawable.rosenamelogo)
+                                    .into(mProfileImg);
                             if (adapter != null) {
                                 adapter.notifyDataSetChanged();
 
@@ -145,32 +150,6 @@ public class ProfileFragment
             mNickNameTxt.setText(nickName);
             mEmailTxt.setText(email);
             mPhoneTxt.setText(phone);
-
-            // ProfilePic Thread
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    while (!Thread.interrupted()) {
-                        handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                Log.d("picasso", "Trying to get profile picture");
-                                Picasso.with(getContext())
-                                        .load(profileElement[3]) //get url
-                                        .placeholder(R.drawable.rose_logo)
-                                        .error(R.drawable.rosenamelogo)
-                                        .into(mProfileImg);
-                            }
-                        });
-                        try {
-                            Thread.sleep(1000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                }
-            }).start();
         }
     }
 

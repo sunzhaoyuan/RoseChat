@@ -40,7 +40,7 @@ public class ContactsFragment extends Fragment {
 //        mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         final LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         view.setLayoutManager(mLayoutManager);
-        mAdapter = new ContactsAdapter(getContext(), mCallback, view);
+        mAdapter = new ContactsAdapter(getContext(), mCallback);
         view.setAdapter(mAdapter);
         return view;
     }
