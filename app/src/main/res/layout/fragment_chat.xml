@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="edu.rosehulman.sunz1.rosechat.fragments.ChatFragment">
+    tools:context="edu.rosehulman.sunz1.rosechat.fragments.ChatRoomFragment">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view_chat"

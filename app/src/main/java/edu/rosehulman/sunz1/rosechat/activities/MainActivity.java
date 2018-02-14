@@ -360,7 +360,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     public void onContactSelected(Contact contact) {
         //TODO:
 //        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-//        ChatFragment fragment = ChatFragment();
+//        ChatRoomFragment fragment = ChatRoomFragment();
 //        ft.addToBackStack("detail");
 //        ft.replace(R.id.fragment_container, fragment);
 //        ft.commit();

@@ -6,7 +6,7 @@ package edu.rosehulman.sunz1.rosechat.models;
 public class ChatRoom {
 
     private String name; //chatroom name
-    private int CID; //chatroom ID
+    private Integer CID; //chatroom ID
 
     public ChatRoom(String name, int CID) {
         this.name = name;
@@ -20,4 +20,5 @@ public class ChatRoom {
     public int getCID() {
         return CID;
     }
+
 }

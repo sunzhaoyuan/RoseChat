@@ -19,6 +19,7 @@ import java.util.ArrayList;
 
 import edu.rosehulman.sunz1.rosechat.R;
 import edu.rosehulman.sunz1.rosechat.SQLService.DatabaseConnectionService;
+import edu.rosehulman.sunz1.rosechat.activities.ChatRoomActivity;
 import edu.rosehulman.sunz1.rosechat.models.ChatRoom;
 import edu.rosehulman.sunz1.rosechat.utils.Constants;
 import edu.rosehulman.sunz1.rosechat.utils.SharedPreferencesUtils;
@@ -28,14 +29,14 @@ import edu.rosehulman.sunz1.rosechat.utils.SharedPreferencesUtils;
  * Edit by Yifei Li and sunz1  on 2/10/18
  */
 
-public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
+public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ViewHolder> {
     private Context mContext;
     ArrayList<ChatRoom> mChatRoomList;
     private DatabaseReference mMessageRef;
     private String mCurrentUID;
 
 
-    public MessageAdapter(Context context) {
+    public ChatRoomAdapter(Context context) {
         mContext = context;
         mChatRoomList = new ArrayList<>();
         mMessageRef = FirebaseDatabase.getInstance().getReference().child(Constants.PATH_MESSAGE);
@@ -62,7 +63,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(MessageAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(ChatRoomAdapter.ViewHolder holder, int position) {
         ChatRoom chat = mChatRoomList.get(position);
         holder.mNameTextView.setText(chat.getName());
         holder.mLastInteraction.setText("not yet");
@@ -110,19 +111,16 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
     }
 
+    /**
+     * Enter the ChatRoom at selected adapter position
+     *
+     * @param adapterPosition
+     */
     private void enterChat(int adapterPosition) {
         ChatRoom currChatRoom = mChatRoomList.get(adapterPosition);
-        int chatRoomID = currChatRoom.getCID();
+        Integer chatRoomID = currChatRoom.getCID();
         String chatRoomName = currChatRoom.getName();
-//        Message currentMessage = mMessageList.get(adapterPosition);
-//        String messageName = currentMessage.getName();
-//        String messageKey = currentMessage.getKey();
-//        String receiversUID = currentMessage.getReceiverUID();
-//        String senderUID = currentMessage.getSenderUID();
-//        Log.d(Constants.TAG_CHAT, "IN MESSAGE_ADAPTER\nreceiverUID: " + receiversUID);
-//        ChatActivity.startActivity(mContext, messageName, senderUID, receiversUID, messageKey);
-//        ChatRoom currentChatRoom = mChatRoomList.get(adapterPosition);
-//        ChatActivity.startActivity(mContext,currentChatRoom.getCID());
+        ChatRoomActivity.startActivity(mContext, chatRoomID, chatRoomName);
     }
 
     private void messageOptions(int adapterPosition) {
