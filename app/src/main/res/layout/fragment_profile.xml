@@ -120,6 +120,7 @@
                 android:layout_below="@id/profile_course6"
                 android:layout_centerHorizontal="true"
                 android:paddingTop="@dimen/padding_small"
+                android:paddingBottom="16dp"
                 android:text="@string/profile_edit"
                 android:textAlignment="textStart"
                 android:textColor="#57a0d4"
