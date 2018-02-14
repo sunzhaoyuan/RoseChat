@@ -222,10 +222,11 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         @Override
         protected Integer doInBackground(String... strings) {
             try {
-                CallableStatement cs = mDBConnection.prepareCall("{? = call Friend_Invite(?, ?)}");
+                CallableStatement cs = mDBConnection.prepareCall("{? = call Friend_Invite(?, ?, ?)}");
                 cs.registerOutParameter(1, Types.INTEGER);
                 cs.setString(2, strings[0]);
                 cs.setString(3, strings[1]);
+                cs.setString(4, strings[2]);
                 cs.execute();
                 int result = cs.getInt(1);
                 indicator.result = result;
@@ -260,7 +261,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                     Toast.makeText(MainActivity.this, "Rose ID cannot be empty", Toast.LENGTH_LONG).show();
                 } else {
                     indicator = new Indicator();
-                    new AddContactTask().execute(SharedPreferencesUtils.getCurrentUser(getApplicationContext()), user);
+                    new AddContactTask().execute(SharedPreferencesUtils.getCurrentUser(getApplicationContext()), user, message);
                     while (indicator.result == -1) {
                         try {
                             Thread.sleep(200);

@@ -139,9 +139,10 @@ public class InvitationAdapter extends RecyclerView.Adapter<InvitationAdapter.Vi
                 mInvitationList.clear();
                 while (rs.next()) {
                     String s = rs.getString(1);
+                    String msg = rs.getString(2 );
                     Invitation invite = new Invitation();
                     invite.setmName(s);
-                    invite.setmMessage("Empty Message");
+                    invite.setmMessage(msg);
                     mInvitationList.add(invite);
                 }
             } catch (SQLException e) {
