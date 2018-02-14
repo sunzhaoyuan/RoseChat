@@ -3,7 +3,6 @@ package edu.rosehulman.sunz1.rosechat.activities;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -12,6 +11,7 @@ import com.google.firebase.auth.FirebaseUser;
 import edu.rosehulman.sunz1.rosechat.R;
 import edu.rosehulman.sunz1.rosechat.adapters.NewChatAdapter;
 import edu.rosehulman.sunz1.rosechat.models.Contact;
+import edu.rosehulman.sunz1.rosechat.utils.LinearLayoutManagerPreferred;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -38,7 +38,7 @@ public class NewChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_new_chat);
 
         RecyclerView recyclerView = (RecyclerView)findViewById(R.id.newChat_recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(new LinearLayoutManagerPreferred(this));
         recyclerView.setHasFixedSize(true);
 
         mAdapter = new NewChatAdapter(this, mCallback);
