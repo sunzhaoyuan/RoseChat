@@ -7,10 +7,12 @@ public class ChatRoom {
 
     private String name; //chatroom name
     private Integer CID; //chatroom ID
+    private String lastText;
 
-    public ChatRoom(String name, int CID) {
+    public ChatRoom(String name, int CID, String lastText) {
         this.name = name;
         this.CID = CID;
+        this.lastText = lastText;
     }
 
     public String getName() {
@@ -20,5 +22,7 @@ public class ChatRoom {
     public int getCID() {
         return CID;
     }
+
+    public String getLastText() {return lastText;}
 
 }

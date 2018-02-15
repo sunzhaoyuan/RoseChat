@@ -26,33 +26,33 @@
             tools:ignore="RtlCompat"
             tools:targetApi="jelly_bean" />
 
-        <!--<Button-->
-            <!--android:id="@+id/button_settings_fontsize"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:background="@android:color/background_light"-->
-            <!--android:fontFamily="sans"-->
-            <!--android:padding="10dp"-->
-            <!--android:text="@string/fontsize"-->
-            <!--android:textAlignment="textStart"-->
-            <!--android:textAllCaps="false"-->
-            <!--android:textSize="20sp"-->
-            <!--tools:ignore="RtlCompat"-->
-            <!--tools:targetApi="jelly_bean" />-->
+        <Button
+            android:id="@+id/button_settings_fontsize"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/background_light"
+            android:fontFamily="sans"
+            android:padding="10dp"
+            android:text="@string/fontsize"
+            android:textAlignment="textStart"
+            android:textAllCaps="false"
+            android:textSize="20sp"
+            tools:ignore="RtlCompat"
+            tools:targetApi="jelly_bean" />
 
-        <!--<Button-->
-            <!--android:id="@+id/button_settings_fontfamily"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:background="@android:color/background_light"-->
-            <!--android:fontFamily="sans"-->
-            <!--android:padding="10dp"-->
-            <!--android:text="@string/fontfamily"-->
-            <!--android:textAlignment="textStart"-->
-            <!--android:textAllCaps="false"-->
-            <!--android:textSize="20sp"-->
-            <!--tools:ignore="RtlCompat"-->
-            <!--tools:targetApi="jelly_bean" />-->
+        <Button
+            android:id="@+id/button_settings_fontfamily"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/background_light"
+            android:fontFamily="sans"
+            android:padding="10dp"
+            android:text="@string/fontfamily"
+            android:textAlignment="textStart"
+            android:textAllCaps="false"
+            android:textSize="20sp"
+            tools:ignore="RtlCompat"
+            tools:targetApi="jelly_bean" />
 
         <Button
             android:id="@+id/button_settings_logOut"
