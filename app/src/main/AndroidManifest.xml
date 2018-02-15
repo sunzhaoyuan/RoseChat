@@ -26,7 +26,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.ChatActivity" />
+        <activity android:name=".activities.ChatRoomActivity" />
         <service
             android:name=".sys.fcm.MyFirebaseMessagingService">
             <intent-filter>

@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.sql.Array;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -34,10 +35,8 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
     ArrayList<String> mContactList;
     ContactsFragment.Callback mCallback;
     final private String DEBUG_KEY = "Debug";
-
     private String UID;
     private Connection mDBConnection;
-    Handler handler;
 
     public ContactsAdapter(Context context, ContactsFragment.Callback callback) {
         mCallback = callback;
@@ -45,31 +44,20 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
         mContactList = new ArrayList<String>();
         UID = SharedPreferencesUtils.getCurrentUser(context);
         mDBConnection = DatabaseConnectionService.getInstance().getConnection();
-        handler = new Handler(Looper.getMainLooper());
 
         new Thread(new Runnable() {
             @Override
             public void run() {
                 while (!Thread.interrupted()) {
                     new GetFriendsTask().execute(UID);
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            refresh();
-                        }
-                    });
                     try {
-                        Thread.sleep(2000);
+                        Thread.sleep(500);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
             }
         }).start();
-    }
-
-    private synchronized void refresh() {
-        notifyDataSetChanged();
     }
 
     @Override
@@ -141,7 +129,6 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
                 cs.execute();
                 ResultSet rs = cs.getResultSet();
                 mContactList.clear();
-                ;
                 while (rs.next()) {
                     String s = rs.getString(1);
                     ContactsAdapter.this.mContactList.add(s);
@@ -150,6 +137,12 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
                 e.printStackTrace();
             }
             return 0;
+        }
+
+        @Override
+        protected void onPostExecute(Integer integer) {
+            super.onPostExecute(integer);
+            notifyDataSetChanged();
         }
     }
 

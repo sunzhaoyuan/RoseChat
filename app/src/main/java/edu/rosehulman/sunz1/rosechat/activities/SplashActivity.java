@@ -28,6 +28,12 @@ public class SplashActivity extends AppCompatActivity {
         protected Long doInBackground(String... strings) {
             DatabaseConnectionService connectionService = DatabaseConnectionService.getInstance();
             connectionService.connect();
+//            int i = 0;
+//            while (DatabaseConnectionService.getInstance().getConnection() == null) {
+//                i++;
+//                if (i % 10000 == 0)
+//                    Log.d("debug", "connection null");
+//            }
             return null;
         }
 
