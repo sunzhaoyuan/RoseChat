@@ -164,6 +164,9 @@ public class ProfileFragment
                 cs.setString(1, mCurrentUID);
                 cs.execute();
                 ResultSet rs = cs.getResultSet();
+                for (int i = 0; i < 6; i++) {
+                    courses[i] = null;
+                }
                 int index = 0;
                 while (rs.next()) {
                     if (index >= 6) {
@@ -183,6 +186,9 @@ public class ProfileFragment
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             int index = 0;
+            for (int i = 0; i < 6; i++) {
+                mCourses[i].setVisibility(View.GONE);
+            }
             while (courses[index] != null) {
                 mCourses[index].setText(courses[index]);
                 mCourses[index].setVisibility(View.VISIBLE);

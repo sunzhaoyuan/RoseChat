@@ -208,8 +208,8 @@ public class ChatCommunicator implements ChatSystem.Communicator {
                     mOnGetMessagesListener.onGetMessagesSuccess(m);
                 }
                 Log.d("Notification", "should have notification");
-                Message lastM = messageList.get(messageList.size() - 1);
-                sendPushNotificationToReceiver(lastM.getSenderID(), lastM.getText(), context);
+//                Message lastM = messageList.get(messageList.size() - 1);
+//                sendPushNotificationToReceiver(lastM.getSenderID(), lastM.getText(), context);
             } else {
                 mOnGetMessagesListener.onGetMessagesFailure("unable to get message ");
             }
