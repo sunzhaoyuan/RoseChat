@@ -29,7 +29,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.TreeMap;
@@ -91,7 +90,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         mButtonLogOut.setTextSize(20*(float)Constants.FONT_SIZE_FACTOR);
         mButtonFontFamily.setTextSize(20*(float)Constants.FONT_SIZE_FACTOR);
         mButtonFontSize.setTextSize(20*(float)Constants.FONT_SIZE_FACTOR);
-//        mButtonFontSize.setTypeface(Typeface.MONOSPACE,0 );
+        mButtonAddCourse.setTextSize(20*(float)Constants.FONT_SIZE_FACTOR);
+        mButtonDeleteCourse.setTextSize(20*(float)Constants.FONT_SIZE_FACTOR);
 
         //font family
         if (Constants.FONT_FAMILY == 1) { //monospace
@@ -101,6 +101,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             mButtonLogOut.setTypeface(Typeface.MONOSPACE, 0);
             mButtonFontFamily.setTypeface(Typeface.MONOSPACE, 0);
             mButtonFontSize.setTypeface(Typeface.MONOSPACE, 0);
+            mButtonAddCourse.setTypeface(Typeface.MONOSPACE, 0);
+            mButtonDeleteCourse.setTypeface(Typeface.MONOSPACE, 0);
         } else {
             mButtonDeleteAccount.setTypeface(Typeface.DEFAULT, 0);
             mButtonFeedback.setTypeface(Typeface.DEFAULT, 0);
@@ -108,6 +110,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             mButtonLogOut.setTypeface(Typeface.DEFAULT, 0);
             mButtonFontFamily.setTypeface(Typeface.DEFAULT, 0);
             mButtonFontSize.setTypeface(Typeface.DEFAULT, 0);
+            mButtonAddCourse.setTypeface(Typeface.DEFAULT, 0);
+            mButtonDeleteCourse.setTypeface(Typeface.DEFAULT, 0);
         }
 
         mButtonAddCourse.setOnClickListener(this);
