@@ -92,11 +92,13 @@ public class ProfileFragment
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            Picasso.with(getContext())
-                                    .load(profileElement[3]) //get url
-                                    .placeholder(R.drawable.rose_logo)
-                                    .error(R.drawable.rosenamelogo)
-                                    .into(mProfileImg);
+                            if (profileElement != null) {
+                                Picasso.with(getContext())
+                                        .load(profileElement[3]) //get url
+                                        .placeholder(R.drawable.rose_logo)
+                                        .error(R.drawable.rosenamelogo)
+                                        .into(mProfileImg);
+                            }
                             if (adapter != null) {
                                 adapter.notifyDataSetChanged();
 
@@ -222,6 +224,11 @@ public class ProfileFragment
         mEmailTxt = (TextView) view.findViewById(R.id.profile_email);
         mNickNameTxt = (TextView) view.findViewById(R.id.profile_name);
         mPhoneTxt = (TextView) view.findViewById(R.id.profile_phone);
+        //font size
+        mEdit.setTextSize(12*(float) Constants.FONT_SIZE_FACTOR);
+        mEmailTxt.setTextSize(12*(float) Constants.FONT_SIZE_FACTOR);
+        mNickNameTxt.setTextSize(12*(float) Constants.FONT_SIZE_FACTOR);
+        mPhoneTxt.setTextSize(12*(float) Constants.FONT_SIZE_FACTOR);
         mCourses = new TextView[6];
         mCourses[0] = (TextView) view.findViewById(R.id.profile_course1);
         mCourses[1] = (TextView) view.findViewById(R.id.profile_course2);
@@ -229,6 +236,10 @@ public class ProfileFragment
         mCourses[3] = (TextView) view.findViewById(R.id.profile_course4);
         mCourses[4] = (TextView) view.findViewById(R.id.profile_course5);
         mCourses[5] = (TextView) view.findViewById(R.id.profile_course6);
+        //font size
+        for(int i = 0; i < mCourses.length; i++){
+            mCourses[i].setTextSize(12*(float) Constants.FONT_SIZE_FACTOR);
+        }
         courses = new String[6];
         bottomNavigationViewEx = (BottomNavigationViewEx) getActivity().findViewById(R.id.bnve);
     }

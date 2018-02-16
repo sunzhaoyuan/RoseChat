@@ -103,6 +103,9 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ViewHo
 
             mNameTextView = (TextView) itemView.findViewById(R.id.message_name);
             mLastInteraction = (TextView) itemView.findViewById(R.id.message_last_interaction);
+            //find size
+            mNameTextView.setTextSize(15*(float)Constants.FONT_SIZE_FACTOR);
+            mLastInteraction.setTextSize(15*(float)Constants.FONT_SIZE_FACTOR);
         }
 
 

@@ -139,6 +139,9 @@ public class MessageRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             super(itemView);
             chatTxt = (TextView) itemView.findViewById(R.id.chat_text);
             chatProfilePicTxt = (TextView) itemView.findViewById(R.id.chat_profile_pic);
+            //font size
+            chatTxt.setTextSize(20*(float) Constants.FONT_SIZE_FACTOR);
+            chatProfilePicTxt.setTextSize(20*(float) Constants.FONT_SIZE_FACTOR);
         }
     }
 
@@ -149,6 +152,9 @@ public class MessageRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             super(itemView);
             chatTxt = (TextView) itemView.findViewById(R.id.chat_text);
             chatProfilePicTxt = (TextView) itemView.findViewById(R.id.chat_profile_pic);
+            //font size
+            chatTxt.setTextSize(20*(float) Constants.FONT_SIZE_FACTOR);
+            chatProfilePicTxt.setTextSize(20*(float) Constants.FONT_SIZE_FACTOR);
         }
     }
 }

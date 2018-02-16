@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import edu.rosehulman.sunz1.rosechat.R;
 import edu.rosehulman.sunz1.rosechat.SQLService.DatabaseConnectionService;
 import edu.rosehulman.sunz1.rosechat.activities.NewChatActivity;
+import edu.rosehulman.sunz1.rosechat.utils.Constants;
 import edu.rosehulman.sunz1.rosechat.utils.SharedPreferencesUtils;
 
 /**
@@ -81,6 +82,7 @@ public class NewChatAdapter extends RecyclerView.Adapter<NewChatAdapter.ViewHold
                 @Override
                 public void onClick(View view) {
                     //create chat room
+                    ((CheckedTextView) view.findViewById(R.id.newChat_name)).setTextSize(20*(float) Constants.FONT_SIZE_FACTOR);
                     if(((CheckedTextView) view.findViewById(R.id.newChat_name)).isChecked()){
                         ((CheckedTextView) view.findViewById(R.id.newChat_name)).setChecked(false);
                         ((CheckedTextView) view.findViewById(R.id.newChat_name)).setCheckMarkDrawable(null);

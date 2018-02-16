@@ -143,6 +143,12 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         mNickNameTxtE = (TextView) view.findViewById(R.id.profile_name_edit);
         mPhoneTxtE = (TextView) view.findViewById(R.id.profile_phone_edit);
         bottomNavigationViewEx = (BottomNavigationViewEx) getActivity().findViewById(R.id.bnve);
+        //set font
+        mConfirm.setTextSize(20*(float) Constants.FONT_SIZE_FACTOR);
+        mEmailTxtE.setTextSize(20*(float) Constants.FONT_SIZE_FACTOR);
+        mNickNameTxtE.setTextSize(20*(float) Constants.FONT_SIZE_FACTOR);
+        mPhoneTxtE.setTextSize(20*(float) Constants.FONT_SIZE_FACTOR);
+        bottomNavigationViewEx.setTextSize(20*(float) Constants.FONT_SIZE_FACTOR);
     }
 
 

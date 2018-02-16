@@ -30,6 +30,7 @@ import edu.rosehulman.sunz1.rosechat.R;
 import edu.rosehulman.sunz1.rosechat.SQLService.DatabaseConnectionService;
 import edu.rosehulman.sunz1.rosechat.activities.InvitationActivity;
 import edu.rosehulman.sunz1.rosechat.models.Invitation;
+import edu.rosehulman.sunz1.rosechat.utils.Constants;
 import edu.rosehulman.sunz1.rosechat.utils.SharedPreferencesUtils;
 
 /**
@@ -105,6 +106,12 @@ public class InvitationAdapter extends RecyclerView.Adapter<InvitationAdapter.Vi
             mInvitePending = (TextView) itemView.findViewById(R.id.invitation_pending);
             mConfirmInvite = (Button) itemView.findViewById(R.id.invitation_confirm);
             mDeclineInvite = (Button) itemView.findViewById(R.id.invitation_decline);
+            //set font size
+            mInviteMessage.setTextSize(25*(float) Constants.FONT_SIZE_FACTOR);
+            mInviteName.setTextSize(20*(float) Constants.FONT_SIZE_FACTOR);
+            mInvitePending.setTextSize(20*(float) Constants.FONT_SIZE_FACTOR);
+            mConfirmInvite.setTextSize(20*(float) Constants.FONT_SIZE_FACTOR);
+            mDeclineInvite.setTextSize(20*(float) Constants.FONT_SIZE_FACTOR);
 
             mConfirmInvite.setOnClickListener(new View.OnClickListener() {
                 @Override
