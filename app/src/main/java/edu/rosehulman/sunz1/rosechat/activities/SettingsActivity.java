@@ -1,8 +1,10 @@
 package edu.rosehulman.sunz1.rosechat.activities;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -47,6 +49,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     private Button mButtonFontFamily;
     private View mProcessBar;
     private Handler mHandler;
+    public boolean fontSizeChanged = false;
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
@@ -69,6 +72,13 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         mButtonLogOut = (Button) findViewById(R.id.button_settings_logOut);
         mButtonFontSize = (Button) findViewById(R.id.button_settings_fontsize);
         mButtonFontFamily = (Button) findViewById(R.id.button_settings_fontfamily);
+        //font size
+        mButtonDeleteAccount.setTextSize(20*(float)Constants.FONT_SIZE_FACTOR);
+        mButtonFeedback.setTextSize(20*(float)Constants.FONT_SIZE_FACTOR);
+        mButtonLanguage.setTextSize(20*(float)Constants.FONT_SIZE_FACTOR);
+        mButtonLogOut.setTextSize(20*(float)Constants.FONT_SIZE_FACTOR);
+        mButtonFontFamily.setTextSize(20*(float)Constants.FONT_SIZE_FACTOR);
+        mButtonFontSize.setTextSize(20*(float)Constants.FONT_SIZE_FACTOR);
 
         mButtonDeleteAccount.setOnClickListener(this);
         mButtonFeedback.setOnClickListener(this);
@@ -91,28 +101,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         mIsFirstTimeReadServer = true;
 
         new SyncSettingTask().execute();
-
-        // reads server constantly
-//        mHandler = new Handler(Looper.getMainLooper());
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                while (!Thread.interrupted()) {
-//                    new SyncSettingTask().execute();
-//                    mHandler.post(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            // return to the main thread
-//                        }
-//                    });
-//                    try {
-//                        Thread.sleep(2000);
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            }
-//        }).start();
     }
 
     @Override
@@ -187,22 +175,21 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
                 //BE CAREFUL: if R.array.fontfamily_array is changed, this variable needs to be changed as well
                 final String[] fontfamilyArray = {"Arial", "Times New Roma"};
-
-                builder.setTitle("Pick a font family")
-                        .setItems(R.array.fontfamily_array, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                //TODO:
-                                String fontFamily = fontfamilyArray[which];
-                                mSettingsArray.set(2, fontFamily);
-                                Log.d(Constants.TAG_SETTING, "Set Font Size : " + mSettingsArray.get(2));
-                                new SyncSettingTask().execute();
-//                                mProcessBar.setVisibility(View.VISIBLE);
-//
-//                                mProcessBar.setVisibility(View.GONE);
-                            }
-                        });
-
+                if (mSettingsArray.size() != 0) {
+                    builder.setTitle("Pick a font family")
+                            .setItems(R.array.fontfamily_array, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    //TODO:
+                                    String fontFamily = fontfamilyArray[which];
+                                    mSettingsArray.set(2, fontFamily);
+                                    Log.d(Constants.TAG_SETTING, "Set Font Size : " + mSettingsArray.get(2));
+                                    new SyncSettingTask().execute();
+                                    mProcessBar.setVisibility(View.VISIBLE);
+                                    mProcessBar.setVisibility(View.GONE);
+                                }
+                            });
+                }
                 builder.setNegativeButton(android.R.string.cancel, null);
                 return builder.create();
             }
@@ -217,41 +204,42 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 Log.d("setting", "fontSize in dialog");
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 final String[] sizefactorArray = {"0.5", "1", "2"};
-
-                builder.setTitle("Pick a font size factor")
-                        .setItems(R.array.fontsize_array, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                String sizefactor = sizefactorArray[which];
-                                mSettingsArray.set(1, sizefactor);
-                                Log.d(Constants.TAG_SETTING, "Set Font Size : " + mSettingsArray.get(1));
-                                new SyncSettingTask().execute();
-                            }
-                        });
-
+                if (mSettingsArray.size() != 0) {
+                    builder.setTitle("Pick a font size factor")
+                            .setItems(R.array.fontsize_array, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    String sizefactor = sizefactorArray[which];
+                                    mSettingsArray.set(1, sizefactor);
+                                    Log.d(Constants.TAG_SETTING, "Set Font Size : " + mSettingsArray.get(1));
+                                    fontSizeChanged = true;
+                                    new SyncSettingTask().execute();
+                                }
+                            });
+                }
                 builder.setNegativeButton(android.R.string.cancel, null);
                 return builder.create();
             }
         };
         df.show(getFragmentManager(), "fontSize");
     }
-//
-//    private void notificationDialog() {
-//        AlertDialog.Builder mBuilder = new AlertDialog.Builder(this);
-//        mBuilder.setTitle("Notifications");
-//        mBuilder.setMessage("Would you like to turn notifications on or off?");
-//        mBuilder.setPositiveButton("On", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {NOTIFICATIONS =true;}
-//        });
-//
-//        mBuilder.setNegativeButton("Off", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {NOTIFICATIONS = false;}
-//        });
-//        AlertDialog dialog = mBuilder.create();
-//        dialog.show();
-//    }
+
+    private void notificationDialog() {
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(this);
+        mBuilder.setTitle("Notifications");
+        mBuilder.setMessage("Would you like to turn notifications on or off?");
+        mBuilder.setPositiveButton("On", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {NOTIFICATIONS =true;}
+        });
+
+        mBuilder.setNegativeButton("Off", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {NOTIFICATIONS = false;}
+        });
+        AlertDialog dialog = mBuilder.create();
+        dialog.show();
+    }
 
     private void logOutConfirmationDialog() {
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(this);
@@ -260,7 +248,13 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         mBuilder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                logOut();
+                try {
+                    DatabaseConnectionService.getInstance().getConnection().close();
+                    logOut();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+
             }
         });
 
@@ -323,7 +317,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                     ResultSet resultSet = cs.getResultSet();
                     while (resultSet.next()) {
                         mSettingsArray.add(0, UID);
-                        mSettingsArray.add(1, Integer.toString(resultSet.getInt("Fontsize")));
+                        mSettingsArray.add(1, Double.toString(resultSet.getDouble("Fontsize")));
                         mSettingsArray.add(2, resultSet.getString("FontFamily"));
                         mSettingsArray.add(3, resultSet.getString("Language"));
                         mSettingsArray.add(4, resultSet.getByte("Notification") + "");
@@ -333,11 +327,21 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                     //we need to create current user
                     cs = mConnection.prepareCall("{call SyncDisplaySettings(?, ?, ?, ?, ?)}");
                     cs.setString(1, UID); //@UID varchar(50)
-                    cs.setInt(2, Integer.parseInt(mSettingsArray.get(1))); //@FontSize int
+                    cs.setFloat(2, Float.parseFloat(mSettingsArray.get(1))); //@FontSize int
                     cs.setString(3, mSettingsArray.get(2)); //@FontFamily nvarchar(20)
                     cs.setString(4, mSettingsArray.get(3)); //@FontLanguage nvarchar(10)
                     cs.setInt(5, Integer.parseInt(mSettingsArray.get(4))); //@Notification bit
                     cs.execute(); //add these data into db
+                    if(fontSizeChanged == true){
+                        fontSizeChanged = false;
+                        Intent mStartActivity = new Intent(getApplicationContext(), SplashActivity.class);
+                        int mPendingIntentId = 123;
+                        PendingIntent mPendingIntent = PendingIntent.getActivity(getApplicationContext(), mPendingIntentId,    mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
+                        AlarmManager mgr = (AlarmManager)getApplication().getSystemService(getApplicationContext().ALARM_SERVICE);
+                        mgr.set(AlarmManager.RTC, System.currentTimeMillis(), mPendingIntent);
+                        finishAffinity();
+
+                    }
                 }
 
             } catch (SQLException e) {

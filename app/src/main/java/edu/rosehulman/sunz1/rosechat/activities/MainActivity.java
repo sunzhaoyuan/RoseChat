@@ -43,12 +43,7 @@ import edu.rosehulman.sunz1.rosechat.models.Contact;
 import edu.rosehulman.sunz1.rosechat.utils.Constants;
 import edu.rosehulman.sunz1.rosechat.utils.SharedPreferencesUtils;
 
-//import edu.rosehulman.sunz1.rosechat.activities.NewChatActivity;
-
-public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener,
-//        MessageFragment.Callback,
-        ContactsFragment.Callback,
-        NewChatActivity.Callback {
+public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, ContactsFragment.Callback {
 
     final private String DEBUG_KEY = "Debug";
 
@@ -62,9 +57,9 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     /**
      * For SQL
      */
-//    private DatabaseConnectionService dbConSer;
+
     private Connection mDBConnection;
-//    private Statement stmt;
+
 
     private HashMap<Integer, Integer> mTitlesMap = new HashMap<Integer, Integer>() {{
         put(R.id.navigation_message, R.string.navi_message);
@@ -91,10 +86,11 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        new FontSetting().execute();
         setContentView(R.layout.activity_main);
 
-//        mBottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
         mNavigation = (BottomNavigationViewEx) findViewById(R.id.bnve);
+        mNavigation.setTextSize(15*(float)Constants.FONT_SIZE_FACTOR);
         mOnNISExListener = new BottomNavigationViewEx.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -121,7 +117,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                 return true;
             }
         };
-//        mBottomNavigationView.setOnNavigationItemSelectedListener(mOnNISListener);
 
 
         mNavigation.setOnNavigationItemSelectedListener(mOnNISExListener);
@@ -137,63 +132,8 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         mFragmentMain = new MessageFragment();
         setTitle(R.id.navigation_message);
 
-//        initConnection();
-//        setupProfileHandler();
         mDBConnection = DatabaseConnectionService.getInstance().getConnection();
         setupProfile();
-    }
-
-//    private void initConnection() {
-//
-//        if (mDBConnection == null) {
-//            Log.d(DEBUG_KEY, "Connection null");
-//            dbConSer.connect();
-//        } else {
-//            Log.d(DEBUG_KEY, "Connection created");
-//        }
-//        mDBConnection = dbConSer.getConnection();
-//    }
-
-    /**
-     * it only creates a contact if there is no contact for this user existed
-     */
-    private void setupProfileHandler() {
-        final DatabaseReference profRef = FirebaseDatabase.getInstance().getReference().child(Constants.PATH_CONTACT);
-        profRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                String currentUID = SharedPreferencesUtils.getCurrentUser(getApplicationContext());
-//                if (!dataSnapshot.child) {
-                int i = 0;
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Log.d(Constants.TAG_PROFILE, "CURRENT UID : " + snapshot.child("uid").getValue());
-                    if (snapshot.child("uid").getValue().equals(currentUID)) {
-                        i++;
-                    }
-                }
-                if (i == 0) {
-                    String fcmToken = FirebaseInstanceId.getInstance().getToken();
-                    mContact = new Contact(currentUID, currentUID,
-                            "https://firebasestorage.googleapis.com/v0/b/rosechat-64ae9.appspot.com/o/profile_pics%2Fdefault.png?alt=media&token=2cc54fe8-da2f-49f9-ab18-0ef0d2e8fea6",
-                            getString(R.string.profile_sample_phone_number),
-                            currentUID + "@rose-hulman.edu",
-                            fcmToken);
-                    DatabaseReference newProfRef = FirebaseDatabase.getInstance().getReference().child(Constants.PATH_CONTACT + "/" + currentUID);
-//                    mContact.setKey(dataSnapshot.getKey());
-                    newProfRef.child("email").setValue(mContact.getEmail());
-                    newProfRef.child("phoneNumber").setValue(mContact.getPhoneNumber());
-                    newProfRef.child("nickName").setValue(mContact.getNickName());
-                    newProfRef.child("profilePicUrl").setValue(mContact.getProfilePicUrl());
-                    newProfRef.child("uid").setValue(currentUID);
-                    newProfRef.child("fireBaseToken").setValue(mContact.getFireBaseToken());
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.d(Constants.TAG_PROFILE, "PROFILE REFERENCE ERROR\n" + databaseError.getMessage());
-            }
-        });
     }
 
 
@@ -220,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                 String defaultPhone = getString(R.string.profile_sample_phone_number);
                 String defaultAvatarURL = "https://firebasestorage.googleapis.com/v0/b/rosechat-64ae9.appspot.com/o/profile_pics%2Fdefault.png?alt=media&token=2cc54fe8-da2f-49f9-ab18-0ef0d2e8fea6";
 
-                cs = MainActivity.this.mDBConnection.prepareCall("{?=call CreateUser(?, ?, ?, ?, ?)}");
+                cs = DatabaseConnectionService.getInstance().getConnection().prepareCall("{?=call CreateUser(?, ?, ?, ?, ?)}");
                 cs.setString(2, UID);
                 cs.setString(3, defaultNickName);
                 cs.setString(4, defaultPhone);
@@ -236,14 +176,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                 e.printStackTrace();
             }
             return null;
-        }
-
-        protected void onProgressUpdate(Integer... progress) {
-
-        }
-
-        protected void onPostExecute(ResultSet rs) {
-
         }
     }
 
@@ -292,10 +224,11 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         @Override
         protected Integer doInBackground(String... strings) {
             try {
-                CallableStatement cs = mDBConnection.prepareCall("{? = call Friend_Invite(?, ?)}");
+                CallableStatement cs = mDBConnection.prepareCall("{? = call Friend_Invite(?, ?, ?)}");
                 cs.registerOutParameter(1, Types.INTEGER);
                 cs.setString(2, strings[0]);
                 cs.setString(3, strings[1]);
+                cs.setString(4, strings[2]);
                 cs.execute();
                 int result = cs.getInt(1);
                 indicator.result = result;
@@ -330,7 +263,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                     Toast.makeText(MainActivity.this, "Rose ID cannot be empty", Toast.LENGTH_LONG).show();
                 } else {
                     indicator = new Indicator();
-                    new AddContactTask().execute(SharedPreferencesUtils.getCurrentUser(getApplicationContext()), user);
+                    new AddContactTask().execute(SharedPreferencesUtils.getCurrentUser(getApplicationContext()), user, message);
                     while (indicator.result == -1) {
                         try {
                             Thread.sleep(200);
@@ -368,7 +301,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     }
 
     private boolean inviteAlreadySentCheck(final String mEmail, String user) {
-
 
         return false;
     }
@@ -428,7 +360,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     public void onContactSelected(Contact contact) {
         //TODO:
 //        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-//        ChatFragment fragment = ChatFragment();
+//        ChatRoomFragment fragment = ChatRoomFragment();
 //        ft.addToBackStack("detail");
 //        ft.replace(R.id.fragment_container, fragment);
 //        ft.commit();
@@ -443,9 +375,23 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         context.startActivity(intent);
     }
 
-    @Override
-    public void onNewChatSelected(Contact contact) {
-
+    private class FontSetting extends AsyncTask<String,Integer,Long>{
+        @Override
+        protected Long doInBackground(String... strings) {
+            try {
+                CallableStatement statement = DatabaseConnectionService.getInstance().getConnection().prepareCall("{call GetAllSettings(?)}");
+                statement.setString(1,SharedPreferencesUtils.getCurrentUser(getApplicationContext()));
+                statement.execute();
+                ResultSet rs = statement.getResultSet();
+                while (rs.next()){
+                    Constants.FONT_SIZE_FACTOR = rs.getDouble("FontSize");
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
     }
+
 
 }
