@@ -4,6 +4,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.widget.RecyclerView;
@@ -148,7 +149,7 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ViewHo
         protected String doInBackground(String... str) {
             Connection connection = DatabaseConnectionService.getInstance().getConnection();
             try {
-                String name = null;
+                String chatRoomName = null;
                 int CID = 0;
                 String lastText = null;
                 String senderUID = null;
@@ -158,7 +159,7 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ViewHo
                 cs.execute();
                 ResultSet rs = cs.getResultSet();
                 while (rs.next()) {
-                    name = rs.getString("Name");
+                    chatRoomName = rs.getString("Name");
                     CID = rs.getInt("CID");
                     CallableStatement cs1 = connection.prepareCall("call GetMessageInChatRoom(?, ?)");
                     cs1.setString(1, mCurrentUID);
@@ -173,12 +174,13 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ViewHo
                         lastText = "";
                         senderUID = "";
                     }
-                    mChatRoomList.add(0, new ChatRoom(name, CID, lastText));
+                    mChatRoomList.add(0, new ChatRoom(chatRoomName, CID, lastText));
                     //first time has lastInterHolder
                     if (!mLastInteractionHolder.keySet().contains(CID)) mLastInteractionHolder.put(CID, lastText);
                     else {
                         if (!mLastInteractionHolder.get(CID).equals(lastText)) { //new message received
-                            pushNotificationToReceiver(senderUID, lastText, mContext);
+                            String textToBePushedNoti = senderUID + ": " + lastText; //who and what
+                            pushNotificationToReceiver(chatRoomName, textToBePushedNoti, mContext);
                             mLastInteractionHolder.put(CID, lastText); //refresh lastText
                         }
                     }
@@ -202,11 +204,11 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ViewHo
     /**
      * Push Notification to the system
      *
-     * @param sender
-     * @param message
+     * @param chatRoomName
+     * @param whoAndWhat
      * @param context
      */
-    private void pushNotificationToReceiver(String sender, String message, Context context) {
+    private void pushNotificationToReceiver(String chatRoomName, String whoAndWhat, Context context) {
         if (!NOTIFICATIONS) {
             return;
         }
@@ -222,8 +224,10 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ViewHo
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
                 .setAutoCancel(true)
                 .setSmallIcon(R.drawable.rose_logo)
-                .setContentTitle(sender)
-                .setContentText(message);
+                .setContentTitle(chatRoomName)
+                .setContentText(whoAndWhat)
+                .setVibrate(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400})
+                .setColor(Color.GREEN);
 
         Intent intent = new Intent(context, ChatCommunicator.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
