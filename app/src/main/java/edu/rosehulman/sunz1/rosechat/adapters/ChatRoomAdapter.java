@@ -1,6 +1,7 @@
 package edu.rosehulman.sunz1.rosechat.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -11,6 +12,8 @@ import android.widget.TextView;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import net.sourceforge.jtds.jdbc.cache.SQLCacheKey;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -69,8 +72,7 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ViewHo
     public void onBindViewHolder(ChatRoomAdapter.ViewHolder holder, int position) {
         ChatRoom chat = mChatRoomList.get(position);
         holder.mNameTextView.setText(chat.getName());
-        new GetMessageFromUserTask(chat.getCID()).execute();
-        holder.mLastInteraction.setText(lastinteraction);
+        holder.mLastInteraction.setText(chat.getLastText());
     }
 
     @Override
@@ -137,13 +139,30 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ViewHo
         protected String doInBackground(String... str) {
             Connection connection = DatabaseConnectionService.getInstance().getConnection();
             try {
+                String name = null;
+                int CID = 0;
+                String text;
                 mChatRoomList.clear();
                 CallableStatement cs = connection.prepareCall("call getChatRoom(?)");
                 cs.setString(1, mCurrentUID);
                 cs.execute();
                 ResultSet rs = cs.getResultSet();
                 while (rs.next()) {
-                    mChatRoomList.add(0, new ChatRoom(rs.getString("Name"), rs.getInt("CID")));
+                    name = rs.getString("Name");
+                    CID = rs.getInt("CID");
+                    CallableStatement cs1 = connection.prepareCall("call GetMessageInChatRoom(?, ?)");
+                    cs1.setString(1, mCurrentUID);
+                    cs1.setInt(2, CID);
+                    cs1.execute();
+                    ResultSet messages = cs1.getResultSet();
+                    messages.next();
+                    try {
+                        text = messages.getString("Text");
+                    }catch (SQLException e){
+                        text = "";
+                    }
+
+                    mChatRoomList.add(0, new ChatRoom(name, CID, text));
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -158,38 +177,5 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ViewHo
         }
     }
 
-    private class GetMessageFromUserTask extends AsyncTask<String, String, Boolean> {
-        private int CID;
-
-        GetMessageFromUserTask(int CID) {
-            this.CID = CID;
-        }
-
-        @Override
-        protected Boolean doInBackground(String... strings) {
-            Connection connection = DatabaseConnectionService.getInstance().getConnection();
-            try {
-                // 1: varchar(50) UID; 2: int ChatRoomID;
-                CallableStatement cs = connection.prepareCall("call GetMessageInChatRoom(?, ?)");
-                cs.setString(1, SharedPreferencesUtils.getCurrentUser(mContext));
-                cs.setInt(2, CID);
-                cs.execute();
-                Log.d(Constants.TAG_CHAT, "Get message from Chat Room: " + CID + "Success.");
-                ResultSet messages = cs.getResultSet();
-                messages.next();
-                Integer MID = messages.getInt("MID");
-                String text = messages.getString("Text");
-                String senderID = messages.getString("SenderUID");
-                Message message = new Message(MID, text, senderID);
-                Log.d(Constants.TAG_CHAT, "Get message: " + message + "Success.");
-                lastinteraction = message.getText(); //in databse : DESC; so latest message on the left end
-
-            } catch (SQLException e) {
-                e.printStackTrace();
-                return false;
-            }
-            return true;
-        }
-    }
 }
 

@@ -7,6 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.sql.CallableStatement;
+import java.sql.SQLException;
+
 import edu.rosehulman.sunz1.rosechat.R;
 import edu.rosehulman.sunz1.rosechat.SQLService.DatabaseConnectionService;
 
@@ -28,12 +31,6 @@ public class SplashActivity extends AppCompatActivity {
         protected Long doInBackground(String... strings) {
             DatabaseConnectionService connectionService = DatabaseConnectionService.getInstance();
             connectionService.connect();
-//            int i = 0;
-//            while (DatabaseConnectionService.getInstance().getConnection() == null) {
-//                i++;
-//                if (i % 10000 == 0)
-//                    Log.d("debug", "connection null");
-//            }
             return null;
         }
 

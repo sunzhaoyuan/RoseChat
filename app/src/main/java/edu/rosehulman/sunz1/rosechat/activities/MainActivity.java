@@ -86,9 +86,11 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        new FontSetting().execute();
         setContentView(R.layout.activity_main);
 
         mNavigation = (BottomNavigationViewEx) findViewById(R.id.bnve);
+        mNavigation.setTextSize(15*(float)Constants.FONT_SIZE_FACTOR);
         mOnNISExListener = new BottomNavigationViewEx.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -371,6 +373,24 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     public static void startActivity(Context context) {
         Intent intent = new Intent(context, MainActivity.class);
         context.startActivity(intent);
+    }
+
+    private class FontSetting extends AsyncTask<String,Integer,Long>{
+        @Override
+        protected Long doInBackground(String... strings) {
+            try {
+                CallableStatement statement = DatabaseConnectionService.getInstance().getConnection().prepareCall("{call GetAllSettings(?)}");
+                statement.setString(1,SharedPreferencesUtils.getCurrentUser(getApplicationContext()));
+                statement.execute();
+                ResultSet rs = statement.getResultSet();
+                while (rs.next()){
+                    Constants.FONT_SIZE_FACTOR = rs.getDouble("FontSize");
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
     }
 
 
