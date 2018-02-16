@@ -1,11 +1,7 @@
 package edu.rosehulman.sunz1.rosechat.sys.chat;
 
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.google.firebase.database.DatabaseReference;
@@ -17,13 +13,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import edu.rosehulman.sunz1.rosechat.R;
 import edu.rosehulman.sunz1.rosechat.SQLService.DatabaseConnectionService;
 import edu.rosehulman.sunz1.rosechat.models.Message;
 import edu.rosehulman.sunz1.rosechat.utils.Constants;
-
-import static android.content.Context.NOTIFICATION_SERVICE;
-import static edu.rosehulman.sunz1.rosechat.activities.SettingsActivity.NOTIFICATIONS;
 
 /**
  * Created by sun on 7/25/17.
@@ -207,39 +199,9 @@ public class ChatCommunicator implements ChatSystem.Communicator {
                 for (Message m : messageList) {
                     mOnGetMessagesListener.onGetMessagesSuccess(m);
                 }
-                Log.d("Notification", "should have notification");
-                Message lastM = messageList.get(messageList.size() - 1);
-//                sendPushNotificationToReceiver(lastM.getSenderID(), lastM.getText(), context);
             } else {
                 mOnGetMessagesListener.onGetMessagesFailure("unable to get message ");
             }
         }
-    }
-
-    /**
-     * Push Notification to the system
-     *
-     * @param sender
-     * @param message
-     * @param context
-     */
-    private void sendPushNotificationToReceiver(String sender, String message, Context context) {
-        if (!NOTIFICATIONS) {
-            return;
-        }
-        //Build notification
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
-                .setAutoCancel(true)
-                .setSmallIcon(R.drawable.rose_logo)
-                .setContentTitle(sender)
-                .setContentText(message);
-
-        Intent intent = new Intent(context, ChatCommunicator.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        mBuilder.setContentIntent(pendingIntent);
-
-        //Issue notification
-        NotificationManager mNotificationMananger = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
-        mNotificationMananger.notify(notificationID, mBuilder.build());
     }
 }
