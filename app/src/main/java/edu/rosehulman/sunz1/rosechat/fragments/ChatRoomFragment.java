@@ -86,6 +86,7 @@ public class ChatRoomFragment extends Fragment implements ChatSystem.View, TextV
         Log.d(Constants.TAG_CHAT, "IN CHAT FRAGMENT\nChatRoom ID: " + getArguments().getInt(Constants.ARG_CHATROOM_ID));
         String receiverUID = getArguments().getString(Constants.ARG_RECEIVER_UID);
         mChatPresenter.getMessage(
+                getContext(),
                 mCurrentUID,
                 getArguments().getInt(Constants.ARG_CHATROOM_ID)
         );

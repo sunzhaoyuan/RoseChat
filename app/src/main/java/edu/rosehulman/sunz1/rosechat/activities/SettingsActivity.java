@@ -317,7 +317,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                     ResultSet resultSet = cs.getResultSet();
                     while (resultSet.next()) {
                         mSettingsArray.add(0, UID);
-                        mSettingsArray.add(1, Integer.toString(resultSet.getInt("Fontsize")));
+                        mSettingsArray.add(1, Double.toString(resultSet.getDouble("Fontsize")));
                         mSettingsArray.add(2, resultSet.getString("FontFamily"));
                         mSettingsArray.add(3, resultSet.getString("Language"));
                         mSettingsArray.add(4, resultSet.getByte("Notification") + "");

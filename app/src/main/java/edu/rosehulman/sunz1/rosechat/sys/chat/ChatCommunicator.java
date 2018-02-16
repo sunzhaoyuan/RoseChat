@@ -65,7 +65,7 @@ public class ChatCommunicator implements ChatSystem.Communicator {
 //                mOnSendMessageListener.onSendMessageFailure("Unable to send message: " + databaseError.getMessage());
 //            }
 //        });
-        new SendMessageTask(chatRoomID, text, UID).execute();
+        new SendMessageTask(context, chatRoomID, text, UID).execute();
     }
 
     private class SendMessageTask extends AsyncTask<String, String, Boolean> {
@@ -73,11 +73,13 @@ public class ChatCommunicator implements ChatSystem.Communicator {
         private Integer chatRoomID;
         private String text;
         private String UID;
+        private Context context;
 
-        public SendMessageTask(Integer chatRoomID, String text, String UID) {
+        public SendMessageTask(Context context, Integer chatRoomID, String text, String UID) {
             this.chatRoomID = chatRoomID;
             this.text = text;
             this.UID = UID;
+            this.context = context;
         }
 
         @Override
@@ -103,15 +105,16 @@ public class ChatCommunicator implements ChatSystem.Communicator {
         @Override
         protected void onPostExecute(Boolean sendMessageSuccessful) {
             super.onPostExecute(sendMessageSuccessful);
-            if (sendMessageSuccessful)
+            if (sendMessageSuccessful) {
                 mOnSendMessageListener.onSendMessageSuccess();
-            else
+//                sendPushNotificationToReceiver("ly12", "test", context);
+            } else
                 mOnSendMessageListener.onSendMessageFailure("Unable to send message: ");
         }
     }
 
     @Override
-    public void getMessageFromUser(final String UID, final Integer chatRoomID) {
+    public void getMessageFromUser(final Context context, final String UID, final Integer chatRoomID) {
 
         Log.d(Constants.TAG_CHAT, "IN CHAT COMMUNICATOR\n" + "sender ID: " + UID + "\nchatRoomID: " + chatRoomID + "\n");
 //        Query query = mChatReference.orderByChild(Constants.ARG_MESSAGE_KEY).equalTo(messageKey);
@@ -137,7 +140,7 @@ public class ChatCommunicator implements ChatSystem.Communicator {
             @Override
             public void run() {
                 while (!Thread.interrupted()) {
-                    new GetMessageFromUserTask(UID, chatRoomID).execute();
+                    new GetMessageFromUserTask(context, UID, chatRoomID).execute();
                     try {
                         Thread.sleep(2000);
                     } catch (InterruptedException e) {
@@ -155,11 +158,21 @@ public class ChatCommunicator implements ChatSystem.Communicator {
         private Integer chatRoomID;
         private ArrayList<Message> messageList;
 
-        public GetMessageFromUserTask(String UID, Integer chatRoomID) {
+        private Context context;
+
+        public GetMessageFromUserTask(Context context, String UID, Integer chatRoomID) {
             this.UID = UID;
             this.chatRoomID = chatRoomID;
             messageList = new ArrayList<>();
+            this.context = context;
         }
+
+//        public GetMessageFromUserTask(String UID, Integer chatRoomID) {
+//            this.UID = UID;
+//            this.chatRoomID = chatRoomID;
+//            messageList = new ArrayList<>();
+////            this.context = context;
+//        }
 
         @Override
         protected Boolean doInBackground(String... strings) {
@@ -191,14 +204,25 @@ public class ChatCommunicator implements ChatSystem.Communicator {
         protected void onPostExecute(Boolean getMessageSuccessful) {
             super.onPostExecute(getMessageSuccessful);
             if (getMessageSuccessful) {
-                for (Message m : messageList)
+                for (Message m : messageList) {
                     mOnGetMessagesListener.onGetMessagesSuccess(m);
+                }
+                Log.d("Notification", "should have notification");
+                Message lastM = messageList.get(messageList.size() - 1);
+                sendPushNotificationToReceiver(lastM.getSenderID(), lastM.getText(), context);
             } else {
                 mOnGetMessagesListener.onGetMessagesFailure("unable to get message ");
             }
         }
     }
 
+    /**
+     * Push Notification to the system
+     *
+     * @param sender
+     * @param message
+     * @param context
+     */
     private void sendPushNotificationToReceiver(String sender, String message, Context context) {
         if (!NOTIFICATIONS) {
             return;
