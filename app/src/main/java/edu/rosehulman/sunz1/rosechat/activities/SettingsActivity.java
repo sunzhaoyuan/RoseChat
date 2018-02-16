@@ -218,7 +218,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
                 //BE CAREFUL: if R.array.fontfamily_array is changed, this variable needs to be changed as well
-                final String[] fontfamilyArray = {"DEFAULT", "MONOSPACE"};
+                final String[] fontfamilyArray = {"Default", "Monospace"};
                 if (mSettingsArray.size() != 0) {
                     builder.setTitle("Pick a font family")
                             .setItems(R.array.fontfamily_array, new DialogInterface.OnClickListener() {
@@ -227,7 +227,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                                     //TODO:
                                     String fontFamily = fontfamilyArray[which];
 
-                                    if (fontFamily.equals("DEFAULT"))
+                                    if (fontFamily.equals("Default"))
                                         Constants.FONT_FAMILY = 0;
                                     else //Monospace
                                         Constants.FONT_FAMILY = 1;
