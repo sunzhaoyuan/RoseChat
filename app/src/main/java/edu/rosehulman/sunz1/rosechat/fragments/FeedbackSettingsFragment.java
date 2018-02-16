@@ -17,6 +17,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import edu.rosehulman.sunz1.rosechat.R;
+import edu.rosehulman.sunz1.rosechat.utils.Constants;
 
 public class FeedbackSettingsFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
@@ -42,6 +43,7 @@ public class FeedbackSettingsFragment extends Fragment {
         feedBackRef = FirebaseDatabase.getInstance().getReference().child("feedback/" + user.getUid());
         final EditText feedback = (EditText) view.findViewById(R.id.feedback_edit_text);
         Button mSend = (Button) view.findViewById(R.id.feedback_send);
+        mSend.setTextSize(20*(float) Constants.FONT_SIZE_FACTOR);
 
         mSend.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -1,8 +1,12 @@
 package edu.rosehulman.sunz1.rosechat.adapters;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,24 +14,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
-import net.sourceforge.jtds.jdbc.cache.SQLCacheKey;
-
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import edu.rosehulman.sunz1.rosechat.R;
 import edu.rosehulman.sunz1.rosechat.SQLService.DatabaseConnectionService;
 import edu.rosehulman.sunz1.rosechat.activities.ChatRoomActivity;
 import edu.rosehulman.sunz1.rosechat.models.ChatRoom;
-import edu.rosehulman.sunz1.rosechat.models.Message;
+import edu.rosehulman.sunz1.rosechat.sys.chat.ChatCommunicator;
 import edu.rosehulman.sunz1.rosechat.utils.Constants;
 import edu.rosehulman.sunz1.rosechat.utils.SharedPreferencesUtils;
+
+import static android.content.Context.NOTIFICATION_SERVICE;
+import static edu.rosehulman.sunz1.rosechat.activities.SettingsActivity.NOTIFICATIONS;
 
 /**
  * Created by agarwaa on 10-Jul-17.
@@ -35,17 +38,21 @@ import edu.rosehulman.sunz1.rosechat.utils.SharedPreferencesUtils;
  */
 
 public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ViewHolder> {
+
     private Context mContext;
-    ArrayList<ChatRoom> mChatRoomList;
-    private DatabaseReference mMessageRef;
+    private ArrayList<ChatRoom> mChatRoomList;
     private String mCurrentUID;
-    private String lastinteraction;
+    private HashMap<Integer, String> mLastInteractionHolder; // for notification
+
+    private ArrayList<Integer> mNotificationID;
 
 
     public ChatRoomAdapter(Context context) {
         mContext = context;
         mChatRoomList = new ArrayList<>();
-        mMessageRef = FirebaseDatabase.getInstance().getReference().child(Constants.PATH_MESSAGE);
+        mLastInteractionHolder = new HashMap<>();
+        //unique ID ensures android displays each notification
+        mNotificationID = new ArrayList<>();
         mCurrentUID = SharedPreferencesUtils.getCurrentUser(mContext);
         new Thread(new Runnable() {
             @Override
@@ -103,6 +110,9 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ViewHo
 
             mNameTextView = (TextView) itemView.findViewById(R.id.message_name);
             mLastInteraction = (TextView) itemView.findViewById(R.id.message_last_interaction);
+            //find size
+            mNameTextView.setTextSize(15*(float)Constants.FONT_SIZE_FACTOR);
+            mLastInteraction.setTextSize(15*(float)Constants.FONT_SIZE_FACTOR);
         }
 
 
@@ -139,16 +149,17 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ViewHo
         protected String doInBackground(String... str) {
             Connection connection = DatabaseConnectionService.getInstance().getConnection();
             try {
-                String name = null;
+                String chatRoomName = null;
                 int CID = 0;
-                String text;
+                String lastText = null;
+                String senderUID = null;
                 mChatRoomList.clear();
                 CallableStatement cs = connection.prepareCall("call getChatRoom(?)");
                 cs.setString(1, mCurrentUID);
                 cs.execute();
                 ResultSet rs = cs.getResultSet();
                 while (rs.next()) {
-                    name = rs.getString("Name");
+                    chatRoomName = rs.getString("Name");
                     CID = rs.getInt("CID");
                     CallableStatement cs1 = connection.prepareCall("call GetMessageInChatRoom(?, ?)");
                     cs1.setString(1, mCurrentUID);
@@ -157,13 +168,26 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ViewHo
                     ResultSet messages = cs1.getResultSet();
                     messages.next();
                     try {
-                        text = messages.getString("Text");
-                    }catch (SQLException e){
-                        text = "";
+                        lastText = messages.getString("Text");
+                        senderUID = messages.getString("SenderUID");
+                    }catch (SQLException e){ //when first create chatRoom
+                        lastText = "";
+                        senderUID = "";
                     }
-
-                    mChatRoomList.add(0, new ChatRoom(name, CID, text));
+                    mChatRoomList.add(0, new ChatRoom(chatRoomName, CID, lastText));
+                    //first time has lastInterHolder
+                    if (!mLastInteractionHolder.keySet().contains(CID)) mLastInteractionHolder.put(CID, lastText);
+                    else {
+                        if (!mLastInteractionHolder.get(CID).equals(lastText)) { //new message received
+                            String textToBePushedNoti = senderUID + ": " + lastText; //who and what
+                            pushNotificationToReceiver(chatRoomName, textToBePushedNoti, mContext);
+                            mLastInteractionHolder.put(CID, lastText); //refresh lastText
+                        }
+                    }
+                    Log.d("NNoti", mLastInteractionHolder.toString());
                 }
+
+
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -175,6 +199,43 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ViewHo
             super.onPostExecute(s);
             notifyDataSetChanged();
         }
+    }
+
+    /**
+     * Push Notification to the system
+     *
+     * @param chatRoomName
+     * @param whoAndWhat
+     * @param context
+     */
+    private void pushNotificationToReceiver(String chatRoomName, String whoAndWhat, Context context) {
+        if (!NOTIFICATIONS) {
+            return;
+        }
+
+        if (this.mNotificationID.isEmpty()) {
+            this.mNotificationID.add(0);
+        } else {
+            int newNotiID = mNotificationID.get(0);
+            this.mNotificationID.add(0, ++newNotiID);
+        }
+
+        //Build notification
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
+                .setAutoCancel(true)
+                .setSmallIcon(R.drawable.rose_logo)
+                .setContentTitle(chatRoomName)
+                .setContentText(whoAndWhat)
+                .setVibrate(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400})
+                .setColor(Color.GREEN);
+
+        Intent intent = new Intent(context, ChatCommunicator.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        mBuilder.setContentIntent(pendingIntent);
+
+        //Issue notification
+        NotificationManager mNotificationMananger = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
+        mNotificationMananger.notify(mNotificationID.get(0), mBuilder.build());
     }
 
 }

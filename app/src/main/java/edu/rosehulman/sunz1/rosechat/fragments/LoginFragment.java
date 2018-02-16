@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import edu.rosehulman.sunz1.rosechat.R;
+import edu.rosehulman.sunz1.rosechat.utils.Constants;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -50,6 +51,7 @@ public class LoginFragment
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
         mLoginBtn = (Button) view.findViewById(R.id.button_login);
+        mLoginBtn.setTextSize(20*(float) Constants.FONT_SIZE_FACTOR);
 //        mLoginBtnTest = (Button) view.findViewById(R.id.button_login_fake);
         mProgressSpinner = view.findViewById(R.id.login_progress);
         return view;
