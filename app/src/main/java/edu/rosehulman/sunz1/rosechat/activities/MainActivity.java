@@ -83,60 +83,11 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        new FontSetting().execute();
-        setContentView(R.layout.activity_main);
-
-        mNavigation = (BottomNavigationViewEx) findViewById(R.id.bnve);
-        mNavigation.setTextSize(15*(float)Constants.FONT_SIZE_FACTOR);
-        if (Constants.FONT_FAMILY == 0) {
-            mNavigation.setTypeface(Typeface.DEFAULT);
-        } else {
-            mNavigation.setTypeface(Typeface.MONOSPACE);
-        }
-
-        mOnNISExListener = new BottomNavigationViewEx.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                int id = item.getItemId();
-                switch (id) {
-                    case R.id.navigation_message:
-                        Log.d(DEBUG_KEY, "message pressed");
-                        mFragmentMain = new MessageFragment();
-                        mViewPager.setCurrentItem(0);
-                        clearBackStack();
-                        break;
-                    case R.id.navigation_contact:
-                        Log.d(DEBUG_KEY, "contact pressed");
-                        mFragmentMain = new ContactsFragment();
-                        mViewPager.setCurrentItem(1);
-                        break;
-                    case R.id.navigation_profile:
-                        Log.d(DEBUG_KEY, "profile pressed");
-                        mFragmentMain = ProfileFragment.newInstance(SharedPreferencesUtils.getCurrentUser(getApplicationContext()));
-                        mViewPager.setCurrentItem(2);
-                        break;
-                }
-                setTitle(id);
-                return true;
-            }
-        };
-
-
-        mNavigation.setOnNavigationItemSelectedListener(mOnNISExListener);
-
-
-        mNavigationPagerAdapter = new NavigationPagerAdapter(getSupportFragmentManager());
-        mViewPager = (ViewPager) findViewById(R.id.fragment_container);
-        setupViewPager(mViewPager);
-
-        mViewPager.addOnPageChangeListener(this);
-        mNavigation.setupWithViewPager(mViewPager);
-
-        mFragmentMain = new MessageFragment();
-        setTitle(R.id.navigation_message);
-
         mDBConnection = DatabaseConnectionService.getInstance().getConnection();
         setupProfile();
+
+
+
     }
 
 
@@ -173,12 +124,67 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                 cs.execute();
                 int out = cs.getInt(1);
                 Log.d(DEBUG_KEY, out + "wo gan");
-
+                new FontSetting().execute();
 
             } catch (SQLException e) {
                 e.printStackTrace();
             }
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(ResultSet resultSet) {
+            setContentView(R.layout.activity_main);
+
+            mNavigation = (BottomNavigationViewEx) findViewById(R.id.bnve);
+            mNavigation.setTextSize(15*(float)Constants.FONT_SIZE_FACTOR);
+            if (Constants.FONT_FAMILY == 0) {
+                mNavigation.setTypeface(Typeface.DEFAULT);
+            } else {
+                mNavigation.setTypeface(Typeface.MONOSPACE);
+            }
+
+            mOnNISExListener = new BottomNavigationViewEx.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                    int id = item.getItemId();
+                    switch (id) {
+                        case R.id.navigation_message:
+                            Log.d(DEBUG_KEY, "message pressed");
+                            mFragmentMain = new MessageFragment();
+                            mViewPager.setCurrentItem(0);
+                            clearBackStack();
+                            break;
+                        case R.id.navigation_contact:
+                            Log.d(DEBUG_KEY, "contact pressed");
+                            mFragmentMain = new ContactsFragment();
+                            mViewPager.setCurrentItem(1);
+                            break;
+                        case R.id.navigation_profile:
+                            Log.d(DEBUG_KEY, "profile pressed");
+                            mFragmentMain = ProfileFragment.newInstance(SharedPreferencesUtils.getCurrentUser(getApplicationContext()));
+                            mViewPager.setCurrentItem(2);
+                            break;
+                    }
+                    setTitle(id);
+                    return true;
+                }
+            };
+
+
+            mNavigation.setOnNavigationItemSelectedListener(mOnNISExListener);
+
+
+            mNavigationPagerAdapter = new NavigationPagerAdapter(getSupportFragmentManager());
+            mViewPager = (ViewPager) findViewById(R.id.fragment_container);
+            setupViewPager(mViewPager);
+
+            mViewPager.addOnPageChangeListener(MainActivity.this);
+            mNavigation.setupWithViewPager(mViewPager);
+
+            mFragmentMain = new MessageFragment();
+            setTitle(R.id.navigation_message);
+            super.onPostExecute(resultSet);
         }
     }
 
