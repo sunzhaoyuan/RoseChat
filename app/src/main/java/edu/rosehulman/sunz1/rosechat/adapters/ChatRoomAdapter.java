@@ -42,7 +42,8 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ViewHo
     private Context mContext;
     private ArrayList<ChatRoom> mChatRoomList;
     private String mCurrentUID;
-    private HashMap<Integer, String> mLastInteractionHolder; // for notification
+    // for notification; CID : MID
+    private HashMap<Integer, Integer> mLastInteractionHolder;
 
     private ArrayList<Integer> mNotificationID;
 
@@ -153,6 +154,7 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ViewHo
                 int CID = 0;
                 String lastText = null;
                 String senderUID = null;
+                int MID = 0;
                 mChatRoomList.clear();
                 CallableStatement cs = connection.prepareCall("call getChatRoom(?)");
                 cs.setString(1, mCurrentUID);
@@ -170,18 +172,20 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ViewHo
                     try {
                         lastText = messages.getString("Text");
                         senderUID = messages.getString("SenderUID");
+                        MID = messages.getInt("MID");
                     }catch (SQLException e){ //when first create chatRoom
                         lastText = "";
                         senderUID = "";
                     }
                     mChatRoomList.add(0, new ChatRoom(chatRoomName, CID, lastText));
                     //first time has lastInterHolder
-                    if (!mLastInteractionHolder.keySet().contains(CID)) mLastInteractionHolder.put(CID, lastText);
+                    if (!mLastInteractionHolder.keySet().contains(CID)) mLastInteractionHolder.put(CID, MID);
                     else {
-                        if (!mLastInteractionHolder.get(CID).equals(lastText)) { //new message received
+                        //new message received, but not push notification if is user itself
+                        if (!mLastInteractionHolder.get(CID).equals(MID) && !senderUID.equals(mCurrentUID)) {
                             String textToBePushedNoti = senderUID + ": " + lastText; //who and what
                             pushNotificationToReceiver(chatRoomName, textToBePushedNoti, mContext);
-                            mLastInteractionHolder.put(CID, lastText); //refresh lastText
+                            mLastInteractionHolder.put(CID, MID); //refresh lastText
                         }
                     }
                     Log.d("NNoti", mLastInteractionHolder.toString());
