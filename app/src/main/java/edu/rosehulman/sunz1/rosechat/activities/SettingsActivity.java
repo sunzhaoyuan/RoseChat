@@ -302,7 +302,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                     ResultSet resultSet = cs.getResultSet();
                     while (resultSet.next()) {
                         mSettingsArray.add(0, UID);
-                        mSettingsArray.add(1, Integer.toString(resultSet.getInt("Fontsize")));
+                        mSettingsArray.add(1, Double.toString(resultSet.getDouble("Fontsize")));
                         mSettingsArray.add(2, resultSet.getString("FontFamily"));
                         mSettingsArray.add(3, resultSet.getString("Language"));
                         mSettingsArray.add(4, resultSet.getByte("Notification") + "");
@@ -312,7 +312,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                     //we need to create current user
                     cs = mConnection.prepareCall("{call SyncDisplaySettings(?, ?, ?, ?, ?)}");
                     cs.setString(1, UID); //@UID varchar(50)
-                    cs.setInt(2, Integer.parseInt(mSettingsArray.get(1))); //@FontSize int
+                    cs.setDouble(2, Double.parseDouble(mSettingsArray.get(1))); //@FontSize int
                     cs.setString(3, mSettingsArray.get(2)); //@FontFamily nvarchar(20)
                     cs.setString(4, mSettingsArray.get(3)); //@FontLanguage nvarchar(10)
                     cs.setInt(5, Integer.parseInt(mSettingsArray.get(4))); //@Notification bit
