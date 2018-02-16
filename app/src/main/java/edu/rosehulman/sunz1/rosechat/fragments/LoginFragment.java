@@ -51,7 +51,7 @@ public class LoginFragment
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
         mLoginBtn = (Button) view.findViewById(R.id.button_login);
-        mLoginBtn.setTextSize(20*(float) Constants.FONT_SIZE_FACTOR);
+//        mLoginBtn.setTextSize(20*(float) Constants.FONT_SIZE_FACTOR);
 //        mLoginBtnTest = (Button) view.findViewById(R.id.button_login_fake);
         mProgressSpinner = view.findViewById(R.id.login_progress);
         return view;

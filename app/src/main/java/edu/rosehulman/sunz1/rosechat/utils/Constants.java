@@ -58,4 +58,6 @@ public class Constants {
 
     //Font Size
     public static double FONT_SIZE_FACTOR = 0;
+    public static float MESSAGE_FONT_SIZE = 1;
+    public static int MEESSAGE_FONT_FAMILY = 0;
 }

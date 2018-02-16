@@ -7,6 +7,7 @@ import android.app.DialogFragment;
 import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -87,6 +88,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         mButtonLogOut.setTextSize(20*(float)Constants.FONT_SIZE_FACTOR);
         mButtonFontFamily.setTextSize(20*(float)Constants.FONT_SIZE_FACTOR);
         mButtonFontSize.setTextSize(20*(float)Constants.FONT_SIZE_FACTOR);
+//        mButtonFontSize.setTypeface(Typeface.MONOSPACE,0 );
 
         mButtonAddCourse.setOnClickListener(this);
         mButtonDeleteCourse.setOnClickListener(this);

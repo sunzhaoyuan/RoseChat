@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="edu.rosehulman.sunz1.rosechat.activities.ChatRoomActivity">
+
+    <item
+        android:id="@+id/set_message_font"
+        android:orderInCategory="10"
+        android:title="FONT SIZE"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/set_message_family"
+        android:orderInCategory="10"
+        android:title="FONT FAMILY"
+        app:showAsAction="always"/>
+
+</menu>
