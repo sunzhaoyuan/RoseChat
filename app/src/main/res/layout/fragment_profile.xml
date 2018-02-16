@@ -131,6 +131,7 @@
                 android:layout_height="3sp"
                 android:layout_below="@+id/profile_edit"
                 android:layout_centerHorizontal="true"
+                android:layout_marginBottom="16dp"
                 android:background="#57a0d4" />
 
         </RelativeLayout>

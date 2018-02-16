@@ -18,6 +18,10 @@ import edu.rosehulman.sunz1.rosechat.R;
 import edu.rosehulman.sunz1.rosechat.fragments.ChatRoomFragment;
 import edu.rosehulman.sunz1.rosechat.utils.Constants;
 
+/**
+ * This class represents the chat room after user clicks
+ * any one of them in the ChatRoomAdapter
+ */
 public class ChatRoomActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;

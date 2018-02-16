@@ -19,6 +19,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -28,7 +29,10 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Locale;
+import java.util.TreeMap;
 
 import edu.rosehulman.sunz1.rosechat.R;
 import edu.rosehulman.sunz1.rosechat.SQLService.DatabaseConnectionService;
@@ -42,6 +46,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
     public static boolean NOTIFICATIONS = true;
 
+    private Button mButtonAddCourse;
+    private Button mButtonDeleteCourse;
     private Button mButtonLanguage;
     private Button mButtonLogOut;
     private Button mButtonFeedback;
@@ -67,6 +73,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
+        mButtonAddCourse = (Button) findViewById(R.id.button_add_course);
+        mButtonDeleteCourse= (Button) findViewById(R.id.button_delete_course);
         mButtonDeleteAccount = (Button) findViewById(R.id.button_settings_deleteAccount);
         mButtonFeedback = (Button) findViewById(R.id.button_settings_feedback);
         mButtonLanguage = (Button) findViewById(R.id.button_settings_Language);
@@ -82,6 +90,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         mButtonFontSize.setTextSize(20*(float)Constants.FONT_SIZE_FACTOR);
 //        mButtonFontSize.setTypeface(Typeface.MONOSPACE,0 );
 
+        mButtonAddCourse.setOnClickListener(this);
+        mButtonDeleteCourse.setOnClickListener(this);
         mButtonDeleteAccount.setOnClickListener(this);
         mButtonFeedback.setOnClickListener(this);
         mButtonLanguage.setOnClickListener(this);
@@ -134,7 +144,15 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void onClick(View v) { //mSettingsArray: {0:UID 1:FontSize 2:FontFamily 3:FontLanguage 4:Notification}
         int id = v.getId();
+        String UID = SharedPreferencesUtils.getCurrentUser(getApplicationContext());
         switch (id) {
+            case R.id.button_add_course:
+                TreeMap<String, Integer> categoryList = new TreeMap<>();
+                new GetCourseCategoryTask().execute(categoryList);
+                return;
+            case R.id.button_delete_course:
+                new GetMyCoursesTask().execute(UID);
+                return;
             case R.id.button_settings_Language:
                 mSettingsArray.set(3, switchLanguage()); //set language
                 new SyncSettingTask().execute();
@@ -197,6 +215,74 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             }
         };
         df.show(getFragmentManager(), "fontSize");
+    }
+
+    private void showChooseCategoryDialog(TreeMap<String, Integer> data){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Choose a course category");
+        final TreeMap<String, Integer> map = data;
+        final String[] categories = new String[map.size()];
+        Iterator<String> iterator = map.keySet().iterator();
+        for(int i=0;i<map.size();i++){
+            categories[i] = iterator.next();
+        }
+        builder.setItems(categories, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String category = categories[which];
+                Integer courseID = map.get(category);
+                new GetCourseListTask().execute(courseID);
+                dialog.dismiss();
+            }
+        });
+        builder.setNegativeButton(android.R.string.cancel, null);
+        builder.create().show();
+    }
+
+    private void showAddCourseDialog(TreeMap<String, Integer> data) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Select a course");
+        final TreeMap<String, Integer> map = data;
+        final String[] courses = new String[map.size()];
+        Iterator<String> iterator = map.keySet().iterator();
+        for (int i = 0; i < map.size(); i++) {
+            courses[i] = iterator.next();
+        }
+        builder.setItems(courses, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String courseName = courses[which];
+                Integer courseID = map.get(courseName);
+                new AddCourseTask().execute(courseID);
+                Toast.makeText(SettingsActivity.this, "Course added successfully.", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            }
+        });
+        builder.setNegativeButton(android.R.string.cancel, null);
+        builder.create().show();
+    }
+
+    private void showDeleteCourseDialog(TreeMap<String, Integer> data){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Select a course to delete");
+        final TreeMap<String, Integer> map = data;
+        final String[] courses = new String[map.size()];
+        Iterator<String> iterator = map.keySet().iterator();
+        for (int i = 0; i < map.size(); i++) {
+            courses[i] = iterator.next();
+        }
+        builder.setItems(courses, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String courseName = courses[which];
+                Integer courseID = map.get(courseName);
+                new DeleteCourseTask().execute(courseID);
+                Toast.makeText(SettingsActivity.this, "Course has been deleted.", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            }
+        });
+        builder.setNegativeButton(android.R.string.cancel, null);
+        builder.create().show();
     }
 
     private void showFontSizeDialog() {
@@ -294,6 +380,130 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 CallableStatement stmt = mConnection.prepareCall("{call DeleteUser(?)}");
                 stmt.setString(1, mUID);
                 stmt.execute();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+    }
+
+    private class GetCourseCategoryTask extends AsyncTask<TreeMap<String, Integer>, String, TreeMap<String, Integer>>{
+        @Override
+        protected TreeMap<String, Integer> doInBackground(TreeMap<String, Integer>[] maps) {
+            CallableStatement cs;
+            TreeMap<String, Integer> map = maps[0];
+            try {
+                cs = mConnection.prepareCall("{call Get_CourseCategories}");
+                cs.execute();
+                ResultSet rs = cs.getResultSet();
+                while(rs.next()){
+                    Integer ID = rs.getInt(1);
+                    String categoryName = rs.getString(2);
+                    map.put(categoryName, ID);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return map;
+        }
+
+        @Override
+        protected void onPostExecute(TreeMap<String, Integer> map) {
+            super.onPostExecute(map);
+            showChooseCategoryDialog(map);
+        }
+    }
+
+    private class GetCourseListTask extends AsyncTask<Integer, String, TreeMap<String, Integer>>{
+
+        @Override
+        protected TreeMap<String, Integer> doInBackground(Integer... integers) {
+            TreeMap<String, Integer> map = null;
+            CallableStatement cs;
+            Integer categoryID = integers[0];
+            try {
+                cs = mConnection.prepareCall("{call Get_CourseList(?)}");
+                cs.setInt(1, categoryID);
+                cs.execute();
+                map = new TreeMap<>();
+                ResultSet rs = cs.getResultSet();
+                while(rs.next()){
+                    Integer courseID = rs.getInt(1);
+                    String courseName = rs.getString(2);
+                    map.put(courseName, courseID);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return map;
+        }
+
+        @Override
+        protected void onPostExecute(TreeMap<String, Integer> map) {
+            super.onPostExecute(map);
+            showAddCourseDialog(map);
+        }
+    }
+
+    private class AddCourseTask extends AsyncTask<Integer, String, String>{
+
+        @Override
+        protected String doInBackground(Integer... integers) {
+            Integer courseID = integers[0];
+            String UID = SharedPreferencesUtils.getCurrentUser(getApplicationContext());
+            CallableStatement cs;
+            try {
+                cs = mConnection.prepareCall("{call Course_Add(?,?)}");
+                cs.setString(1, UID);
+                cs.setInt(2, courseID);
+                cs.execute();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+    }
+
+    private class GetMyCoursesTask extends AsyncTask<String, String, TreeMap<String, Integer>>{
+
+        @Override
+        protected TreeMap<String, Integer> doInBackground(String... strings) {
+            String UID = strings[0];
+            TreeMap<String, Integer> map = new TreeMap<>();
+            try {
+                CallableStatement cs = mConnection.prepareCall("{call Get_Courses(?)}");
+                cs.setString(1, UID);
+                cs.execute();
+                ResultSet rs = cs.getResultSet();
+                while (rs.next()) {
+                    String courseName = rs.getString(1);
+                    Integer courseID = rs.getInt(2);
+                    map.put(courseName, courseID);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return map;
+        }
+
+        @Override
+        protected void onPostExecute(TreeMap<String, Integer> map) {
+            super.onPostExecute(map);
+            showDeleteCourseDialog(map);
+        }
+    }
+
+    private class DeleteCourseTask extends AsyncTask<Integer, String, String>{
+
+        @Override
+        protected String doInBackground(Integer... integers) {
+            Integer courseID = integers[0];
+            String UID = SharedPreferencesUtils.getCurrentUser(getApplicationContext());
+            try {
+                CallableStatement cs = mConnection.prepareCall("{call Course_Delete(?, ?)}");
+                cs.setString(1, UID);
+                cs.setInt(2, courseID);
+                cs.execute();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
