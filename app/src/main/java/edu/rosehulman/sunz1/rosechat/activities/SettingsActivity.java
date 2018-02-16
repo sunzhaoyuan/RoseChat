@@ -72,6 +72,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         mButtonLogOut = (Button) findViewById(R.id.button_settings_logOut);
         mButtonFontSize = (Button) findViewById(R.id.button_settings_fontsize);
         mButtonFontFamily = (Button) findViewById(R.id.button_settings_fontfamily);
+
         //font size
         mButtonDeleteAccount.setTextSize(20*(float)Constants.FONT_SIZE_FACTOR);
         mButtonFeedback.setTextSize(20*(float)Constants.FONT_SIZE_FACTOR);
@@ -79,6 +80,11 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         mButtonLogOut.setTextSize(20*(float)Constants.FONT_SIZE_FACTOR);
         mButtonFontFamily.setTextSize(20*(float)Constants.FONT_SIZE_FACTOR);
         mButtonFontSize.setTextSize(20*(float)Constants.FONT_SIZE_FACTOR);
+
+        //font family
+        if (Constants.FONT_FAMILY == 1) { //monospace
+
+        }
 
         mButtonDeleteAccount.setOnClickListener(this);
         mButtonFeedback.setOnClickListener(this);
@@ -174,7 +180,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
                 //BE CAREFUL: if R.array.fontfamily_array is changed, this variable needs to be changed as well
-                final String[] fontfamilyArray = {"Arial", "Times New Roma"};
+                final String[] fontfamilyArray = {"DEFAULT", "MONOSPACE"};
                 if (mSettingsArray.size() != 0) {
                     builder.setTitle("Pick a font family")
                             .setItems(R.array.fontfamily_array, new DialogInterface.OnClickListener() {
@@ -332,11 +338,19 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                     cs.setString(4, mSettingsArray.get(3)); //@FontLanguage nvarchar(10)
                     cs.setInt(5, Integer.parseInt(mSettingsArray.get(4))); //@Notification bit
                     cs.execute(); //add these data into db
+
+                    /**
+                     * This chunk of code restart the app
+                     */
                     if(fontSizeChanged == true){
                         fontSizeChanged = false;
                         Intent mStartActivity = new Intent(getApplicationContext(), SplashActivity.class);
                         int mPendingIntentId = 123;
-                        PendingIntent mPendingIntent = PendingIntent.getActivity(getApplicationContext(), mPendingIntentId,    mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
+                        PendingIntent mPendingIntent = PendingIntent.getActivity(
+                                getApplicationContext(),
+                                mPendingIntentId,
+                                mStartActivity,
+                                PendingIntent.FLAG_CANCEL_CURRENT);
                         AlarmManager mgr = (AlarmManager)getApplication().getSystemService(getApplicationContext().ALARM_SERVICE);
                         mgr.set(AlarmManager.RTC, System.currentTimeMillis(), mPendingIntent);
                         finishAffinity();
