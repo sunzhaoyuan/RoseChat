@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v4.app.NotificationCompat;
+import android.telecom.Call;
 import android.util.Log;
 
 import com.google.firebase.database.DatabaseReference;
@@ -15,6 +16,7 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 
 import edu.rosehulman.sunz1.rosechat.R;
@@ -87,12 +89,23 @@ public class ChatCommunicator implements ChatSystem.Communicator {
             Connection connection = DatabaseConnectionService.getInstance().getConnection();
             try {
                 // 1: varchar(50) UID; 2: int ChatRoomID; 3: nvarchar(50) text
-                CallableStatement cs = connection.prepareCall("call UserSendMessage(?, ?, ?)");
-                cs.setString(1, UID);
-                cs.setInt(2, chatRoomID);
-                cs.setString(3, text);
+                CallableStatement cs = connection.prepareCall("call ? = UserSendMessage(?, ?, ?)");
+                cs.registerOutParameter(1,Types.INTEGER);
+                cs.setString(2, UID);
+                cs.setInt(3, chatRoomID);
+                cs.setString(4, text);
                 cs.execute();
+                int MID = cs.getInt(1);
 
+                CallableStatement cs1 = connection.prepareCall("{call setMessageSetting(?,?,?)}");
+                cs1.setInt(1,MID);
+                cs1.setFloat(2,Constants.MESSAGE_FONT_SIZE);
+                if(Constants.MEESSAGE_FONT_FAMILY  == 0){
+                    cs1.setString(3,"Deafult");
+                }else {
+                    cs1.setString(3,"Monospace");
+                }
+                cs1.execute();
                 Log.d(Constants.TAG_CHAT, "Send message: " + text + "Success.");
 
             } catch (SQLException e) {
@@ -208,8 +221,8 @@ public class ChatCommunicator implements ChatSystem.Communicator {
                     mOnGetMessagesListener.onGetMessagesSuccess(m);
                 }
                 Log.d("Notification", "should have notification");
-                Message lastM = messageList.get(messageList.size() - 1);
-                sendPushNotificationToReceiver(lastM.getSenderID(), lastM.getText(), context);
+//                Message lastM = messageList.get(messageList.size() - 1);
+//                sendPushNotificationToReceiver(lastM.getSenderID(), lastM.getText(), context);
             } else {
                 mOnGetMessagesListener.onGetMessagesFailure("unable to get message ");
             }

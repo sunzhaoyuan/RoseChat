@@ -10,11 +10,11 @@
         <item>@string/font_size_two</item>
     </array>
 
-    <string name="font_family_arial">Arial</string>
-    <string name="font_family_times_new_roma">Times New Roma</string>
+    <string name="font_family_default">Default</string>
+    <string name="font_family_monospace">Monospace</string>
     <array name="fontfamily_array">
-        <item>@string/font_family_arial</item>
-        <item>@string/font_family_times_new_roma</item>
+        <item>@string/font_family_default</item>
+        <item>@string/font_family_monospace</item>
     </array>
 
 </resources>
