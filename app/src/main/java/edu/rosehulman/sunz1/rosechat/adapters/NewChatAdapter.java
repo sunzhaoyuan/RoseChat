@@ -1,21 +1,14 @@
 package edu.rosehulman.sunz1.rosechat.adapters;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
-import android.app.FragmentManager;
 import android.content.Context;
-import android.content.DialogInterface;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckedTextView;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import java.sql.CallableStatement;
@@ -27,7 +20,6 @@ import java.util.ArrayList;
 
 import edu.rosehulman.sunz1.rosechat.R;
 import edu.rosehulman.sunz1.rosechat.SQLService.DatabaseConnectionService;
-import edu.rosehulman.sunz1.rosechat.activities.NewChatActivity;
 import edu.rosehulman.sunz1.rosechat.utils.Constants;
 import edu.rosehulman.sunz1.rosechat.utils.SharedPreferencesUtils;
 
@@ -82,15 +74,21 @@ public class NewChatAdapter extends RecyclerView.Adapter<NewChatAdapter.ViewHold
                 @Override
                 public void onClick(View view) {
                     //create chat room
-                    ((CheckedTextView) view.findViewById(R.id.newChat_name)).setTextSize(20*(float) Constants.FONT_SIZE_FACTOR);
-                    if(((CheckedTextView) view.findViewById(R.id.newChat_name)).isChecked()){
-                        ((CheckedTextView) view.findViewById(R.id.newChat_name)).setChecked(false);
-                        ((CheckedTextView) view.findViewById(R.id.newChat_name)).setCheckMarkDrawable(null);
+                    CheckedTextView checkedTextView = (CheckedTextView) view.findViewById(R.id.newChat_name);
+                    checkedTextView.setTextSize(20*(float) Constants.FONT_SIZE_FACTOR);
+                    if (Constants.FONT_FAMILY == 0) {
+                        checkedTextView.setTypeface(Typeface.DEFAULT);
+                    } else {
+                        checkedTextView.setTypeface(Typeface.MONOSPACE);
+                    }
+                    if(checkedTextView.isChecked()){
+                        checkedTextView.setChecked(false);
+                        checkedTextView.setCheckMarkDrawable(null);
                         FriendID = ((TextView) view.findViewById(R.id.newChat_name)).getText().toString();
                         mSelectedContactsList.remove(FriendID);
                     }else{
-                        ((CheckedTextView) view.findViewById(R.id.newChat_name)).setChecked(true);
-                        ((CheckedTextView) view.findViewById(R.id.newChat_name)).setCheckMarkDrawable(R.mipmap.ic_check_box);
+                        checkedTextView.setChecked(true);
+                        checkedTextView.setCheckMarkDrawable(R.mipmap.ic_check_box);
                         FriendID = ((TextView) view.findViewById(R.id.newChat_name)).getText().toString();
                         mSelectedContactsList.add(FriendID);
                     }

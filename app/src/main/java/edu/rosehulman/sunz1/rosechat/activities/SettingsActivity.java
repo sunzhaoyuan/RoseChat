@@ -56,7 +56,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     private Button mButtonFontFamily;
     private View mProcessBar;
     private Handler mHandler;
-    public boolean fontSizeChanged = false;
+    private boolean isFontChanged;
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
@@ -81,6 +81,9 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         mButtonLogOut = (Button) findViewById(R.id.button_settings_logOut);
         mButtonFontSize = (Button) findViewById(R.id.button_settings_fontsize);
         mButtonFontFamily = (Button) findViewById(R.id.button_settings_fontfamily);
+
+        isFontChanged = false;
+
         //font size
         mButtonDeleteAccount.setTextSize(20*(float)Constants.FONT_SIZE_FACTOR);
         mButtonFeedback.setTextSize(20*(float)Constants.FONT_SIZE_FACTOR);
@@ -89,6 +92,23 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         mButtonFontFamily.setTextSize(20*(float)Constants.FONT_SIZE_FACTOR);
         mButtonFontSize.setTextSize(20*(float)Constants.FONT_SIZE_FACTOR);
 //        mButtonFontSize.setTypeface(Typeface.MONOSPACE,0 );
+
+        //font family
+        if (Constants.FONT_FAMILY == 1) { //monospace
+            mButtonDeleteAccount.setTypeface(Typeface.MONOSPACE, 0);
+            mButtonFeedback.setTypeface(Typeface.MONOSPACE, 0);
+            mButtonLanguage.setTypeface(Typeface.MONOSPACE, 0);
+            mButtonLogOut.setTypeface(Typeface.MONOSPACE, 0);
+            mButtonFontFamily.setTypeface(Typeface.MONOSPACE, 0);
+            mButtonFontSize.setTypeface(Typeface.MONOSPACE, 0);
+        } else {
+            mButtonDeleteAccount.setTypeface(Typeface.DEFAULT, 0);
+            mButtonFeedback.setTypeface(Typeface.DEFAULT, 0);
+            mButtonLanguage.setTypeface(Typeface.DEFAULT, 0);
+            mButtonLogOut.setTypeface(Typeface.DEFAULT, 0);
+            mButtonFontFamily.setTypeface(Typeface.DEFAULT, 0);
+            mButtonFontSize.setTypeface(Typeface.DEFAULT, 0);
+        }
 
         mButtonAddCourse.setOnClickListener(this);
         mButtonDeleteCourse.setOnClickListener(this);
@@ -194,7 +214,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
                 //BE CAREFUL: if R.array.fontfamily_array is changed, this variable needs to be changed as well
-                final String[] fontfamilyArray = {"Arial", "Times New Roma"};
+                final String[] fontfamilyArray = {"DEFAULT", "MONOSPACE"};
                 if (mSettingsArray.size() != 0) {
                     builder.setTitle("Pick a font family")
                             .setItems(R.array.fontfamily_array, new DialogInterface.OnClickListener() {
@@ -202,6 +222,13 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                                 public void onClick(DialogInterface dialog, int which) {
                                     //TODO:
                                     String fontFamily = fontfamilyArray[which];
+
+                                    if (fontFamily.equals("DEFAULT"))
+                                        Constants.FONT_FAMILY = 0;
+                                    else //Monospace
+                                        Constants.FONT_FAMILY = 1;
+                                    isFontChanged = true;
+
                                     mSettingsArray.set(2, fontFamily);
                                     Log.d(Constants.TAG_SETTING, "Set Font Size : " + mSettingsArray.get(2));
                                     new SyncSettingTask().execute();
@@ -300,7 +327,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                                     String sizefactor = sizefactorArray[which];
                                     mSettingsArray.set(1, sizefactor);
                                     Log.d(Constants.TAG_SETTING, "Set Font Size : " + mSettingsArray.get(1));
-                                    fontSizeChanged = true;
+                                    isFontChanged = true;
                                     new SyncSettingTask().execute();
                                 }
                             });
@@ -544,15 +571,22 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                     cs.setString(4, mSettingsArray.get(3)); //@FontLanguage nvarchar(10)
                     cs.setInt(5, Integer.parseInt(mSettingsArray.get(4))); //@Notification bit
                     cs.execute(); //add these data into db
-                    if(fontSizeChanged == true){
-                        fontSizeChanged = false;
+
+                    /**
+                     * This chunk of code restart the app
+                     */
+                    if(isFontChanged == true){
+                        isFontChanged = false;
                         Intent mStartActivity = new Intent(getApplicationContext(), SplashActivity.class);
                         int mPendingIntentId = 123;
-                        PendingIntent mPendingIntent = PendingIntent.getActivity(getApplicationContext(), mPendingIntentId,    mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
+                        PendingIntent mPendingIntent = PendingIntent.getActivity(
+                                getApplicationContext(),
+                                mPendingIntentId,
+                                mStartActivity,
+                                PendingIntent.FLAG_CANCEL_CURRENT);
                         AlarmManager mgr = (AlarmManager)getApplication().getSystemService(getApplicationContext().ALARM_SERVICE);
                         mgr.set(AlarmManager.RTC, System.currentTimeMillis(), mPendingIntent);
                         finishAffinity();
-
                     }
                 }
 

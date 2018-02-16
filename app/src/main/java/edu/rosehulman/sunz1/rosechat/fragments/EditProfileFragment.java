@@ -2,6 +2,7 @@ package edu.rosehulman.sunz1.rosechat.fragments;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,7 +11,6 @@ import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -143,12 +143,25 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         mNickNameTxtE = (TextView) view.findViewById(R.id.profile_name_edit);
         mPhoneTxtE = (TextView) view.findViewById(R.id.profile_phone_edit);
         bottomNavigationViewEx = (BottomNavigationViewEx) getActivity().findViewById(R.id.bnve);
+
         //set font
         mConfirm.setTextSize(20*(float) Constants.FONT_SIZE_FACTOR);
         mEmailTxtE.setTextSize(20*(float) Constants.FONT_SIZE_FACTOR);
         mNickNameTxtE.setTextSize(20*(float) Constants.FONT_SIZE_FACTOR);
         mPhoneTxtE.setTextSize(20*(float) Constants.FONT_SIZE_FACTOR);
-        bottomNavigationViewEx.setTextSize(20*(float) Constants.FONT_SIZE_FACTOR);
+//        bottomNavigationViewEx.setTextSize(20*(float) Constants.FONT_SIZE_FACTOR);
+
+        if (Constants.FONT_FAMILY == 0) {
+            mConfirm.setTypeface(Typeface.DEFAULT);
+            mEmailTxtE.setTypeface(Typeface.DEFAULT);
+            mNickNameTxtE.setTypeface(Typeface.DEFAULT);
+            mPhoneTxtE.setTypeface(Typeface.DEFAULT);
+        } else {
+            mConfirm.setTypeface(Typeface.MONOSPACE);
+            mEmailTxtE.setTypeface(Typeface.MONOSPACE);
+            mNickNameTxtE.setTypeface(Typeface.MONOSPACE);
+            mPhoneTxtE.setTypeface(Typeface.MONOSPACE);
+        }
     }
 
 

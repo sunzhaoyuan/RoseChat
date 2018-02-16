@@ -34,10 +34,6 @@ public class InvitationActivity extends AppCompatActivity {
         mAdapter = new InvitationAdapter(this, mCallback);
         recyclerView.setAdapter(mAdapter);
 
-//        if(mAdapter.getItemCount() == 0){
-//            TextView noInvitations = (TextView) findViewById(R.id.invitation_no_pending_invitations);
-//            noInvitations.setVisibility(View.VISIBLE);
-//        }
     }
 
     @Override

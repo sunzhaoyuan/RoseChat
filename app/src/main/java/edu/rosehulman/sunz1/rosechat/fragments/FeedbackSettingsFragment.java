@@ -1,7 +1,6 @@
 package edu.rosehulman.sunz1.rosechat.fragments;
 
-import android.content.Context;
-import android.net.Uri;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -43,7 +42,12 @@ public class FeedbackSettingsFragment extends Fragment {
         feedBackRef = FirebaseDatabase.getInstance().getReference().child("feedback/" + user.getUid());
         final EditText feedback = (EditText) view.findViewById(R.id.feedback_edit_text);
         Button mSend = (Button) view.findViewById(R.id.feedback_send);
+
         mSend.setTextSize(20*(float) Constants.FONT_SIZE_FACTOR);
+        if (Constants.FONT_FAMILY == 0)
+            mSend.setTypeface(Typeface.DEFAULT);
+        else
+            mSend.setTypeface(Typeface.MONOSPACE);
 
         mSend.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -1,9 +1,8 @@
 package edu.rosehulman.sunz1.rosechat.adapters;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -13,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.sql.Array;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -103,6 +101,11 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
 
             mContactName = (TextView) itemView.findViewById(R.id.contact_name);
             mContactName.setTextSize(20*(float) Constants.FONT_SIZE_FACTOR);
+            if (Constants.FONT_FAMILY == 0) {
+                mContactName.setTypeface(Typeface.DEFAULT);
+            } else {
+                mContactName.setTypeface(Typeface.MONOSPACE);
+            }
 
         }
     }

@@ -1,24 +1,14 @@
 package edu.rosehulman.sunz1.rosechat.adapters;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
-import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -106,12 +96,28 @@ public class InvitationAdapter extends RecyclerView.Adapter<InvitationAdapter.Vi
             mInvitePending = (TextView) itemView.findViewById(R.id.invitation_pending);
             mConfirmInvite = (Button) itemView.findViewById(R.id.invitation_confirm);
             mDeclineInvite = (Button) itemView.findViewById(R.id.invitation_decline);
+
             //set font size
             mInviteMessage.setTextSize(25*(float) Constants.FONT_SIZE_FACTOR);
             mInviteName.setTextSize(20*(float) Constants.FONT_SIZE_FACTOR);
             mInvitePending.setTextSize(20*(float) Constants.FONT_SIZE_FACTOR);
             mConfirmInvite.setTextSize(20*(float) Constants.FONT_SIZE_FACTOR);
             mDeclineInvite.setTextSize(20*(float) Constants.FONT_SIZE_FACTOR);
+
+            //set font family
+            if (Constants.FONT_FAMILY == 0) {
+                mInviteMessage.setTypeface(Typeface.DEFAULT);
+                mInviteName.setTypeface(Typeface.DEFAULT);
+                mInvitePending.setTypeface(Typeface.DEFAULT);
+                mConfirmInvite.setTypeface(Typeface.DEFAULT);
+                mDeclineInvite.setTypeface(Typeface.DEFAULT);
+            } else {
+                mInviteMessage.setTypeface(Typeface.MONOSPACE);
+                mInviteName.setTypeface(Typeface.MONOSPACE);
+                mInvitePending.setTypeface(Typeface.MONOSPACE);
+                mConfirmInvite.setTypeface(Typeface.MONOSPACE);
+                mDeclineInvite.setTypeface(Typeface.MONOSPACE);
+            }
 
             mConfirmInvite.setOnClickListener(new View.OnClickListener() {
                 @Override

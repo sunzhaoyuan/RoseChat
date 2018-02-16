@@ -159,7 +159,7 @@ public class ChatRoomFragment extends Fragment implements ChatSystem.View, TextV
         }
         if (!mChatAdapter.contains(message.getMID())) {
             mChatAdapter.add(message);
-            mRecyclerViewChat.smoothScrollToPosition(mChatAdapter.getItemCount());
+            mRecyclerViewChat.smoothScrollToPosition(mChatAdapter.getItemCount() - 1);
         }
     }
 

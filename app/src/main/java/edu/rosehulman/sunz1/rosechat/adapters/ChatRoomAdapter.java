@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.widget.RecyclerView;
@@ -114,6 +115,15 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ViewHo
             //find size
             mNameTextView.setTextSize(15*(float)Constants.FONT_SIZE_FACTOR);
             mLastInteraction.setTextSize(15*(float)Constants.FONT_SIZE_FACTOR);
+
+            if (Constants.FONT_FAMILY == 0) {
+                mNameTextView.setTypeface(Typeface.DEFAULT);
+                mLastInteraction.setTypeface(Typeface.DEFAULT);
+            } else {
+                mNameTextView.setTypeface(Typeface.MONOSPACE);
+                mLastInteraction.setTypeface(Typeface.MONOSPACE);
+            }
+
         }
 
 

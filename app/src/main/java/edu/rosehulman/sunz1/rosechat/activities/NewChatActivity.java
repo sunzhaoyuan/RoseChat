@@ -1,12 +1,12 @@
 package edu.rosehulman.sunz1.rosechat.activities;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -31,7 +31,6 @@ import java.util.ArrayList;
 import edu.rosehulman.sunz1.rosechat.R;
 import edu.rosehulman.sunz1.rosechat.SQLService.DatabaseConnectionService;
 import edu.rosehulman.sunz1.rosechat.adapters.NewChatAdapter;
-import edu.rosehulman.sunz1.rosechat.models.Contact;
 import edu.rosehulman.sunz1.rosechat.utils.Constants;
 import edu.rosehulman.sunz1.rosechat.utils.SharedPreferencesUtils;
 
@@ -58,7 +57,14 @@ public class NewChatActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_chat);
         button = (Button) findViewById(R.id.newChat_confirm_button);
+
         button.setTextSize(20*(float) Constants.FONT_SIZE_FACTOR);
+        if (Constants.FONT_FAMILY == 0) {
+            button.setTypeface(Typeface.DEFAULT);
+        } else {
+            button.setTypeface(Typeface.MONOSPACE);
+        }
+
         button.setOnClickListener(this);
         RecyclerView recyclerView = (RecyclerView)findViewById(R.id.newChat_recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

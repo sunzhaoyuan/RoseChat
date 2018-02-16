@@ -56,8 +56,9 @@ public class Constants {
     public static final String DB_ServerUsername = "RCClient";
     public static final String DB_ServerPassword = "RCClient123";
 
-    //Font Size
+    //Font
     public static double FONT_SIZE_FACTOR = 0;
+    public static double FONT_FAMILY = 0; //0: default; 1: monospace
     public static float MESSAGE_FONT_SIZE = 1;
     public static int MEESSAGE_FONT_FAMILY = 0;
 }

@@ -1,5 +1,6 @@
 package edu.rosehulman.sunz1.rosechat.fragments;
 
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -235,6 +236,18 @@ public class ProfileFragment
         mEmailTxt.setTextSize(12*(float) Constants.FONT_SIZE_FACTOR);
         mNickNameTxt.setTextSize(12*(float) Constants.FONT_SIZE_FACTOR);
         mPhoneTxt.setTextSize(12*(float) Constants.FONT_SIZE_FACTOR);
+        if (Constants.FONT_FAMILY == 0) {
+            mEdit.setTypeface(Typeface.DEFAULT);
+            mEmailTxt.setTypeface(Typeface.DEFAULT);
+            mNickNameTxt.setTypeface(Typeface.DEFAULT);
+            mPhoneTxt.setTypeface(Typeface.DEFAULT);
+        } else {
+            mEdit.setTypeface(Typeface.MONOSPACE);
+            mEmailTxt.setTypeface(Typeface.MONOSPACE);
+            mNickNameTxt.setTypeface(Typeface.MONOSPACE);
+            mPhoneTxt.setTypeface(Typeface.MONOSPACE);
+        }
+
         mCourses = new TextView[6];
         mCourses[0] = (TextView) view.findViewById(R.id.profile_course1);
         mCourses[1] = (TextView) view.findViewById(R.id.profile_course2);
