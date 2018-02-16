@@ -24,6 +24,7 @@ import edu.rosehulman.sunz1.rosechat.R;
 import edu.rosehulman.sunz1.rosechat.SQLService.DatabaseConnectionService;
 import edu.rosehulman.sunz1.rosechat.fragments.ContactsFragment;
 import edu.rosehulman.sunz1.rosechat.fragments.ProfileFragment;
+import edu.rosehulman.sunz1.rosechat.utils.Constants;
 import edu.rosehulman.sunz1.rosechat.utils.SharedPreferencesUtils;
 
 /**
@@ -101,6 +102,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
             });
 
             mContactName = (TextView) itemView.findViewById(R.id.contact_name);
+            mContactName.setTextSize(20*(float) Constants.FONT_SIZE_FACTOR);
 
         }
     }

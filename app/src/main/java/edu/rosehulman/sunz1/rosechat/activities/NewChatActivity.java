@@ -32,6 +32,7 @@ import edu.rosehulman.sunz1.rosechat.R;
 import edu.rosehulman.sunz1.rosechat.SQLService.DatabaseConnectionService;
 import edu.rosehulman.sunz1.rosechat.adapters.NewChatAdapter;
 import edu.rosehulman.sunz1.rosechat.models.Contact;
+import edu.rosehulman.sunz1.rosechat.utils.Constants;
 import edu.rosehulman.sunz1.rosechat.utils.SharedPreferencesUtils;
 
 /**
@@ -57,6 +58,7 @@ public class NewChatActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_chat);
         button = (Button) findViewById(R.id.newChat_confirm_button);
+        button.setTextSize(20*(float) Constants.FONT_SIZE_FACTOR);
         button.setOnClickListener(this);
         RecyclerView recyclerView = (RecyclerView)findViewById(R.id.newChat_recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
