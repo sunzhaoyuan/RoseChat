@@ -7,6 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.sql.CallableStatement;
+import java.sql.SQLException;
+
 import edu.rosehulman.sunz1.rosechat.R;
 import edu.rosehulman.sunz1.rosechat.SQLService.DatabaseConnectionService;
 

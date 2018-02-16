@@ -47,6 +47,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     private Button mButtonFontFamily;
     private View mProcessBar;
     private Handler mHandler;
+    public boolean fontSizeChanged = false;
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
@@ -91,28 +92,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         mIsFirstTimeReadServer = true;
 
         new SyncSettingTask().execute();
-
-        // reads server constantly
-//        mHandler = new Handler(Looper.getMainLooper());
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                while (!Thread.interrupted()) {
-//                    new SyncSettingTask().execute();
-//                    mHandler.post(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            // return to the main thread
-//                        }
-//                    });
-//                    try {
-//                        Thread.sleep(2000);
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            }
-//        }).start();
     }
 
     @Override
@@ -197,9 +176,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                                 mSettingsArray.set(2, fontFamily);
                                 Log.d(Constants.TAG_SETTING, "Set Font Size : " + mSettingsArray.get(2));
                                 new SyncSettingTask().execute();
-//                                mProcessBar.setVisibility(View.VISIBLE);
-//
-//                                mProcessBar.setVisibility(View.GONE);
+                                mProcessBar.setVisibility(View.VISIBLE);
+                                mProcessBar.setVisibility(View.GONE);
                             }
                         });
 
@@ -225,6 +203,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                                 String sizefactor = sizefactorArray[which];
                                 mSettingsArray.set(1, sizefactor);
                                 Log.d(Constants.TAG_SETTING, "Set Font Size : " + mSettingsArray.get(1));
+                                fontSizeChanged = true;
                                 new SyncSettingTask().execute();
                             }
                         });
@@ -235,23 +214,23 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         };
         df.show(getFragmentManager(), "fontSize");
     }
-//
-//    private void notificationDialog() {
-//        AlertDialog.Builder mBuilder = new AlertDialog.Builder(this);
-//        mBuilder.setTitle("Notifications");
-//        mBuilder.setMessage("Would you like to turn notifications on or off?");
-//        mBuilder.setPositiveButton("On", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {NOTIFICATIONS =true;}
-//        });
-//
-//        mBuilder.setNegativeButton("Off", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {NOTIFICATIONS = false;}
-//        });
-//        AlertDialog dialog = mBuilder.create();
-//        dialog.show();
-//    }
+
+    private void notificationDialog() {
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(this);
+        mBuilder.setTitle("Notifications");
+        mBuilder.setMessage("Would you like to turn notifications on or off?");
+        mBuilder.setPositiveButton("On", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {NOTIFICATIONS =true;}
+        });
+
+        mBuilder.setNegativeButton("Off", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {NOTIFICATIONS = false;}
+        });
+        AlertDialog dialog = mBuilder.create();
+        dialog.show();
+    }
 
     private void logOutConfirmationDialog() {
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(this);
@@ -338,6 +317,13 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                     cs.setString(4, mSettingsArray.get(3)); //@FontLanguage nvarchar(10)
                     cs.setInt(5, Integer.parseInt(mSettingsArray.get(4))); //@Notification bit
                     cs.execute(); //add these data into db
+                    if(fontSizeChanged == true){
+                        fontSizeChanged = false;
+                        Intent i = getApplicationContext().getPackageManager()
+                                .getLaunchIntentForPackage( getApplicationContext().getPackageName() );
+                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        getApplicationContext().startActivity(i);
+                    }
                 }
 
             } catch (SQLException e) {
