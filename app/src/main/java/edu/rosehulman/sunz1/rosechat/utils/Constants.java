@@ -58,5 +58,5 @@ public class Constants {
 
     //Font
     public static double FONT_SIZE_FACTOR = 0;
-    public static double FONT_FAMILY = 0;
+    public static double FONT_FAMILY = 0; //0: default; 1: monospace
 }

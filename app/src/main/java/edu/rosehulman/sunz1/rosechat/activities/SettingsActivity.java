@@ -7,6 +7,7 @@ import android.app.DialogFragment;
 import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -49,7 +50,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     private Button mButtonFontFamily;
     private View mProcessBar;
     private Handler mHandler;
-    public boolean fontSizeChanged = false;
+    private boolean isFontChanged;
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
@@ -73,6 +74,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         mButtonFontSize = (Button) findViewById(R.id.button_settings_fontsize);
         mButtonFontFamily = (Button) findViewById(R.id.button_settings_fontfamily);
 
+        isFontChanged = false;
+
         //font size
         mButtonDeleteAccount.setTextSize(20*(float)Constants.FONT_SIZE_FACTOR);
         mButtonFeedback.setTextSize(20*(float)Constants.FONT_SIZE_FACTOR);
@@ -83,7 +86,19 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
         //font family
         if (Constants.FONT_FAMILY == 1) { //monospace
-
+            mButtonDeleteAccount.setTypeface(Typeface.MONOSPACE, 0);
+            mButtonFeedback.setTypeface(Typeface.MONOSPACE, 0);
+            mButtonLanguage.setTypeface(Typeface.MONOSPACE, 0);
+            mButtonLogOut.setTypeface(Typeface.MONOSPACE, 0);
+            mButtonFontFamily.setTypeface(Typeface.MONOSPACE, 0);
+            mButtonFontSize.setTypeface(Typeface.MONOSPACE, 0);
+        } else {
+            mButtonDeleteAccount.setTypeface(Typeface.DEFAULT, 0);
+            mButtonFeedback.setTypeface(Typeface.DEFAULT, 0);
+            mButtonLanguage.setTypeface(Typeface.DEFAULT, 0);
+            mButtonLogOut.setTypeface(Typeface.DEFAULT, 0);
+            mButtonFontFamily.setTypeface(Typeface.DEFAULT, 0);
+            mButtonFontSize.setTypeface(Typeface.DEFAULT, 0);
         }
 
         mButtonDeleteAccount.setOnClickListener(this);
@@ -188,6 +203,13 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                                 public void onClick(DialogInterface dialog, int which) {
                                     //TODO:
                                     String fontFamily = fontfamilyArray[which];
+
+                                    if (fontFamily.equals("DEFAULT"))
+                                        Constants.FONT_FAMILY = 0;
+                                    else //Monospace
+                                        Constants.FONT_FAMILY = 1;
+                                    isFontChanged = true;
+
                                     mSettingsArray.set(2, fontFamily);
                                     Log.d(Constants.TAG_SETTING, "Set Font Size : " + mSettingsArray.get(2));
                                     new SyncSettingTask().execute();
@@ -218,7 +240,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                                     String sizefactor = sizefactorArray[which];
                                     mSettingsArray.set(1, sizefactor);
                                     Log.d(Constants.TAG_SETTING, "Set Font Size : " + mSettingsArray.get(1));
-                                    fontSizeChanged = true;
+                                    isFontChanged = true;
                                     new SyncSettingTask().execute();
                                 }
                             });
@@ -342,8 +364,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                     /**
                      * This chunk of code restart the app
                      */
-                    if(fontSizeChanged == true){
-                        fontSizeChanged = false;
+                    if(isFontChanged == true){
+                        isFontChanged = false;
                         Intent mStartActivity = new Intent(getApplicationContext(), SplashActivity.class);
                         int mPendingIntentId = 123;
                         PendingIntent mPendingIntent = PendingIntent.getActivity(
@@ -354,7 +376,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                         AlarmManager mgr = (AlarmManager)getApplication().getSystemService(getApplicationContext().ALARM_SERVICE);
                         mgr.set(AlarmManager.RTC, System.currentTimeMillis(), mPendingIntent);
                         finishAffinity();
-
                     }
                 }
 
