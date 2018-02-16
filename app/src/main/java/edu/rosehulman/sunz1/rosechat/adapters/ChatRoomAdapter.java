@@ -37,16 +37,21 @@ import static edu.rosehulman.sunz1.rosechat.activities.SettingsActivity.NOTIFICA
  */
 
 public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ViewHolder> {
+
     private Context mContext;
     private ArrayList<ChatRoom> mChatRoomList;
     private String mCurrentUID;
     private HashMap<Integer, String> mLastInteractionHolder; // for notification
+
+    private ArrayList<Integer> mNotificationID;
 
 
     public ChatRoomAdapter(Context context) {
         mContext = context;
         mChatRoomList = new ArrayList<>();
         mLastInteractionHolder = new HashMap<>();
+        //unique ID ensures android displays each notification
+        mNotificationID = new ArrayList<>();
         mCurrentUID = SharedPreferencesUtils.getCurrentUser(mContext);
         new Thread(new Runnable() {
             @Override
@@ -206,7 +211,12 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ViewHo
             return;
         }
 
-        int notificationID = 3446;
+        if (this.mNotificationID.isEmpty()) {
+            this.mNotificationID.add(0);
+        } else {
+            int newNotiID = mNotificationID.get(0);
+            this.mNotificationID.add(0, ++newNotiID);
+        }
 
         //Build notification
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
@@ -221,7 +231,7 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ViewHo
 
         //Issue notification
         NotificationManager mNotificationMananger = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
-        mNotificationMananger.notify(notificationID, mBuilder.build());
+        mNotificationMananger.notify(mNotificationID.get(0), mBuilder.build());
     }
 
 }

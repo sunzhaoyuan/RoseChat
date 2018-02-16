@@ -4,9 +4,6 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -23,40 +20,17 @@ import edu.rosehulman.sunz1.rosechat.utils.Constants;
 
 public class ChatCommunicator implements ChatSystem.Communicator {
 
-    private static final int notificationID = 3446;
-
     private ChatSystem.OnSendMessageListener mOnSendMessageListener;
     private ChatSystem.OnGetMessagesListener mOnGetMessagesListener;
-    private DatabaseReference mChatReference;
 
     public ChatCommunicator(ChatSystem.OnSendMessageListener onSendMessageListener,
                             ChatSystem.OnGetMessagesListener onGetMessagesListener) {
         mOnSendMessageListener = onSendMessageListener;
         mOnGetMessagesListener = onGetMessagesListener;
-        mChatReference = FirebaseDatabase.getInstance().getReference().child(Constants.PATH_CHAT);
     }
 
     @Override
     public void sendMessageToUser(Context context, Integer chatRoomID, String text, String UID) {
-        //TODO: need a helper method to get all receivers' ids - Sprint 3
-
-//        mChatReference.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                mChatReference.push().setValue(chat);
-//                chat.setKey(dataSnapshot.getKey());
-//                Log.d(Constants.TAG_CHAT, "getMessage Fired");
-////                getMessageFromUser(chat.getSenderUid(), chat.getReceiverUid(), chat.getMessageKey());
-////                getMessageForSending();
-////                sendPushNotificationToReceiver(); //TODO: waiting for the test
-//                mOnSendMessageListener.onSendMessageSuccess();
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//                mOnSendMessageListener.onSendMessageFailure("Unable to send message: " + databaseError.getMessage());
-//            }
-//        });
         new SendMessageTask(context, chatRoomID, text, UID).execute();
     }
 
@@ -99,7 +73,6 @@ public class ChatCommunicator implements ChatSystem.Communicator {
             super.onPostExecute(sendMessageSuccessful);
             if (sendMessageSuccessful) {
                 mOnSendMessageListener.onSendMessageSuccess();
-//                sendPushNotificationToReceiver("ly12", "test", context);
             } else
                 mOnSendMessageListener.onSendMessageFailure("Unable to send message: ");
         }
@@ -109,24 +82,6 @@ public class ChatCommunicator implements ChatSystem.Communicator {
     public void getMessageFromUser(final Context context, final String UID, final Integer chatRoomID) {
 
         Log.d(Constants.TAG_CHAT, "IN CHAT COMMUNICATOR\n" + "sender ID: " + UID + "\nchatRoomID: " + chatRoomID + "\n");
-//        Query query = mChatReference.orderByChild(Constants.ARG_MESSAGE_KEY).equalTo(messageKey);
-//        query.addValueEventListener(new ValueEventListener() {
-//
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-////                Log.d(Constants.TAG_CHAT, "This dataSnapshot is " + dataSnapshot.getValue().toString() + "\n");
-//                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-//                    Chat chat = snapshot.getValue(Chat.class);
-//                    Log.d(Constants.TAG_CHAT, chat.toString());
-//                    mOnGetMessagesListener.onGetMessagesSuccess(chat);
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//                mOnGetMessagesListener.onGetMessagesFailure("unable to get message " + databaseError.getMessage());
-//            }
-//        });
 
         new Thread(new Runnable() {
             @Override
@@ -158,13 +113,6 @@ public class ChatCommunicator implements ChatSystem.Communicator {
             messageList = new ArrayList<>();
             this.context = context;
         }
-
-//        public GetMessageFromUserTask(String UID, Integer chatRoomID) {
-//            this.UID = UID;
-//            this.chatRoomID = chatRoomID;
-//            messageList = new ArrayList<>();
-////            this.context = context;
-//        }
 
         @Override
         protected Boolean doInBackground(String... strings) {
