@@ -209,7 +209,7 @@ public class ChatCommunicator implements ChatSystem.Communicator {
                 }
                 Log.d("Notification", "should have notification");
                 Message lastM = messageList.get(messageList.size() - 1);
-                sendPushNotificationToReceiver(lastM.getSenderID(), lastM.getText(), context);
+//                sendPushNotificationToReceiver(lastM.getSenderID(), lastM.getText(), context);
             } else {
                 mOnGetMessagesListener.onGetMessagesFailure("unable to get message ");
             }
