@@ -68,6 +68,19 @@ public class ChatRoomFragment extends Fragment implements ChatSystem.View, TextV
         View view = inflater.inflate(R.layout.fragment_chat, container, false);
         mRecyclerViewChat = (RecyclerView) view.findViewById(R.id.recycler_view_chat);
         mEditTextChat = (EditText) view.findViewById(R.id.edit_text_chat);
+        mRecyclerViewChat.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                if(bottom < oldBottom){
+                    mRecyclerViewChat.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            mRecyclerViewChat.smoothScrollToPosition(mRecyclerViewChat.getAdapter().getItemCount() - 1);
+                        }
+                    }, 100);
+                }
+            }
+        });
         return view;
     }
 
