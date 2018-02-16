@@ -14,8 +14,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -39,6 +41,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
     public static boolean NOTIFICATIONS = true;
 
+    private Button mButtonAddCourse;
     private Button mButtonLanguage;
     private Button mButtonLogOut;
     private Button mButtonFeedback;
@@ -64,6 +67,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
+        mButtonAddCourse = (Button) findViewById(R.id.button_add_course);
         mButtonDeleteAccount = (Button) findViewById(R.id.button_settings_deleteAccount);
         mButtonFeedback = (Button) findViewById(R.id.button_settings_feedback);
         mButtonLanguage = (Button) findViewById(R.id.button_settings_Language);
@@ -71,6 +75,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         mButtonFontSize = (Button) findViewById(R.id.button_settings_fontsize);
         mButtonFontFamily = (Button) findViewById(R.id.button_settings_fontfamily);
 
+        mButtonAddCourse.setOnClickListener(this);
         mButtonDeleteAccount.setOnClickListener(this);
         mButtonFeedback.setOnClickListener(this);
         mButtonLanguage.setOnClickListener(this);
@@ -124,6 +129,9 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) { //mSettingsArray: {0:UID 1:FontSize 2:FontFamily 3:FontLanguage 4:Notification}
         int id = v.getId();
         switch (id) {
+            case R.id.button_add_course:
+                showAddCourseDialog();
+                return;
             case R.id.button_settings_Language:
                 mSettingsArray.set(3, switchLanguage()); //set language
                 new SyncSettingTask().execute();
@@ -186,6 +194,10 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             }
         };
         df.show(getFragmentManager(), "fontSize");
+    }
+
+    private void showAddCourseDialog(){
+
     }
 
     private void showFontSizeDialog() {
@@ -277,6 +289,26 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 CallableStatement stmt = mConnection.prepareCall("{call DeleteUser(?)}");
                 stmt.setString(1, mUID);
                 stmt.execute();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+    }
+
+    private class GetCourseCategoryTask extends AsyncTask<ArrayList<String>, String, String>{
+        @Override
+        protected String doInBackground(ArrayList<String>[] arrayLists) {
+            CallableStatement cs = null;
+            ArrayList<String> list = arrayLists[0];
+            try {
+                cs = mConnection.prepareCall("{call Get_CourseCategories}");
+                cs.execute();
+                ResultSet rs = cs.getResultSet();
+                while(rs.next()){
+                    String categoryName = rs.getString(1);
+                    list.add(categoryName);
+                }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
