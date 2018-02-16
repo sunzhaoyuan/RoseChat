@@ -388,6 +388,10 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                 ResultSet rs = statement.getResultSet();
                 while (rs.next()){
                     Constants.FONT_SIZE_FACTOR = rs.getDouble("FontSize");
+                    if (rs.getString("FontFamily").equals("DEFAULT"))
+                        Constants.FONT_FAMILY = 0;
+                    else
+                        Constants.FONT_FAMILY = 1;
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
