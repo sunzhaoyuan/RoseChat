@@ -5,79 +5,83 @@
     android:layout_height="match_parent"
     tools:context="edu.rosehulman.sunz1.rosechat.fragments.ProfileFragment">
 
-    <RelativeLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/profile_image_edit"
-            style="@style/ProfileBorder"
-            android:layout_width="200sp"
-            android:layout_height="200dp"
-            android:paddingTop="15dp"
-            android:layout_centerHorizontal="true"
-            android:src="@drawable/rose_logo"
-            android:cropToPadding="true"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_alignBottom="@+id/profile_image_edit"
-            android:text="Click to edit"
-            android:textAllCaps="true"
-            android:textStyle="bold"/>
+            <ImageView
+                android:id="@+id/profile_image_edit"
+                style="@style/ProfileBorder"
+                android:layout_width="200sp"
+                android:layout_height="200dp"
+                android:layout_centerHorizontal="true"
+                android:cropToPadding="true"
+                android:paddingTop="15dp"
+                android:src="@drawable/rose_logo" />
 
-        <EditText
-            android:id="@+id/profile_name_edit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/profile_image_edit"
-            android:layout_centerHorizontal="true"
-            android:paddingTop="@dimen/padding_big"
-            android:text="@string/profile_sample_name"
-            android:textSize="30sp"
-            android:textStyle="bold" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/profile_image_edit"
+                android:layout_centerHorizontal="true"
+                android:text="Click to edit"
+                android:textAllCaps="true"
+                android:textStyle="bold" />
 
-        <EditText
-            android:id="@+id/profile_email_edit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/profile_name_edit"
-            android:layout_centerHorizontal="true"
-            android:paddingTop="@dimen/padding_small"
-            android:text="@string/profile_sample_email"
-            android:textSize="15sp" />
+            <EditText
+                android:id="@+id/profile_name_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/profile_image_edit"
+                android:layout_centerHorizontal="true"
+                android:paddingTop="@dimen/padding_big"
+                android:text="@string/profile_sample_name"
+                android:textSize="30sp"
+                android:textStyle="bold" />
 
-        <EditText
-            android:id="@+id/profile_phone_edit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/profile_email_edit"
-            android:layout_centerHorizontal="true"
-            android:paddingTop="@dimen/padding_small"
-            android:text="@string/profile_sample_phone_number"
-            android:textSize="18sp" />
+            <EditText
+                android:id="@+id/profile_email_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/profile_name_edit"
+                android:layout_centerHorizontal="true"
+                android:paddingTop="@dimen/padding_small"
+                android:text="@string/profile_sample_email"
+                android:textSize="15sp" />
 
-        <TextView
-            android:id="@+id/profile_confirm_edit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/profile_phone_edit"
-            android:layout_centerHorizontal="true"
-            android:paddingTop="@dimen/padding_small"
-            android:text="@string/profile_confirm"
-            android:textAlignment="textStart"
-            android:textColor="#57a0d4"
-            android:textSize="15sp" />
+            <EditText
+                android:id="@+id/profile_phone_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/profile_email_edit"
+                android:layout_centerHorizontal="true"
+                android:paddingTop="@dimen/padding_small"
+                android:text="@string/profile_sample_phone_number"
+                android:textSize="18sp" />
 
-        <View
-            android:layout_width="60sp"
-            android:layout_height="3sp"
-            android:layout_below="@+id/profile_confirm_edit"
-            android:layout_centerHorizontal="true"
-            android:background="#57a0d4" />
+            <TextView
+                android:id="@+id/profile_confirm_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/profile_phone_edit"
+                android:layout_centerHorizontal="true"
+                android:paddingTop="@dimen/padding_small"
+                android:text="@string/profile_confirm"
+                android:textAlignment="textStart"
+                android:textColor="#57a0d4"
+                android:textSize="15sp" />
 
-    </RelativeLayout>
+            <View
+                android:layout_width="60sp"
+                android:layout_height="3sp"
+                android:layout_below="@+id/profile_confirm_edit"
+                android:layout_centerHorizontal="true"
+                android:background="#57a0d4" />
 
+        </RelativeLayout>
+    </ScrollView>
 </FrameLayout>
