@@ -13,11 +13,11 @@ public class Constants {
     // For the Chat Feature
     public static final String ARG_USERS = "users";
     public static final String ARG_RECEIVER = "receiver";
-    public static final String ARG_MESSAGE_NAME = "message_name";
+    public static final String ARG_CHATROOM_NAME = "chatroom_name";
     public static final String ARG_RECEIVER_UID = "receiver_uid";
     public static final String ARG_FIREBASE_TOKEN = "firebase_token";
     public static final String ARG_MESSAGE = "message";
-    public static final String ARG_MESSAGE_KEY = "messageKey";
+    public static final String ARG_CHATROOM_ID = "chatroom_id";
     public static final String ARG_SENDER_UID = "sender_uid";
 
     // For the Profile Feature
@@ -55,4 +55,10 @@ public class Constants {
     public static final String DB_DatabaseName = "RoseChat";
     public static final String DB_ServerUsername = "RCClient";
     public static final String DB_ServerPassword = "RCClient123";
+
+    //Font
+    public static double FONT_SIZE_FACTOR = 1;
+    public static double FONT_FAMILY = 0; //0: default; 1: monospace
+    public static float MESSAGE_FONT_SIZE = 1;
+    public static int MEESSAGE_FONT_FAMILY = 0;
 }

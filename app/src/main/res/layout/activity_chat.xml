@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/green_50"
-    tools:context="edu.rosehulman.sunz1.rosechat.activities.ChatActivity">
+    tools:context="edu.rosehulman.sunz1.rosechat.activities.ChatRoomActivity">
 
     <FrameLayout
         android:id="@+id/frame_layout_chat_container"

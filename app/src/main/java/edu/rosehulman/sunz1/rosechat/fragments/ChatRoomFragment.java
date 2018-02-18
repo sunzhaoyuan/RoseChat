@@ -18,64 +18,62 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import edu.rosehulman.sunz1.rosechat.R;
-import edu.rosehulman.sunz1.rosechat.adapters.ChatRecyclerAdapter;
-import edu.rosehulman.sunz1.rosechat.models.Chat;
+import edu.rosehulman.sunz1.rosechat.adapters.MessageRecyclerAdapter;
+import edu.rosehulman.sunz1.rosechat.models.Message;
 import edu.rosehulman.sunz1.rosechat.sys.chat.ChatPresenter;
 import edu.rosehulman.sunz1.rosechat.sys.chat.ChatSystem;
 import edu.rosehulman.sunz1.rosechat.utils.Constants;
 import edu.rosehulman.sunz1.rosechat.utils.SharedPreferencesUtils;
 
-public class ChatFragment extends Fragment implements ChatSystem.View, TextView.OnEditorActionListener {
+public class ChatRoomFragment extends Fragment implements ChatSystem.View, TextView.OnEditorActionListener {
 
     public static final String TAG = Constants.TAG_CHAT;
 
     private ProgressDialog mProgressDialog;
-    private ChatRecyclerAdapter mChatAdapter;
+    private MessageRecyclerAdapter mChatAdapter;
     private ChatPresenter mChatPresenter;
     private RecyclerView mRecyclerViewChat;
     private EditText mEditTextChat;
 
     private String mCurrentUID;
 
-    public ChatFragment() {
+    public ChatRoomFragment() {
         // Required empty public constructor
     }
 
-    public static ChatFragment newInstance(String messageName,
-                                           String senderUid,
-                                           String receiverUid,
-                                           String messageKey) {
-
+    /**
+     * Get values that were passed from ChatRoomActivity : init()
+     *
+     * @param chatRoomName
+     * @param chatRoomID
+     * @return fragment - a ChatRoomFragment callback that ChatRoomActivity
+     *                    uses to replace fragment container
+     */
+    public static ChatRoomFragment newInstance(String chatRoomName,
+                                               Integer chatRoomID)
+    {
         Bundle args = new Bundle();
-        args.putString(Constants.ARG_SENDER_UID, senderUid);
-        args.putString(Constants.ARG_MESSAGE_NAME, messageName);
-        args.putString(Constants.ARG_RECEIVER_UID, receiverUid);
-        args.putString(Constants.ARG_MESSAGE_KEY, messageKey);
-        ChatFragment fragment = new ChatFragment();
+        args.putString(Constants.ARG_CHATROOM_NAME, chatRoomName);
+        args.putInt(Constants.ARG_CHATROOM_ID, chatRoomID);
+        ChatRoomFragment fragment = new ChatRoomFragment();
         fragment.setArguments(args);
         return fragment;
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater,
+                             ViewGroup container,
+                             Bundle savedInstanceState)
+    {
         View view = inflater.inflate(R.layout.fragment_chat, container, false);
-        bindViews(view);
-        return view;
-    }
-
-    private void bindViews(View view) {
         mRecyclerViewChat = (RecyclerView) view.findViewById(R.id.recycler_view_chat);
         mEditTextChat = (EditText) view.findViewById(R.id.edit_text_chat);
+        return view;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        init();
-    }
-
-    private void init() {
         mCurrentUID = SharedPreferencesUtils.getCurrentUser(getContext());
         mProgressDialog = new ProgressDialog(getActivity());
         mProgressDialog.setTitle(getString(R.string.loading));
@@ -85,11 +83,13 @@ public class ChatFragment extends Fragment implements ChatSystem.View, TextView.
         mEditTextChat.setOnEditorActionListener(this);
 
         mChatPresenter = new ChatPresenter(this);
-        Log.d(Constants.TAG_CHAT, "IN CHAT FRAGMENT\nmessageKey: " + getArguments().getString(Constants.ARG_MESSAGE_KEY));
+        Log.d(Constants.TAG_CHAT, "IN CHAT FRAGMENT\nChatRoom ID: " + getArguments().getInt(Constants.ARG_CHATROOM_ID));
         String receiverUID = getArguments().getString(Constants.ARG_RECEIVER_UID);
-        mChatPresenter.getMessage(mCurrentUID,
-                receiverUID.equals(mCurrentUID) ? getArguments().getString(Constants.ARG_SENDER_UID) : receiverUID,
-                getArguments().getString(Constants.ARG_MESSAGE_KEY));
+        mChatPresenter.getMessage(
+                getContext(),
+                mCurrentUID,
+                getArguments().getInt(Constants.ARG_CHATROOM_ID)
+        );
     }
 
     @Override
@@ -108,45 +108,58 @@ public class ChatFragment extends Fragment implements ChatSystem.View, TextView.
     @Override
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
         if (actionId == EditorInfo.IME_ACTION_SEND) {
+            // after the user pushes "Send" button
             sendMessage();
             return true;
         }
         return false;
     }
 
+    /**
+     *
+     *
+     */
     private void sendMessage() {
+        Integer chatRoomID = getArguments().getInt(Constants.ARG_CHATROOM_ID);
         String text = mEditTextChat.getText().toString();
-        String receiverUid = getArguments().getString(Constants.ARG_RECEIVER_UID);
-        String senderUid = getArguments().getString(Constants.ARG_SENDER_UID);
-        String messageKey = getArguments().getString(Constants.ARG_MESSAGE_KEY);
-
-        receiverUid = receiverUid.equals(mCurrentUID) ? senderUid : receiverUid;
-        String receiver = receiverUid;
-
-        Chat chat = new Chat(messageKey, mCurrentUID, receiver, mCurrentUID, receiverUid, text, System.currentTimeMillis());
-        mChatPresenter.sendMessage(getActivity().getApplicationContext(), chat);
+        mChatPresenter.sendMessage(getActivity().getApplicationContext(), chatRoomID, text, mCurrentUID);
     }
+
+
 
     @Override
     public void onSendMessageSuccess() {
         mEditTextChat.setText(""); // clear EditText
-        Toast.makeText(getActivity(), "Message sent", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getActivity(), "Message sent", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onSendMessageFailure(String message) {
-        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void onGetMessagesSuccess(Chat chat) {
+    public void onGetMessagesSuccess(Message message) {
         if (mChatAdapter == null) {
-            mChatAdapter = new ChatRecyclerAdapter(getContext(), new ArrayList<Chat>());
+            mChatAdapter = new MessageRecyclerAdapter(getContext(), new ArrayList<Message>());
             mRecyclerViewChat.setAdapter(mChatAdapter);
+            mRecyclerViewChat.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+                @Override
+                public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                    if(bottom < oldBottom){
+                        mRecyclerViewChat.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                mRecyclerViewChat.smoothScrollToPosition(mRecyclerViewChat.getAdapter().getItemCount() - 1);
+                            }
+                        }, 100);
+                    }
+                }
+            });
         }
-        if (!mChatAdapter.contains(chat.getTimeStamp())) {
-            mChatAdapter.add(chat);
-            mRecyclerViewChat.smoothScrollToPosition(mChatAdapter.getItemCount());
+        if (!mChatAdapter.contains(message.getMID())) {
+            mChatAdapter.add(message);
+            mRecyclerViewChat.smoothScrollToPosition(mChatAdapter.getItemCount() - 1);
         }
     }
 

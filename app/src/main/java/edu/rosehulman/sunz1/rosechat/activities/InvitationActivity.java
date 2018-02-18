@@ -5,9 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-
 import edu.rosehulman.sunz1.rosechat.R;
 import edu.rosehulman.sunz1.rosechat.adapters.InvitationAdapter;
 
@@ -17,7 +14,7 @@ import edu.rosehulman.sunz1.rosechat.adapters.InvitationAdapter;
 
 public class InvitationActivity extends AppCompatActivity {
     final private String DEBUG_KEY = "Debug";
-    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+//    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     InvitationAdapter mAdapter;
     private Callback mCallback;
 
@@ -37,10 +34,6 @@ public class InvitationActivity extends AppCompatActivity {
         mAdapter = new InvitationAdapter(this, mCallback);
         recyclerView.setAdapter(mAdapter);
 
-//        if(mAdapter.getItemCount() == 0){
-//            TextView noInvitations = (TextView) findViewById(R.id.invitation_no_pending_invitations);
-//            noInvitations.setVisibility(View.VISIBLE);
-//        }
     }
 
     @Override

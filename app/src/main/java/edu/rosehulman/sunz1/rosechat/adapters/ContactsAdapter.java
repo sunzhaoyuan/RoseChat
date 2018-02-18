@@ -1,9 +1,8 @@
 package edu.rosehulman.sunz1.rosechat.adapters;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -23,6 +22,7 @@ import edu.rosehulman.sunz1.rosechat.R;
 import edu.rosehulman.sunz1.rosechat.SQLService.DatabaseConnectionService;
 import edu.rosehulman.sunz1.rosechat.fragments.ContactsFragment;
 import edu.rosehulman.sunz1.rosechat.fragments.ProfileFragment;
+import edu.rosehulman.sunz1.rosechat.utils.Constants;
 import edu.rosehulman.sunz1.rosechat.utils.SharedPreferencesUtils;
 
 /**
@@ -34,10 +34,8 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
     ArrayList<String> mContactList;
     ContactsFragment.Callback mCallback;
     final private String DEBUG_KEY = "Debug";
-
     private String UID;
     private Connection mDBConnection;
-    Handler handler;
 
     public ContactsAdapter(Context context, ContactsFragment.Callback callback) {
         mCallback = callback;
@@ -45,31 +43,20 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
         mContactList = new ArrayList<String>();
         UID = SharedPreferencesUtils.getCurrentUser(context);
         mDBConnection = DatabaseConnectionService.getInstance().getConnection();
-        handler = new Handler(Looper.getMainLooper());
 
         new Thread(new Runnable() {
             @Override
             public void run() {
                 while (!Thread.interrupted()) {
                     new GetFriendsTask().execute(UID);
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            refresh();
-                        }
-                    });
                     try {
-                        Thread.sleep(2000);
+                        Thread.sleep(500);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
             }
         }).start();
-    }
-
-    private synchronized void refresh() {
-        notifyDataSetChanged();
     }
 
     @Override
@@ -113,6 +100,12 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
             });
 
             mContactName = (TextView) itemView.findViewById(R.id.contact_name);
+            mContactName.setTextSize(20*(float) Constants.FONT_SIZE_FACTOR);
+            if (Constants.FONT_FAMILY == 0) {
+                mContactName.setTypeface(Typeface.DEFAULT);
+            } else {
+                mContactName.setTypeface(Typeface.MONOSPACE);
+            }
 
         }
     }
@@ -141,7 +134,6 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
                 cs.execute();
                 ResultSet rs = cs.getResultSet();
                 mContactList.clear();
-                ;
                 while (rs.next()) {
                     String s = rs.getString(1);
                     ContactsAdapter.this.mContactList.add(s);
@@ -150,6 +142,12 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
                 e.printStackTrace();
             }
             return 0;
+        }
+
+        @Override
+        protected void onPostExecute(Integer integer) {
+            super.onPostExecute(integer);
+            notifyDataSetChanged();
         }
     }
 

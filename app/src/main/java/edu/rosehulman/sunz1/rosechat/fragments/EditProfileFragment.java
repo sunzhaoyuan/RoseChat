@@ -2,10 +2,13 @@ package edu.rosehulman.sunz1.rosechat.fragments;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -16,14 +19,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
+import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -35,7 +39,6 @@ import java.sql.Types;
 import edu.rosehulman.sunz1.rosechat.R;
 import edu.rosehulman.sunz1.rosechat.SQLService.DatabaseConnectionService;
 import edu.rosehulman.sunz1.rosechat.activities.MainActivity;
-import edu.rosehulman.sunz1.rosechat.models.Contact;
 import edu.rosehulman.sunz1.rosechat.sys.image_selector.UserPicture;
 import edu.rosehulman.sunz1.rosechat.utils.Constants;
 import edu.rosehulman.sunz1.rosechat.utils.SharedPreferencesUtils;
@@ -62,19 +65,16 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
     private String newPhone;
     private String newEmail;
     private String newAvatarURL;
-
     public static EditProfileFragment newInstance(String email,
                                                   String nickName,
                                                   String phone,
-                                                  String profilePicURL) {
+                                                  final String profilePicURL) {
 
         Bundle args = new Bundle();
         args.putString(Constants.PROF_EMAIL, email);
         args.putString(Constants.PROF_NICK_NAME, nickName);
         args.putString(Constants.PROF_PHONE, phone);
         args.putString(Constants.PROF_PROFILE_PIC_URL, profilePicURL);
-        Log.d(Constants.TAG_PROFILE, "\nnewInstance is CALLED\nEMAIL: " + email +
-                "\nNICK_NAME: " + nickName + "\nPHONE: " + phone + "\nPROFILE_PIC: " + profilePicURL);
         EditProfileFragment fragment = new EditProfileFragment();
         fragment.setArguments(args);
         return fragment;
@@ -98,29 +98,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         mEmailTxtE.setText(getArguments().getString(Constants.PROF_EMAIL));
         mNickNameTxtE.setText(getArguments().getString(Constants.PROF_NICK_NAME));
         mPhoneTxtE.setText(getArguments().getString(Constants.PROF_PHONE));
-//        FirebaseStorage.getInstance().getReference().child("profile_pics/" + mCurrentUID).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-//            @Override
-//            public void onSuccess(Uri uri) {
-//                mProfilePicURL = uri.toString();
-//                Picasso.with(getContext())
-//                        .load(mProfilePicURL)
-//                        .into(mProfileImgE);
-//            }
-//        });
-        // TODO: get Token from firebase
-        DatabaseReference token = FirebaseDatabase.getInstance().getReference().child(Constants.PATH_CONTACT)
-                .child(mCurrentUID).child("fireBaseToken");
-        token.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                mToken = dataSnapshot.getValue().toString();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+        mProfilePicURL = getArguments().getString(Constants.PROF_PROFILE_PIC_URL);
         ((MainActivity)getActivity()).setTitle(mCurrentUID);
     }
 
@@ -131,7 +109,30 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         View view = inflater.inflate(R.layout.fragment_edit_profile, container, false);
         bindViews(view);
         bottomNavigationViewEx.setVisibility(View.GONE);
-
+        new Thread(new Runnable() {
+            Handler handler = new Handler(Looper.getMainLooper());
+            @Override
+            public void run() {
+                while (!Thread.interrupted()){
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            Log.d("picasso", "Edit: Trying to get profile picture");
+                            Picasso.with(getContext())
+                                    .load(mProfilePicURL) //get url
+                                    .placeholder(R.drawable.rose_logo)
+                                    .error(R.drawable.rosenamelogo)
+                                    .into(mProfileImgE);
+                        }
+                    });
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).start();
         return view;
     }
 
@@ -142,6 +143,25 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         mNickNameTxtE = (TextView) view.findViewById(R.id.profile_name_edit);
         mPhoneTxtE = (TextView) view.findViewById(R.id.profile_phone_edit);
         bottomNavigationViewEx = (BottomNavigationViewEx) getActivity().findViewById(R.id.bnve);
+
+        //set font
+        mConfirm.setTextSize(20*(float) Constants.FONT_SIZE_FACTOR);
+        mEmailTxtE.setTextSize(20*(float) Constants.FONT_SIZE_FACTOR);
+        mNickNameTxtE.setTextSize(20*(float) Constants.FONT_SIZE_FACTOR);
+        mPhoneTxtE.setTextSize(20*(float) Constants.FONT_SIZE_FACTOR);
+//        bottomNavigationViewEx.setTextSize(20*(float) Constants.FONT_SIZE_FACTOR);
+
+        if (Constants.FONT_FAMILY == 0) {
+            mConfirm.setTypeface(Typeface.DEFAULT);
+            mEmailTxtE.setTypeface(Typeface.DEFAULT);
+            mNickNameTxtE.setTypeface(Typeface.DEFAULT);
+            mPhoneTxtE.setTypeface(Typeface.DEFAULT);
+        } else {
+            mConfirm.setTypeface(Typeface.MONOSPACE);
+            mEmailTxtE.setTypeface(Typeface.MONOSPACE);
+            mNickNameTxtE.setTypeface(Typeface.MONOSPACE);
+            mPhoneTxtE.setTypeface(Typeface.MONOSPACE);
+        }
     }
 
 
@@ -162,8 +182,6 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
     }
 
     private void confirmChanges() {
-//        StorageReference profilePicStorageRef = FirebaseStorage.getInstance().getReference()
-//                .child(Constants.PATH_PROFILE_PIC + "/" + mCurrentUID);
         // TODO: write the txt from those EditTxts 
         newNickName = mNickNameTxtE.getText().toString();
         newPhone = mPhoneTxtE.getText().toString();
@@ -173,34 +191,9 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         handler.postAtTime(new Runnable() {
             @Override
             public void run() {
-//                Contact newContact = new Contact(mCurrentUID, nickNameNew, mProfilePicURL, phoneNew, emailNew, mToken);
-//                uploadAllToFirebase(newContact);
                 new EditProfTask().execute();
             }
         }, 1000); // 1000ms = 1s
-    }
-
-    private void uploadAllToFirebase(final Contact newContact) {
-        final DatabaseReference profileRef = FirebaseDatabase.getInstance().getReference().child(Constants.PATH_CONTACT);
-        profileRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Log.d(Constants.TAG_PROFILE, "SETTING UP NEW PROFILE\nLOOPING THROUGH CHILDREN:\n" + snapshot.getValue());
-                    if (snapshot.child("uid").getValue().equals(mCurrentUID)) {
-                        profileRef.child(snapshot.getKey()).setValue(newContact);
-                        Log.d(Constants.TAG_PROFILE, "JUST UPDATE THE DATA ON TABLE\n" +
-                                profileRef.child(snapshot.getKey()).toString());
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(getContext(), "Cannot update profile\nerror: " +
-                        databaseError.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
     }
 
     private void singleImgSelection() {
@@ -220,7 +213,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
                 Uri selectedImageUri = data.getData();
                 try {
                     mProfileImgE.setImageBitmap(new UserPicture(selectedImageUri, getActivity().getContentResolver()).getBitmap());
-                    //TODO: update new Profile Image here
+                    //update new Profile Image here
                     updateProfilePic();
                 } catch (IOException e) {
                     Log.e(MainActivity.class.getSimpleName(), "Failed to load image", e);
@@ -234,7 +227,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
     }
 
     private void updateProfilePic() {
-        StorageReference profilePicStorageRef = FirebaseStorage.getInstance().getReference()
+        final StorageReference profilePicStorageRef = FirebaseStorage.getInstance().getReference()
                 .child(Constants.PATH_PROFILE_PIC + "/" + mCurrentUID);
         mProfileImgE.setDrawingCacheEnabled(true);
         mProfileImgE.buildDrawingCache();
@@ -243,21 +236,38 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();
 
-        profilePicStorageRef.putBytes(data);
-        Log.d(Constants.TAG_PROFILE, "JUST UPLOAD PIC TO STORAGE");
-//        profilePicStorageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-//            @Override
-//            public void onSuccess(Uri uri) {
-//                mProfilePicURL = uri.toString();
-//                Log.d(Constants.TAG_PROFILE, "GET PROFILE PIC URL SUCCESS :\n" + mProfilePicURL);
-////                mNewContact = new Contact(mCurrentUID, nickNameNew, downloadUri, phoneNew, emailNew);
-//            }
-//        }).addOnFailureListener(new OnFailureListener() {
-//            @Override
-//            public void onFailure(@NonNull Exception e) {
-//                Log.d(Constants.TAG_PROFILE, "GET PROFILE PIC URL FAILED :\n" + e.toString());
-//            }
-//        });
+        profilePicStorageRef.putBytes(data).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                profilePicStorageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        String profilePicURL = uri.toString();
+                        newAvatarURL = profilePicURL;
+                        mProfilePicURL = profilePicURL;
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(Constants.TAG_PROFILE, "Doesn't have custom profile yet.");
+                    }
+                });
+            }
+        });
+        /*profilePicStorageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                String profilePicURL = uri.toString();
+                newAvatarURL = profilePicURL;
+                mProfilePicURL = profilePicURL;
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(Constants.TAG_PROFILE, "Doesn't have custom profile yet.");
+            }
+        });
+        Log.d(Constants.TAG_PROFILE, "JUST UPLOAD PIC TO STORAGE");*/
     }
 
     private class EditProfTask extends AsyncTask<String, String, String> {

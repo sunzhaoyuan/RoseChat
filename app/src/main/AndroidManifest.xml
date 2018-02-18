@@ -18,7 +18,7 @@
         <activity android:name=".activities.LogInActivity" />
         <activity android:name=".activities.SettingsActivity" />
         <activity android:name=".activities.NewChatActivity" />
-        <activity android:name=".activities.InvitationActivity"/>
+        <activity android:name=".activities.InvitationActivity" />
         <activity android:name=".activities.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,19 +26,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.ChatActivity" />
-        <service
-            android:name=".sys.fcm.MyFirebaseMessagingService">
+        <activity android:name=".activities.ChatRoomActivity" />
+
+        <service android:name=".sys.fcm.MyFirebaseMessagingService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        <service
-            android:name=".sys.fcm.FirebaseIDService">
+        <service android:name=".sys.fcm.FirebaseIDService">
             <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
+
     </application>
 
 </manifest>
