@@ -13,11 +13,9 @@ After two years in Rose-Hulman, we have noticed one of the biggest problems of g
  
 Ultimately, the application core function is to allow students/professors to chat amongst themselves. From there we will try to add more features to the application (they can be found in Preliminary Requirements). The long term goal for this application is to make Rose-Hulman suggest teachers and students (especially incoming freshmen, since they are most likely) to download this app so everyone will have this app ready from the start of their Rose career.
 
-## Preliminary Requirements
+## Requirements
 - [x] Allow users to send messages to each other.
-- [ ] Enable users to send image messages.
-- [ ] Users are able to create groups amongst themselves.
-- [ ] Users can record and send voice messages.
+- [x] Users are able to create groups amongst themselves.
 - [x] Create an authentication system so only people with a [Rose account](http://rose-hulman.edu/admissions-and-aid/contact-admissions.html) can use the app.
 - [x] Allow multi-language support (especially Mandarin), to take into account the portion of the student body whose native language is not English.
 - [x] Create a profile page that is editable.
@@ -26,8 +24,6 @@ Ultimately, the application core function is to allow students/professors to cha
     * Email
     * Schedule (should have an option to hide)
     * Office hours/office location (for teachers)
-- [ ] Allow students to voice call.
-- [ ] Have a translation dictionary avaliable.
 
 ## Screen Mock
 You can find our UI demo on [Ninja Mock](https://ninjamock.com/s/5FZF2) 
